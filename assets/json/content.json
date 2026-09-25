@@ -1,0 +1,1310 @@
+{
+  "schema_version": "1",
+  "profile": {
+    "name": "Ivan Zolin",
+    "headline": {
+      "en": "ML/AI Research Engineer",
+      "ru": "ML/AI Research Engineer"
+    },
+    "summary": {
+      "en": "ML/AI Research Engineer working at the intersection of fundamental machine learning, LLMs/VLMs, NLP, and computer vision. Interested in new architectures, training methods, optimization, and AI systems.\n",
+      "ru": "ML/AI Research Engineer, работающий на стыке фундаментального машинного обучения, LLM/VLM, NLP и компьютерного зрения. Интересуюсь новыми архитектурами, методами обучения, оптимизацией и AI-системами.\n"
+    },
+    "location": "Saint Petersburg, Russia",
+    "interests": [
+      "Fundamental AI",
+      "LLMs",
+      "VLMs",
+      "NLP",
+      "Computer Vision",
+      "AI Agents",
+      "RAG",
+      "Optimization",
+      "Representation Learning",
+      "AI Alignment"
+    ]
+  },
+  "experience": [
+    {
+      "id": "inream",
+      "organization": "Inream (Startup)",
+      "role": {
+        "en": "Kotlin Full-Stack Developer",
+        "ru": null
+      },
+      "location": "Saint Petersburg, Russia",
+      "period": {
+        "start": "2022-11",
+        "end": "2022-12"
+      },
+      "status": "completed",
+      "responsibilities": {
+        "en": [
+          "Developed a web interface for personalized language-learning tasks and deployed the system using Heroku."
+        ],
+        "ru": null
+      },
+      "links": {
+        "organization": {
+          "url": "https://lang.inream.com/dialogs/fast-intro",
+          "label": "Inream"
+        }
+      },
+      "evidence": []
+    },
+    {
+      "id": "itmo-dpht",
+      "organization": "Digital Public Health Technologies (DPHT), ITMO University",
+      "role": {
+        "en": "NLP R&D Engineer",
+        "ru": "NLP R&D engineer"
+      },
+      "location": "Saint Petersburg, Russia",
+      "period": {
+        "start": "2025-08",
+        "end": null
+      },
+      "status": "current",
+      "responsibilities": {
+        "en": [
+          "Designed and developed MAS-EHR, a multi-agent system for automated processing of electronic health records, covering OCR, de-identification, and clinical information structuring."
+        ],
+        "ru": [
+          "Разработал MAS-EHR — мультиагентную систему для автоматизированной обработки электронных медицинских карт, включающую OCR, деидентификацию и структуризацию клинических данных."
+        ]
+      },
+      "links": {
+        "organization": {
+          "url": "https://dpht.itmo.ru/",
+          "label": "DPHT"
+        }
+      },
+      "evidence": []
+    },
+    {
+      "id": "labid",
+      "organization": "Laboratory of Biomedical Imaging and Data Analysis (LABID), SPbPU",
+      "role": {
+        "en": "AI Researcher (Computer Vision & NLP)",
+        "ru": "AI Researcher"
+      },
+      "location": "Saint Petersburg, Russia",
+      "period": {
+        "start": "2024-04",
+        "end": "2026-04"
+      },
+      "status": "completed",
+      "responsibilities": {
+        "en": [
+          "Developed TriDeFusion-v2, a hybrid RAUDen-based denoising architecture with Noise2Noise knowledge distillation and a CUDA wavelet-domain refinement module; manuscript under review in a Q1 journal.",
+          "Developed NeuroRAG, a multi-agent LLM and RAG system over biomedical sources (PubMed, NCBI, arXiv); manuscript under review in a Q1 journal."
+        ],
+        "ru": [
+          "Разработал TriDeFusion-v2 — гибридную архитектуру денойзинга RAUDen с дистилляцией Noise2Noise и CUDA-модулем вейвлет-уточнения; статья на рецензировании в Q1 журнале.",
+          "Разработал NeuroRAG — мультиагентную систему LLM и RAG по биомедицинским источникам (PubMed, NCBI, arXiv); статья на рецензировании в Q1 журнале."
+        ]
+      },
+      "links": {
+        "organization": {
+          "url": "https://www.spbstu.ru/structure/nauchno_issledovatelskaya_laboratoriya_laboratoriya_analiza_biomeditsinskikh_izobrazheniy_i_dannykh_3024/",
+          "label": "LABID"
+        }
+      },
+      "evidence": []
+    },
+    {
+      "id": "lmn",
+      "organization": "Laboratory of Molecular Neurodegeneration (LMN), SPbPU",
+      "role": {
+        "en": "Junior CV Researcher",
+        "ru": "ML стажёр-исследователь"
+      },
+      "location": "Saint Petersburg, Russia",
+      "period": {
+        "start": "2023-04",
+        "end": "2024-04"
+      },
+      "status": "completed",
+      "responsibilities": {
+        "en": [
+          "Developed TriDeFusion, a 3D fluorescence-microscopy denoising algorithm combining Noise2Noise and Non-local Means, presented at IEEE SIBIRCON 2024.",
+          "Developed FRT, a web-based system for processing 3D microscopy images using machine learning and deep learning methods."
+        ],
+        "ru": [
+          "Разработал TriDeFusion — алгоритм денойзинга 3D флуоресцентных микроскопических изображений, объединяющий Noise2Noise и Non-local Means; представлен на IEEE SIBIRCON 2024.",
+          "Разработал FRT — веб-сервис для обработки 3D микроскопических изображений с применением методов машинного и глубокого обучения."
+        ]
+      },
+      "links": {
+        "organization": {
+          "url": "https://www.spbstu.ru/structure/laboratoriya_molekulyarnoy_neyrodegeneratsii_lmn/",
+          "label": "LMN"
+        }
+      },
+      "evidence": []
+    },
+    {
+      "id": "partner-finder",
+      "organization": "Partner Finder (startup)",
+      "role": {
+        "en": "ML Engineer",
+        "ru": "Software developer"
+      },
+      "location": "Saint Petersburg, Russia",
+      "period": {
+        "start": "2023-02",
+        "end": "2023-08"
+      },
+      "status": "completed",
+      "responsibilities": {
+        "en": [
+          "Developed a search and recommendation system for business proposals, combining NLP-driven text representations with user-based features; scaled to 10k+ proposals."
+        ],
+        "ru": [
+          "Создал поисковый движок и рекомендательную систему для бизнес-предложений, объединяющую NLP-анализ текста и пользовательские данные; обработка 10k+ предложений."
+        ]
+      },
+      "links": {},
+      "evidence": []
+    }
+  ],
+  "education": [
+    {
+      "id": "itmo",
+      "institution": {
+        "en": "ITMO University",
+        "ru": "Университет ИТМО"
+      },
+      "degree": {
+        "en": "M.S.",
+        "ru": "Магистр"
+      },
+      "field": {
+        "en": "Deep Learning and Generative AI",
+        "ru": "Глубокое обучение и генеративный ИИ"
+      },
+      "period": {
+        "start": "2024-08",
+        "end": "2026-06"
+      },
+      "status": "completed",
+      "gpa": [
+        {
+          "scale": "5.00",
+          "value": 4.9
+        },
+        {
+          "scale": "4.00",
+          "value": 3.82
+        }
+      ],
+      "thesis": {
+        "en": "Multi-agent Medical Records Data Processing System (EHR)",
+        "ru": "Мультиагентная система обработки данных медицинских карт (EHR)"
+      },
+      "evidence": []
+    },
+    {
+      "id": "spbpu",
+      "institution": {
+        "en": "Peter the Great St. Petersburg Polytechnic University (SPbPU)",
+        "ru": "Санкт-Петербургский политехнический университет Петра Великого (СПбПУ)"
+      },
+      "degree": {
+        "en": "B.S.",
+        "ru": "Бакалавр"
+      },
+      "field": {
+        "en": "Applied Mathematics and Computer Science",
+        "ru": "Прикладная математика и информатика"
+      },
+      "period": {
+        "start": "2020-09",
+        "end": "2024-06"
+      },
+      "status": "completed",
+      "gpa": [
+        {
+          "scale": "5.00",
+          "value": 4.53
+        },
+        {
+          "scale": "4.00",
+          "value": 3.62
+        }
+      ],
+      "thesis": {
+        "en": "Online AI-based deconvolution and denoising service for confocal microscopy",
+        "ru": "Онлайн-сервис ИИ-деконволюции и денойзинга для конфокальных микроскопов"
+      },
+      "evidence": []
+    }
+  ],
+  "projects": [
+    {
+      "id": "frt",
+      "type": "research",
+      "status": "completed",
+      "period": {
+        "start": "2023-04",
+        "end": null
+      },
+      "title": {
+        "en": "FRT",
+        "ru": null
+      },
+      "description": {
+        "en": "# FRT\n\n## Overview\n\nFRT is a web-based system for processing 3D microscopy images using machine learning and deep learning methods, developed at the Laboratory of Molecular Neurodegeneration (LMN), SPbPU.\n\nThe system exposes image-processing pipelines as an online service rather than as a local script, so that microscopy data can be uploaded, queued and processed asynchronously through a browser.\n\n## Stack\n\nThe service is built on FastAPI with Celery for asynchronous job execution, Redis as the broker/result backend, S3 for image storage, a React frontend, and Docker for deployment. These are the only technologies the sources attach to this project; no ML framework is named for it in any source.\n\n## Results\n\nNo quantitative results are recorded for FRT in any available source. The project's `metrics` list is therefore empty — this reflects an absence of measurements in the sources, not an absence of outcomes.\n\n## Patents\n\nTwo patent registrations are linked to this project in the CV: one for an online service for neural-network and algorithmic deconvolution of confocal fluorescence microscopy images, and one for automatic segmentation of fluorescent microspheres in confocal microscopy images. Registration numbers and dates are absent from every source, and the scans are private, so neither is recorded as canonical evidence here.\n\n## Links\n\n- Source code: https://github.com/IMZolin/frt-web",
+        "ru": "# FRT\n\n## Обзор\n\nFRT — веб-сервис для обработки 3D микроскопических изображений с применением машинного обучения и нейронных сетей, разработанный в Лаборатории молекулярной нейродегенерации (ЛМН), СПбПУ.\n\nПримечание: русскоязычные источники описывают проект, но нигде не называют его «FRT»; это название закреплено идентификатором проекта (`config/website.yml`) и адресом репозитория.\n\n## Стек\n\nСервис построен на FastAPI с Celery для асинхронного выполнения задач, Redis, S3 для хранения изображений, фронтендом на React и Docker для развёртывания. Это единственные технологии, которые источники связывают с данным проектом.\n\n## Результаты\n\nКоличественные результаты для FRT в доступных источниках отсутствуют, поэтому поле `metrics` пустое.\n\n## Патенты\n\nВ резюме к этому проекту привязаны две патентные регистрации: «Программа онлайн-сервиса нейросетевой и алгоритмической деконволюции изображений конфокальной флуоресцентной микроскопии» и «Программа для автоматической сегментации флуоресцентных микросфер на конфокальных микроскопических изображениях». Номера и даты регистрации отсутствуют во всех источниках, сканы недоступны публично, поэтому они не внесены в канонические evidence.\n\n## Ссылки\n\n- Исходный код: https://github.com/IMZolin/frt-web"
+      },
+      "highlights": {
+        "en": [
+          "Developed a web-based system for processing 3D microscopy images using ML and DL methods (FastAPI, Celery, Redis, S3, React, Docker)."
+        ],
+        "ru": [
+          "Разработал веб-сервис для обработки 3D микроскопических изображений (FastAPI, Celery, Redis, S3, React, Docker) с применением ML и нейросетей."
+        ]
+      },
+      "technologies": [
+        "FastAPI",
+        "Celery",
+        "Redis",
+        "S3",
+        "React",
+        "Docker"
+      ],
+      "metrics": [],
+      "links": {
+        "github": {
+          "url": "https://github.com/IMZolin/frt-web",
+          "label": "GitHub"
+        }
+      },
+      "evidence": [],
+      "related": {
+        "projects": [],
+        "publications": [],
+        "experience": [
+          "lmn"
+        ],
+        "achievements": [
+          "patent-microsphere-segmentation",
+          "patent-confocal-deconvolution"
+        ]
+      }
+    },
+    {
+      "id": "mas-ehr",
+      "type": "research",
+      "status": "active",
+      "period": {
+        "start": "2025-08",
+        "end": null
+      },
+      "title": {
+        "en": "MAS-EHR",
+        "ru": "MAS-EHR"
+      },
+      "description": {
+        "en": "# MAS-EHR\n\n## Overview\n\nMAS-EHR is a multi-agent system for automated processing of electronic health records, developed as part of the Digital Public Health Technologies (DPHT) work at ITMO University.\n\n## Scope\n\nThe system covers OCR of medical record documents, de-identification of patient information, and structuring/extraction of clinical information from the resulting text.\n\n## Results\n\nNo quantitative results are recorded for MAS-EHR in canonical content. The project's `metrics` list is intentionally empty.\n\n## Links\n\n- Presentation: https://annadphtitmo.github.io/MAS_EHR_presentation/",
+        "ru": "# MAS-EHR\n\n## Обзор\n\nMAS-EHR — мультиагентная система для автоматизированной обработки электронных медицинских карт, разработанная в рамках работы над Digital Public Health Technologies (DPHT) в Университете ИТМО.\n\n## Охват\n\nСистема включает OCR документов медицинских карт, деидентификацию данных пациентов и структуризацию/извлечение клинической информации из полученного текста.\n\n## Результаты\n\nКоличественные результаты для MAS-EHR в канонических данных не зафиксированы, поле `metrics` намеренно пустое.\n\n## Ссылки\n\n- Презентация: https://annadphtitmo.github.io/MAS_EHR_presentation/"
+      },
+      "highlights": {
+        "en": [
+          "MAS-EHR: a multi-agent system for automated processing of electronic health records, covering OCR, de-identification, and structuring/extraction of clinical information."
+        ],
+        "ru": [
+          "MAS-EHR — мультиагентная система для автоматизированной обработки электронных медицинских карт, включающая OCR, деидентификацию и структуризацию клинических данных."
+        ]
+      },
+      "technologies": [
+        "OCR"
+      ],
+      "metrics": [],
+      "links": {
+        "demo": {
+          "url": "https://annadphtitmo.github.io/MAS_EHR_presentation/",
+          "label": "MAS-EHR Presentation"
+        }
+      },
+      "evidence": [],
+      "related": {
+        "projects": [],
+        "publications": [],
+        "experience": [
+          "itmo-dpht"
+        ],
+        "achievements": [
+          "gravitation-2026-mas-ehr",
+          "selectel-pitch-the-future",
+          "ods-data-fest-2026"
+        ]
+      }
+    },
+    {
+      "id": "neurorag",
+      "type": "research",
+      "status": "active",
+      "period": {
+        "start": "2024-04",
+        "end": null
+      },
+      "title": {
+        "en": "NeuroRAG",
+        "ru": "NeuroRAG"
+      },
+      "description": {
+        "en": "# NeuroRAG\n\n## Overview\n\nNeuroRAG is a research project on multi-agent retrieval-augmented generation (RAG) for question answering in neurobiology and medicine, developed at the Laboratory of Biomedical Imaging and Data Analysis (LABID), SPbPU.\n\nGeneral-purpose large language models are strong at language generation and retrieval but unreliable in specialised scientific reasoning. NeuroRAG addresses this by grounding answers in domain literature rather than in model parameters alone.\n\n## Approach\n\nThe system retrieves over domain-specific biomedical sources — PubMed, arXiv and NCBI Gene/Protein — alongside web sources, and combines several retrieval strategies with adaptive techniques: Reciprocal Rank Fusion, LLM-based document reranking and contextual compression. Answers are produced by ensemble generation across several LLMs, followed by validation steps intended to minimise hallucinations and verify answer relevance.\n\n## Results\n\nMeasured results are recorded as `metrics` in `project.yml` and described in full in the `neurorag` publication record. In summary: on nine MMLU biomedical subsets the system ranked first or tied for first in six categories, with peak accuracies of 99.0% (Medical Genetics, tied with GPT-4.1), 94.1% (High School Chemistry) and 92.8% (Clinical Knowledge), exceeding BioMistral by 20–41 percentage points on every subset. On the open-ended PubMedQA benchmark (n=50) it more than doubled the BERTScore of a FlashRAG Naive RAG baseline (0.425 versus 0.206). In a structured blind evaluation, 13 domain specialists selected NeuroRAG as the best response 103 times out of 160 evaluated responses — 72.5% of decisive preferences, after excluding nine ties and nine \"all inadequate\" verdicts.\n\nOn the curated PubMed Summary QA free-text benchmark NeuroRAG reached a cosine similarity of 0.759 — statistically tied with Mistral Large and Llama 3.3 70B, and behind GPT-4o at 0.795.\n\n## Status\n\nThe work is described in a manuscript that is currently under review; see the `neurorag` publication record for its authors, venue and status.\n\n## Links\n\n- Source code: https://github.com/Biomed-imaging-lab/NeuroRAG\n- Web service: https://neurorag.vladimirskvortsov.com",
+        "ru": "# NeuroRAG\n\n## Обзор\n\nNeuroRAG — исследовательский проект по мультиагентной генерации с извлечением (RAG) для ответов на вопросы по нейробиологии и медицине, разработанный в Лаборатории анализа биомедицинских изображений и данных (ЛАБИД), СПбПУ.\n\nВ русскоязычных источниках проект описан как «ИИ-ассистент для нейробиологов» на основе мультиагентной архитектуры LLM и RAG с доступом к PubMed, NCBI и arXiv.\n\n## Подход\n\nСистема выполняет поиск по предметным биомедицинским источникам — PubMed, arXiv и NCBI Gene/Protein — а также по веб-источникам, объединяя несколько стратегий извлечения с адаптивными методами: Reciprocal Rank Fusion, переранжирование документов с помощью LLM и контекстное сжатие. Ответ формируется ансамблем из нескольких LLM с последующими шагами валидации, снижающими число галлюцинаций и проверяющими релевантность ответа.\n\n## Результаты\n\nИзмеренные результаты записаны в поле `metrics` файла `project.yml`. Кратко: на девяти биомедицинских подмножествах MMLU система заняла первое или разделила первое место в шести категориях с пиковой точностью 99.0% (Medical Genetics, наравне с GPT-4.1), 94.1% (High School Chemistry) и 92.8% (Clinical Knowledge), превзойдя BioMistral на 20–41 процентного пункта на каждом подмножестве. На открытом бенчмарке PubMedQA (n=50) показатель BERTScore более чем вдвое превысил базовое решение FlashRAG Naive RAG (0.425 против 0.206). В слепой экспертной оценке 13 специалистов признали ответ NeuroRAG лучшим 103 раза из 160 оценённых ответов — 72.5% решающих предпочтений, после исключения девяти ничьих и девяти вердиктов «все ответы неадекватны».\n\nНа бенчмарке PubMed Summary QA косинусное сходство составило 0.759 — статистически наравне с Mistral Large и Llama 3.3 70B и ниже GPT-4o (0.795).\n\nПримечание: эти результаты приведены по англоязычной рукописи (см. поле `metrics` в `project.yml` и запись публикации `neurorag`); русскоязычной версии аннотации в источниках нет.\n\n## Статус\n\nРабота описана в рукописи, находящейся на рецензировании; авторы, издание и статус указаны в записи публикации `neurorag`.\n\n## Ссылки\n\n- Исходный код: https://github.com/Biomed-imaging-lab/NeuroRAG\n- Веб-сервис: https://neurorag.vladimirskvortsov.com"
+      },
+      "highlights": {
+        "en": [
+          "NeuroRAG: multi-agent LLM + RAG assistant for neurobiological and medical question answering over PubMed, NCBI and arXiv, combining Reciprocal Rank Fusion, LLM-based reranking and contextual compression with validated ensemble generation across several LLMs.",
+          "Ranked first or tied for first on six of nine MMLU biomedical subsets (peak 99.0% on Medical Genetics) and was selected the best response 103 of 160 times (72.5% of decisive preferences, after excluding ties and inadequate responses) in a blind evaluation by 13 domain specialists."
+        ],
+        "ru": [
+          "NeuroRAG — ИИ-ассистент на основе мультиагентной архитектуры LLM и RAG с доступом к PubMed, NCBI и arXiv для ответов на вопросы по нейробиологии и медицине."
+        ]
+      },
+      "technologies": [
+        "LLM",
+        "RAG",
+        "Multi-agent systems",
+        "Reciprocal Rank Fusion"
+      ],
+      "metrics": [
+        {
+          "name": "MMLU biomedical subsets ranked first or tied for first",
+          "value": "6 of 9",
+          "unit": null,
+          "dataset": "MMLU biomedical subsets (nine categories)",
+          "model": "NeuroRAG"
+        },
+        {
+          "name": "Accuracy",
+          "value": 99.0,
+          "unit": "%",
+          "dataset": "MMLU — Medical Genetics",
+          "model": "NeuroRAG"
+        },
+        {
+          "name": "Accuracy",
+          "value": 92.8,
+          "unit": "%",
+          "dataset": "MMLU — Clinical Knowledge",
+          "model": "NeuroRAG"
+        },
+        {
+          "name": "Accuracy",
+          "value": 94.1,
+          "unit": "%",
+          "dataset": "MMLU — High School Chemistry",
+          "model": "NeuroRAG"
+        },
+        {
+          "name": "Accuracy margin over BioMistral",
+          "value": "20–41 percentage points",
+          "unit": null,
+          "dataset": "MMLU biomedical subsets (every subset)",
+          "model": "NeuroRAG"
+        },
+        {
+          "name": "Cosine similarity",
+          "value": 0.759,
+          "unit": null,
+          "dataset": "PubMed Summary QA (curated free-text benchmark)",
+          "model": "NeuroRAG"
+        },
+        {
+          "name": "BERTScore",
+          "value": 0.425,
+          "unit": null,
+          "dataset": "PubMedQA, open-ended (n=50)",
+          "model": "NeuroRAG"
+        },
+        {
+          "name": "Best-response rate in blind expert evaluation",
+          "value": 72.5,
+          "unit": "%",
+          "dataset": "160 evaluated responses to 12 neurobiological questions rated by 13 domain specialists; 103 best-response selections out of 142 decisive preferences (9 ties and 9 'all inadequate' verdicts excluded)",
+          "model": "NeuroRAG"
+        }
+      ],
+      "links": {
+        "github": {
+          "url": "https://github.com/Biomed-imaging-lab/NeuroRAG",
+          "label": "GitHub"
+        },
+        "demo": {
+          "url": "https://neurorag.vladimirskvortsov.com/",
+          "label": "Web service"
+        }
+      },
+      "evidence": [],
+      "related": {
+        "projects": [],
+        "publications": [
+          "neurorag"
+        ],
+        "experience": [
+          "labid"
+        ],
+        "achievements": [
+          "patent-neuroscience-rag-ensemble"
+        ]
+      }
+    },
+    {
+      "id": "tridefusion",
+      "type": "research",
+      "status": "active",
+      "period": {
+        "start": "2023-04",
+        "end": null
+      },
+      "title": {
+        "en": "TriDeFusion",
+        "ru": "TriDeFusion"
+      },
+      "description": {
+        "en": "# TriDeFusion\n\n## Overview\n\nTriDeFusion is a research line on deep-learning-based restoration and denoising of 3D fluorescence microscopy images, developed across two laboratories: the Laboratory of Molecular Neurodegeneration (LMN), SPbPU (TriDeFusion v1) and the Laboratory of Biomedical Imaging and Data Analysis (LABID), SPbPU (TriDeFusion-v2).\n\nFluorescence microscopy images are frequently degraded by noise and distortions that complicate downstream analysis. TriDeFusion addresses this by combining classical and learned denoising techniques rather than relying on a single method.\n\n## TriDeFusion (v1)\n\nThe first version combines Noise2Noise (N2N) with Non-Local Means (NLM) filtering for 3D image denoising. On synthetic data it achieved up to a 54% reduction in RMSE and a 20% increase in PSNR compared to an N2N-UNet baseline; on real data it reduced noise mean intensity by over 50% and noise variance by 33%. This work was presented as \"TriDeFusion: Enhanced denoising algorithm for 3D fluorescence microscopy images integrating modified Noise2Noise and Non-local means\" at IEEE SIBIRCON 2024 (see the `tridefusion-v1` publication).\n\n## TriDeFusion-v2\n\nThe second version extends the approach into a hybrid spatial-frequency restoration design: a lightweight attention-based CNN family (RAUDen), Noise2Noise knowledge distillation into a smaller distilled variant (RAUDen-Lite, -40% parameters and inference time), and a locally adaptive, CUDA-accelerated wavelet-domain refinement module (8x speedup). This work is described in \"TriDeFusion-v2: Distilled Hybrid Residual Attention Denoising and Wavelet Filtering\", currently under review in a Q1 journal (see the `tridefusion-v2` publication).\n\n## Code\n\nSource code: https://github.com/Biomed-imaging-lab/TriDeFusion",
+        "ru": "# TriDeFusion\n\n## Обзор\n\nTriDeFusion — исследовательское направление по восстановлению и денойзингу 3D-изображений флуоресцентной микроскопии на основе глубокого обучения, развивавшееся в двух лабораториях: Лаборатории молекулярной нейродегенерации (ЛМН), СПбПУ (TriDeFusion v1) и Лаборатории анализа биомедицинских изображений и данных (ЛАБИД), СПбПУ (TriDeFusion-v2).\n\nИзображения флуоресцентной микроскопии часто страдают от шума и искажений, усложняющих последующий анализ. TriDeFusion решает эту задачу, комбинируя классические и обучаемые методы денойзинга вместо использования единственного подхода.\n\n## TriDeFusion (v1)\n\nПервая версия объединяет Noise2Noise (N2N) и фильтр Non-local Means (NLM) для денойзинга 3D-изображений. На синтетических данных достигнуто снижение RMSE до 54% и рост PSNR на 20% по сравнению с базовым методом N2N-UNet; на реальных данных среднее значение шума снижено более чем на 50%, дисперсия — на 33%. Работа представлена как «TriDeFusion: Enhanced denoising algorithm for 3D fluorescence microscopy images integrating modified Noise2Noise and Non-local means» на конференции IEEE SIBIRCON 2024 (см. публикацию `tridefusion-v1`).\n\n## TriDeFusion-v2\n\nВторая версия расширяет подход до гибридной пространственно-частотной архитектуры: семейство лёгких CNN с механизмом внимания (RAUDen), дистилляция знаний Noise2Noise в уменьшенную модель (RAUDen-Lite, -40% параметров и времени инференса) и локально-адаптивный CUDA-ускоренный модуль уточнения в вейвлет-области (ускорение 8x). Работа описана в статье «TriDeFusion-v2: Distilled Hybrid Residual Attention Denoising and Wavelet Filtering», которая находится на рецензировании в журнале Q1 (см. публикацию `tridefusion-v2`).\n\n## Код\n\nИсходный код: https://github.com/Biomed-imaging-lab/TriDeFusion"
+      },
+      "highlights": {
+        "en": [
+          "TriDeFusion (v1): 3D fluorescence-microscopy denoising algorithm combining Noise2Noise and Non-local Means; up to 54% RMSE reduction and 20% PSNR increase on synthetic data vs N2N-UNet (IEEE SIBIRCON 2024).",
+          "TriDeFusion-v2: hybrid RAUDen architecture with Noise2Noise knowledge distillation (RAUDen-Lite, -40% parameters and inference time) and a CUDA wavelet-domain refinement module (8x speedup); under review in a Q1 journal."
+        ],
+        "ru": [
+          "TriDeFusion (v1): алгоритм денойзинга 3D-изображений, объединяющий Noise2Noise и фильтр Non-local Means; RMSE ↓54%, PSNR ↑20% на синтетических данных vs N2N-UNet (IEEE SIBIRCON 2024).",
+          "TriDeFusion-v2: модель денойзинга на архитектурах RAUDen с N2N Knowledge Distillation (RAUDen-Lite, -40% параметров и времени инференса) и CUDA-wavelet-фильтром (ускорение 8x); статья подана в Q1 журнал."
+        ]
+      },
+      "technologies": [
+        "Noise2Noise",
+        "Non-local Means",
+        "RAUDen",
+        "Wavelet Filtering",
+        "CUDA"
+      ],
+      "metrics": [
+        {
+          "name": "RMSE reduction",
+          "value": "up to 54%",
+          "unit": null,
+          "dataset": "synthetic data",
+          "model": "TriDeFusion (v1)"
+        },
+        {
+          "name": "PSNR increase",
+          "value": "20%",
+          "unit": null,
+          "dataset": "synthetic data",
+          "model": "TriDeFusion (v1)"
+        },
+        {
+          "name": "Noise mean-intensity reduction",
+          "value": "over 50%",
+          "unit": null,
+          "dataset": "real data",
+          "model": "TriDeFusion (v1)"
+        },
+        {
+          "name": "Noise variance reduction",
+          "value": "33%",
+          "unit": null,
+          "dataset": "real data",
+          "model": "TriDeFusion (v1)"
+        },
+        {
+          "name": "PSNR",
+          "value": "29.2 ± 2.8",
+          "unit": "dB",
+          "dataset": "synthetic tubular volumes, high noise (Poisson α=1, σ=0.2)",
+          "model": "TriDeFusion-v2 (TDF2)"
+        },
+        {
+          "name": "MAE",
+          "value": "0.023 ± 0.006",
+          "unit": null,
+          "dataset": "synthetic tubular volumes, high noise (Poisson α=1, σ=0.2)",
+          "model": "TriDeFusion-v2 (TDF2)"
+        },
+        {
+          "name": "MS-SSIM",
+          "value": "0.85 ± 0.05",
+          "unit": null,
+          "dataset": "synthetic tubular volumes, high noise (Poisson α=1, σ=0.2)",
+          "model": "TriDeFusion-v2 (TDF2)"
+        },
+        {
+          "name": "LPIPS",
+          "value": "0.082 ± 0.016",
+          "unit": null,
+          "dataset": "synthetic tubular volumes, high noise (Poisson α=1, σ=0.2)",
+          "model": "TriDeFusion-v2 (TDF2)"
+        },
+        {
+          "name": "Parameter and inference-time reduction",
+          "value": "-40%",
+          "unit": null,
+          "dataset": null,
+          "model": "TriDeFusion-v2 (RAUDen-Lite)"
+        },
+        {
+          "name": "CUDA wavelet module speedup",
+          "value": "8x",
+          "unit": null,
+          "dataset": null,
+          "model": "TriDeFusion-v2"
+        }
+      ],
+      "links": {
+        "github": {
+          "url": "https://github.com/Biomed-imaging-lab/TriDeFusion",
+          "label": "GitHub"
+        }
+      },
+      "evidence": [],
+      "related": {
+        "projects": [],
+        "publications": [
+          "tridefusion-v1",
+          "tridefusion-v2"
+        ],
+        "experience": [
+          "lmn",
+          "labid"
+        ],
+        "achievements": [
+          "sibircon-2024"
+        ]
+      }
+    }
+  ],
+  "publications": [
+    {
+      "id": "neurorag",
+      "title": {
+        "en": "NeuroRAG: A Multi-Agent Model for Neurobiological Question Answering",
+        "ru": null
+      },
+      "description": {
+        "en": "# NeuroRAG: A Multi-Agent Model for Neurobiological Question Answering\n\n## Abstract\n\n**Objective:** Large Language Models (LLMs) perform well in general language tasks but remain prone to factual errors and weak domain-specific reasoning in neurobiology and medicine. This study aims to improve the reliability of biomedical question answering.\n\n**Methods:** We developed NeuroRAG, a multi-agent retrieval-augmented generation framework that combines domain-specific and web-based retrieval, adaptive document filtering, multi-LLM answer generation, and post-generation validation. Its performance was evaluated on nine biomedical MMLU subsets, a free-text PubMed Summary QA dataset, PubMedQA, and a blinded expert assessment.\n\n**Results:** NeuroRAG ranked first or tied for first on six of nine MMLU subsets and exceeded the biomedical baseline model by 20–41 percentage points across all subsets. On PubMed Summary QA, it achieved competitive semantic similarity relative to leading general-purpose LLMs and substantially outperformed the biomedical baseline. On PubMedQA, NeuroRAG more than doubled the BERTScore of a Naive RAG baseline. In the expert evaluation, 13 specialists assessed 160 responses to 12 neurobiological questions; NeuroRAG received 103 of 160 total selections and 72.5% of decisive model preferences after excluding ties and inadequate responses.\n\n**Conclusion:** NeuroRAG demonstrates that structured multi-source retrieval, adaptive filtering, ensemble generation, and validation can improve the quality and grounding of biomedical question answering compared with standalone LLMs and simple RAG pipelines. The framework provides a reproducible tool for source-grounded scientific information support in neurobiology and biomedicine.\n\n## Keywords\n\nneuroscience; multi-agent generation; large language model; retrieval-augmented generation; RAG; LLM",
+        "ru": null
+      },
+      "year": 2026,
+      "status": "under_review",
+      "doi": null,
+      "authors": [
+        "Vladimir Skvortsov",
+        "Ivan Zolin",
+        "Vyacheslav Chukanov",
+        "Ekaterina Pchitskaya"
+      ],
+      "venue": {
+        "name": "Journal of Biomedical Informatics",
+        "pages": null,
+        "isbn": null,
+        "publisher": null
+      },
+      "links": {},
+      "related": {
+        "projects": [
+          "neurorag"
+        ],
+        "publications": [],
+        "experience": [],
+        "achievements": []
+      }
+    },
+    {
+      "id": "tridefusion-v1",
+      "title": {
+        "en": "TriDeFusion: Enhanced denoising algorithm for 3D fluorescence microscopy images integrating modified Noise2Noise and Non-local means",
+        "ru": null
+      },
+      "description": {
+        "en": "## Abstract\n\nFluorescence microscopy is a technique for obtaining images of luminous objects of small size. It is widely used in fields ranging from materials science to neurobiology. Fluorescence microscopy has several advantages over other forms of microscopy, offering high sensitivity and specificity. However, it often results in images with noise and distortions, complicating subsequent analysis. This paper introduces the TriDeFusion algorithm for 3D image denoising, integrating Non-Local Means (NLM) and Modified Noise2Noise (N2N) techniques. Our results show that TriDeFusion significantly improves image quality, particularly in preserving details while reducing noise. In experiments with synthetic data, the combined methods outperformed individual approaches in both Root Mean Square Error (RMSE) and Peak Signal-to-Noise Ratio (PSNR) metrics, achieving up to a 54% reduction in RMSE and a 20% increase in PSNR. For real data, our algorithm demonstrated a significant reduction of noise mean intensity by over 50% and variance by 33%, confirming its robustness and effectiveness across different noise levels and data types.\n\n## Key words\n\n- [fluorescence microscopy](https://ieeexplore.ieee.org/search/searchresult.jsp?matchBoolean=true\\&queryText=%22Index%20Terms%22\\:fluorescence%20microscopy\\&newsearch=true)\n- [confocal microscopy](https://ieeexplore.ieee.org/search/searchresult.jsp?matchBoolean=true\\&queryText=%22Index%20Terms%22\\:confocal%20microscopy\\&newsearch=true)\n- [denoising](https://ieeexplore.ieee.org/search/searchresult.jsp?matchBoolean=true\\&queryText=%22Index%20Terms%22\\:denoising\\&newsearch=true)\n- [computer vision](https://ieeexplore.ieee.org/search/searchresult.jsp?matchBoolean=true\\&queryText=%22Index%20Terms%22\\:computer vision\\&newsearch=true)\n- [deep learning](https://ieeexplore.ieee.org/search/searchresult.jsp?matchBoolean=true\\&queryText=%22Index%20Terms%22\\:deep learning\\&newsearch=true)\n- [convolution neural network](https://ieeexplore.ieee.org/search/searchresult.jsp?matchBoolean=true\\&queryText=%22Index%20Terms%22\\:convolution neural network\\&newsearch=true)",
+        "ru": null
+      },
+      "year": 2024,
+      "status": "published",
+      "doi": "10.1109/SIBIRCON63777.2024.10758532",
+      "authors": [
+        "Ivan Zolin",
+        "Vyacheslav Chukanov",
+        "Ekaterina Pchitskaya"
+      ],
+      "venue": {
+        "name": "2024 IEEE International Multi-Conference on Engineering, Computer and Information Sciences, SIBIRCON 2024",
+        "pages": "211-216",
+        "isbn": "9798331532024",
+        "publisher": "Institute of Electrical and Electronics Engineers Inc."
+      },
+      "links": {
+        "paper": {
+          "url": "https://ieeexplore.ieee.org/document/10758532",
+          "label": "IEEE Xplore"
+        },
+        "official": {
+          "url": "https://sibircon.ieeesiberia.org/files/32/556/4057/4057_2024312853.pdf",
+          "label": "SIBIRCON Proceedings PDF"
+        }
+      },
+      "related": {
+        "projects": [
+          "tridefusion"
+        ],
+        "publications": [],
+        "experience": [],
+        "achievements": []
+      }
+    },
+    {
+      "id": "tridefusion-v2",
+      "title": {
+        "en": "TriDeFusion-v2: Distilled Hybrid Residual Attention Denoising and Wavelet Filtering",
+        "ru": null
+      },
+      "description": {
+        "en": "# TriDeFusion-v2: Distilled Hybrid Residual Attention Denoising and Wavelet Filtering\n\n## Abstract\n\nFluorescence microscopy is widely used to visualize biological structures, but acquired images are often degraded by noise, low signal-to-noise ratios, and limited spatial resolution. Recent deep learning–based restoration methods can achieve high reconstruction quality, but large convolutional and transformer-based architectures may impose substantial computational costs and limit their deployment on resource-constrained systems. In this work, we present TriDeFusion-v2 (TDF2), a hybrid spatial–frequency restoration framework that combines a lightweight attention-based CNN, Noise2Noise knowledge distillation, and locally adaptive wavelet-domain refinement. The proposed design separates learned spatial reconstruction from coefficient-level frequency refinement, enabling local suppression of residual high-frequency noise while preserving fine biological structures. Extensive experiments on synthetic tubular and calcium-imaging data, as well as real fluorescence microscopy acquisitions, demonstrate that TDF2 achieves competitive or superior restoration quality relative to established and recent baselines while substantially reducing model complexity and inference time. Real-data experiments further demonstrate improvements in background suppression, signal-to-noise characteristics, and structural sharpness in the absence of clean Ground Truth (GT) images. These results indicate that TDF2 provides a favorable quality–efficiency trade-off for large-scale fluorescence microscopy processing and resource-constrained biomedical imaging pipelines. Our code is available at https://github.com/Biomed-imaging-lab/TriDeFusion\n\n## Keywords\n\nDenoising, microscopy, neuroimaging, neural network, optimization, self-supervised learning, transformers, wavelet.",
+        "ru": null
+      },
+      "year": 2026,
+      "status": "under_review",
+      "doi": null,
+      "authors": [
+        "Ivan Zolin",
+        "Anastasiya Rakovskaya",
+        "Evgenii Fedorov",
+        "Sergey Belyaev",
+        "Vyacheslav Chukanov",
+        "Ekaterina Pchitskaya"
+      ],
+      "venue": {
+        "name": "IEEE Access",
+        "pages": null,
+        "isbn": null,
+        "publisher": null
+      },
+      "links": {},
+      "related": {
+        "projects": [
+          "tridefusion"
+        ],
+        "publications": [],
+        "experience": [],
+        "achievements": []
+      }
+    }
+  ],
+  "achievements": [
+    {
+      "id": "sibircon-2024",
+      "title": {
+        "en": "IEEE SIBIRCON 2024",
+        "ru": "IEEE SIBIRCON 2024"
+      },
+      "date": "2024",
+      "organization": null,
+      "result": {
+        "en": "Presented the paper \"TriDeFusion: Enhanced denoising algorithm for 3D fluorescence microscopy images integrating modified Noise2Noise and Non-local means\" at IEEE SIBIRCON 2024.",
+        "ru": "Представил научную работу \"TriDeFusion: Enhanced denoising algorithm for 3D fluorescence microscopy images integrating modified Noise2Noise and Non-local means\" на конференции IEEE SIBIRCON 2024."
+      },
+      "links": [],
+      "evidence": [],
+      "related": {
+        "projects": [
+          "tridefusion"
+        ],
+        "publications": [
+          "tridefusion-v1"
+        ],
+        "experience": [
+          "lmn"
+        ],
+        "achievements": []
+      }
+    },
+    {
+      "id": "selectel-pitch-the-future",
+      "title": {
+        "en": "Pitch the Future: Med AI",
+        "ru": "Pitch the Future: Med AI"
+      },
+      "date": null,
+      "organization": "Selectel",
+      "result": {
+        "en": "Recipient of the Selectel grant for the \"Pitch the Future: Med AI\" competition, with the MAS-EHR project.",
+        "ru": "Победитель грантового конкурса Selectel \"Pitch the Future: Med AI\"."
+      },
+      "links": [
+        {
+          "url": "https://selectel.ru/blog/events/pitch-the-future/?utm_source=telegram&utm_medium=referral&utm_campaign=events_pitch_the_future_1225_medikalksu_paid#video-slider",
+          "label": "Event page"
+        }
+      ],
+      "evidence": [],
+      "related": {
+        "projects": [
+          "mas-ehr"
+        ],
+        "publications": [],
+        "experience": [],
+        "achievements": []
+      }
+    },
+    {
+      "id": "ods-data-fest-2026",
+      "title": {
+        "en": "ODS Data Fest 2026",
+        "ru": "ODS Data Fest 2026"
+      },
+      "date": "2026",
+      "organization": null,
+      "result": {
+        "en": "Speaker at ODS Data Fest 2026 (\"Medical Data Horror Stories\" track) with the talk \"MAS-EHR: A Multi-Agent System for Clinical Data Integration and Harmonization\".",
+        "ru": "Выступление на конференции ODS Data Fest 2026 в секции \"Ужасы медицинских данных\" с докладом \"MAS-EHR: Мультиагентная система для интеграции, гармонизации и анализа клинических данных\"."
+      },
+      "links": [],
+      "evidence": [],
+      "related": {
+        "projects": [
+          "mas-ehr"
+        ],
+        "publications": [],
+        "experience": [],
+        "achievements": []
+      }
+    },
+    {
+      "id": "itmo-congress-young-scientists-2025",
+      "title": {
+        "en": "XIV ITMO Congress of Young Scientists",
+        "ru": "XIV Конгресс Молодых Учёных ИТМО"
+      },
+      "date": "2025",
+      "organization": null,
+      "result": {
+        "en": "Winner, XIV ITMO Congress of Young Scientists (2025).",
+        "ru": "Победа в XIV Конгрессе Молодых Учёных ИТМО."
+      },
+      "links": [],
+      "evidence": [],
+      "related": {
+        "projects": [],
+        "publications": [],
+        "experience": [],
+        "achievements": []
+      }
+    },
+    {
+      "id": "itmo-young-professionals-2024",
+      "title": {
+        "en": "International ITMO Conference \"Young Professionals\"",
+        "ru": "Международная конференция \"Молодые профессионалы\""
+      },
+      "date": "2024",
+      "organization": "ITMO",
+      "result": {
+        "en": "Winner, \"Best Popular Science Talk\" at the International ITMO Conference \"Young Professionals\" (2024).",
+        "ru": "Победа в номинации \"Лучшее научно-популярное выступление\" молодого профессионала на международной конференции \"Молодые профессионалы\" (2024)."
+      },
+      "links": [],
+      "evidence": [],
+      "related": {
+        "projects": [],
+        "publications": [],
+        "experience": [],
+        "achievements": []
+      }
+    },
+    {
+      "id": "melnichenko-competition-2024",
+      "title": {
+        "en": "Andrey Melnichenko Russian Science Competition",
+        "ru": "Российский научный конкурс А. И. Мельниченко"
+      },
+      "date": "2024",
+      "organization": null,
+      "result": {
+        "en": "Grand Finalist, Andrey Melnichenko Russian Science Competition (2024).",
+        "ru": "Суперфиналист Российского научного конкурса А. И. Мельниченко."
+      },
+      "links": [],
+      "evidence": [],
+      "related": {
+        "projects": [],
+        "publications": [],
+        "experience": [],
+        "achievements": []
+      }
+    },
+    {
+      "id": "itmo-young-professionals-2025",
+      "title": {
+        "en": "International ITMO Conference \"Young Professionals\"",
+        "ru": "Конференция ИТМО \"Молодые профессионалы\""
+      },
+      "date": "2025",
+      "organization": "ITMO",
+      "result": {
+        "en": "Participant, International ITMO Conference \"Young Professionals\" (2025).",
+        "ru": "Конференция ИТМО \"Молодые профессионалы\" (2025)."
+      },
+      "links": [],
+      "evidence": [],
+      "related": {
+        "projects": [],
+        "publications": [],
+        "experience": [],
+        "achievements": []
+      }
+    },
+    {
+      "id": "blue-sky-research-2024",
+      "title": {
+        "en": "Blue Sky Research Scientific Projects Competition",
+        "ru": "Конкурс научных проектов \"Blue Sky Research\""
+      },
+      "date": "2024",
+      "organization": null,
+      "result": {
+        "en": "Participant, Blue Sky Research Scientific Projects Competition (2024).",
+        "ru": "Участие в конкурсе научных проектов \"Blue Sky Research\" (2024)."
+      },
+      "links": [],
+      "evidence": [],
+      "related": {
+        "projects": [],
+        "publications": [],
+        "experience": [],
+        "achievements": []
+      }
+    },
+    {
+      "id": "polytech-life-sciences-2025",
+      "title": {
+        "en": "Polytech for Life Sciences 2025",
+        "ru": "Политех наукам жизнь 2025"
+      },
+      "date": "2025",
+      "organization": null,
+      "result": {
+        "en": "Conference presentation at \"Polytech for Life Sciences 2025\".",
+        "ru": "Участие в конференции \"Политех наукам жизнь 2025\"."
+      },
+      "links": [],
+      "evidence": [],
+      "related": {
+        "projects": [],
+        "publications": [],
+        "experience": [],
+        "achievements": []
+      }
+    },
+    {
+      "id": "open-data-forum-2025",
+      "title": {
+        "en": "Open Data Forum 2025",
+        "ru": "Открытые данные 2025"
+      },
+      "date": "2025",
+      "organization": null,
+      "result": {
+        "en": "Conference presentation at \"Open Data Forum 2025\".",
+        "ru": "Участие в конференции-форуме \"Открытые данные 2025\"."
+      },
+      "links": [],
+      "evidence": [],
+      "related": {
+        "projects": [],
+        "publications": [],
+        "experience": [],
+        "achievements": []
+      }
+    },
+    {
+      "id": "medicine-modern-technologies-2024",
+      "title": {
+        "en": "Medicine at the Intersection of Modern Technologies",
+        "ru": "Медицина на стыке современных технологий"
+      },
+      "date": "2024",
+      "organization": null,
+      "result": {
+        "en": "Conference presentation at \"Medicine at the Intersection of Modern Technologies\" (2024).",
+        "ru": "Участие в конференции \"Медицина на стыке современных технологий\" (2024)."
+      },
+      "links": [],
+      "evidence": [],
+      "related": {
+        "projects": [],
+        "publications": [],
+        "experience": [],
+        "achievements": []
+      }
+    },
+    {
+      "id": "open-data-forum-2024-team",
+      "title": {
+        "en": "Open Data Forum 2024",
+        "ru": "Открытые данные 2024"
+      },
+      "date": "2024",
+      "organization": null,
+      "result": {
+        "en": "Team participant, \"Open Data Forum 2024\".",
+        "ru": "Командное участие в форуме \"Открытые данные 2024\"."
+      },
+      "links": [],
+      "evidence": [],
+      "related": {
+        "projects": [],
+        "publications": [],
+        "experience": [],
+        "achievements": []
+      }
+    },
+    {
+      "id": "polytech-life-sciences-2023",
+      "title": {
+        "en": "Polytech for Life Sciences 2023",
+        "ru": "Политех наукам жизнь 2023"
+      },
+      "date": "2023",
+      "organization": null,
+      "result": {
+        "en": "Conference presentation at \"Polytech for Life Sciences 2023\".",
+        "ru": "Участие в конференции \"Политех наукам жизнь 2023\"."
+      },
+      "links": [],
+      "evidence": [],
+      "related": {
+        "projects": [],
+        "publications": [],
+        "experience": [],
+        "achievements": []
+      }
+    },
+    {
+      "id": "cbai-personalized-medicine-2023",
+      "title": {
+        "en": "CB&AI – Computational Biology and Artificial Intelligence for Personalized Medicine 2023",
+        "ru": "CB&AI — Вычислительная биология и искусственный интеллект для персонализированной медицины 2023"
+      },
+      "date": "2023",
+      "organization": null,
+      "result": {
+        "en": "Conference presentation (thesis), \"CB&AI – Computational Biology and Artificial Intelligence for Personalized Medicine\" (2023).",
+        "ru": "Участие в конференции \"CB&AI — Вычислительная биология и искусственный интеллект для персонализированной медицины\" (2023) с тезисом."
+      },
+      "links": [
+        {
+          "url": "https://www.endocrincentr.ru/sites/default/files/all/EVENTS_2023/09-11.08_vychislitelnaya_biologiya_i_iskusstvennyj_intellekt_dlya_personalizirovannoj_mediciny/theses/039.pdf",
+          "label": "Thesis PDF"
+        }
+      ],
+      "evidence": [],
+      "related": {
+        "projects": [],
+        "publications": [],
+        "experience": [],
+        "achievements": []
+      }
+    },
+    {
+      "id": "selectel-career-wave-scholarship-2024",
+      "title": {
+        "en": "Selectel Career Wave Scholarship",
+        "ru": "Стипендия Selectel Career Wave"
+      },
+      "date": "2024",
+      "organization": "Selectel",
+      "result": {
+        "en": "Recipient of the Selectel Career Wave Scholarship (Autumn 2024).",
+        "ru": "Получение стипендии \"Selectel Career Wave\" (осень 2024)."
+      },
+      "links": [],
+      "evidence": [],
+      "related": {
+        "projects": [],
+        "publications": [],
+        "experience": [],
+        "achievements": []
+      }
+    },
+    {
+      "id": "patent-medical-text-deidentification",
+      "title": {
+        "en": "Detection and Anonymization of Personal Data in Unstructured Medical Texts",
+        "ru": "Программа обнаружения и маскирования персональных данных клиента в неструктурированных медицинских текстах"
+      },
+      "date": null,
+      "organization": null,
+      "result": {
+        "en": "Registered patent for a system detecting and anonymizing personal data in unstructured medical texts.",
+        "ru": "Регистрация патента на программу обнаружения и маскирования персональных данных клиента в неструктурированных медицинских текстах."
+      },
+      "links": [],
+      "evidence": [],
+      "related": {
+        "projects": [],
+        "publications": [],
+        "experience": [
+          "itmo-dpht"
+        ],
+        "achievements": []
+      }
+    },
+    {
+      "id": "patent-neuroscience-rag-ensemble",
+      "title": {
+        "en": "AI System Based on an Ensemble of Language Models with RAG Access to a Neuroscience Knowledge Base",
+        "ru": "Программа для ИИ-системы на основе ансамбля языковых моделей с RAG-доступом к базе знаний по нейробиологии"
+      },
+      "date": null,
+      "organization": null,
+      "result": {
+        "en": "Registered patent for an AI system based on an ensemble of language models with RAG-based access to a neuroscience knowledge base.",
+        "ru": "Регистрация патента на программу для ИИ-системы на основе ансамбля языковых моделей с RAG-доступом к базе знаний по нейробиологии."
+      },
+      "links": [],
+      "evidence": [],
+      "related": {
+        "projects": [
+          "neurorag"
+        ],
+        "publications": [],
+        "experience": [
+          "labid"
+        ],
+        "achievements": []
+      }
+    },
+    {
+      "id": "patent-microsphere-segmentation",
+      "title": {
+        "en": "Automatic Segmentation of Fluorescent Microspheres in Confocal Microscopy Images",
+        "ru": "Программа для автоматической сегментации флуоресцентных микросфер на конфокальных микроскопических изображениях"
+      },
+      "date": null,
+      "organization": null,
+      "result": {
+        "en": "Registered patent for a method of automatic segmentation of fluorescent microspheres in confocal microscopy images.",
+        "ru": "Регистрация патента на программу для автоматической сегментации флуоресцентных микросфер на конфокальных микроскопических изображениях."
+      },
+      "links": [],
+      "evidence": [],
+      "related": {
+        "projects": [
+          "frt"
+        ],
+        "publications": [],
+        "experience": [
+          "lmn"
+        ],
+        "achievements": []
+      }
+    },
+    {
+      "id": "patent-confocal-deconvolution",
+      "title": {
+        "en": "Online AI-Based Deconvolution and Denoising Service for Confocal Fluorescence Microscopy Images",
+        "ru": "Программа онлайн-сервиса нейросетевой и алгоритмической деконволюции изображений конфокальной флуоресцентной микроскопии"
+      },
+      "date": null,
+      "organization": null,
+      "result": {
+        "en": "Registered patent for an online AI-based deconvolution and denoising service for confocal fluorescence microscopy images.",
+        "ru": "Регистрация патента на программу онлайн-сервиса нейросетевой и алгоритмической деконволюции изображений конфокальной флуоресцентной микроскопии."
+      },
+      "links": [],
+      "evidence": [],
+      "related": {
+        "projects": [
+          "frt"
+        ],
+        "publications": [],
+        "experience": [
+          "lmn"
+        ],
+        "achievements": []
+      }
+    },
+    {
+      "id": "gravitation-2026-mas-ehr",
+      "title": {
+        "en": "International AI & Big Data Award \"Gravitation 2026\"",
+        "ru": "Международная премия по ИИ и Big Data \"Гравитация 2026\""
+      },
+      "date": "2026",
+      "organization": null,
+      "result": {
+        "en": "Winner, International AI & Big Data Award \"Gravitation 2026\" (Youth Track) for MAS-EHR.",
+        "ru": "Победитель международной премии по ИИ и Big Data \"Гравитация 2026\" в номинации \"Молодёжный трек\" за проект MAS-EHR."
+      },
+      "links": [],
+      "evidence": [],
+      "related": {
+        "projects": [
+          "mas-ehr"
+        ],
+        "publications": [],
+        "experience": [],
+        "achievements": []
+      }
+    },
+    {
+      "id": "itmo-students-awards-2024",
+      "title": {
+        "en": "ITMO Students Awards 2024",
+        "ru": "ITMO Students Awards 2024"
+      },
+      "date": "2024",
+      "organization": "ITMO",
+      "result": {
+        "en": "Nominee for the \"Intellect of the Year\" award at ITMO Students Awards 2024.",
+        "ru": "Номинация в направлении \"Интеллект года\" премии \"ITMO Students Awards 2024\"."
+      },
+      "links": [],
+      "evidence": [],
+      "related": {
+        "projects": [],
+        "publications": [],
+        "experience": [],
+        "achievements": []
+      }
+    }
+  ],
+  "skills": {
+    "groups": [
+      {
+        "category": "languages",
+        "items": [
+          "Python",
+          "C",
+          "C++",
+          "SQL",
+          "MATLAB",
+          "JavaScript",
+          "Java",
+          "LaTeX"
+        ]
+      },
+      {
+        "category": "ml_ai",
+        "items": [
+          "Machine Learning",
+          "Deep Learning",
+          "Computer Vision",
+          "NLP",
+          "LLM",
+          "RAG",
+          "Multi-Agent Systems",
+          "RL",
+          "AutoML"
+        ]
+      },
+      {
+        "category": "frameworks",
+        "items": [
+          "PyTorch",
+          "JAX",
+          "TensorFlow",
+          "OpenCV",
+          "ONNX",
+          "LangChain",
+          "LangGraph",
+          "scikit-learn",
+          "Ultralytics",
+          "pandas",
+          "NumPy",
+          "NLTK"
+        ]
+      },
+      {
+        "category": "data",
+        "items": [
+          "PostgreSQL"
+        ]
+      },
+      {
+        "category": "mlops",
+        "items": [
+          "Docker",
+          "FastAPI",
+          "Django",
+          "ReactJS",
+          "Redis",
+          "Kafka",
+          "Celery",
+          "S3",
+          "Prometheus",
+          "Grafana",
+          "ELK",
+          "CI/CD",
+          "Microservices",
+          "GPU/CUDA"
+        ]
+      },
+      {
+        "category": "core_cs",
+        "items": [
+          "Statistics",
+          "Probability Theory",
+          "Calculus",
+          "Linear Algebra",
+          "Optimization",
+          "Discrete Mathematics",
+          "Algorithms and Data Structures",
+          "Parallel Computing"
+        ]
+      },
+      {
+        "category": "tools",
+        "items": [
+          "Git",
+          "Bash"
+        ]
+      }
+    ]
+  },
+  "blog": [],
+  "links": {
+    "github": {
+      "url": "https://github.com/IMZolin",
+      "label": "GitHub"
+    },
+    "linkedin": {
+      "url": "https://www.linkedin.com/in/ivan-zolin",
+      "label": "LinkedIn"
+    },
+    "telegram": {
+      "personal": {
+        "url": "https://t.me/zolin_work",
+        "label": "Telegram"
+      },
+      "channel": {
+        "url": "https://t.me/noise_adjusted",
+        "label": "Telegram Channel"
+      }
+    },
+    "research": {
+      "google_scholar": {
+        "url": "https://scholar.google.com/citations?user=JWYh92gAAAAJ&view_op",
+        "label": "Google Scholar"
+      },
+      "orcid": {
+        "url": "https://orcid.org/0009-0005-3498-7880",
+        "label": "ORCID"
+      },
+      "researchgate": {
+        "url": "https://www.researchgate.net/profile/Ivan-Zolin-2",
+        "label": "ResearchGate"
+      }
+    },
+    "email": "zolin_im@outlook.com"
+  }
+}
