@@ -1,0 +1,9 @@
+<!-- Site search modal (opened by header button or Cmd/Ctrl+K) -->
+<div id="site-search" class="site-search" data-base="{{ site.baseurl }}" role="dialog" aria-modal="true" aria-label="Search" hidden>
+  <div class="site-search-panel">
+    <input id="site-search-input" class="site-search-input" type="search" placeholder="Search…" autocomplete="off" aria-label="Search">
+    <div id="site-search-results" class="site-search-results"></div>
+    <div class="site-search-foot"><kbd>↑</kbd> <kbd>↓</kbd> navigate · <kbd>Enter</kbd> open · <kbd>Esc</kbd> close</div>
+  </div>
+</div>
+<script defer src="{{ '/assets/js/search.js' | relative_url | bust_file_cache }}"></script>

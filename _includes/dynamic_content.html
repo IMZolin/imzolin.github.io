@@ -1,0 +1,34 @@
+<!--
+  Dynamic content shell.
+  The professional content shown below is fetched at runtime by
+  assets/js/content-loader.js from the published contract at
+  /assets/json/content.json (resolved through Jekyll's baseurl via relative_url).
+  No professional facts are hard-coded here — this is only the shell, the
+  loading state, the error state, and the language toggle.
+-->
+<div id="dynamic-content"
+     class="dynamic-content"
+     data-content-url="{{ '/assets/json/content.json' | relative_url }}"
+     {%- if include.sections %}
+     data-sections="{{ include.sections }}"
+     {%- endif %}>
+
+  <!-- Loading state -->
+  <div id="site-loading" class="dyn-loading">
+    <div class="dyn-spinner" aria-hidden="true"></div>
+    <span class="dyn-loading-label">Loading content…</span>
+  </div>
+
+  <!-- Error state -->
+  <div id="site-error" class="dyn-error" hidden>
+    <p class="dyn-error-title">Unable to load website content.</p>
+    <p class="dyn-error-body">Please try again later.</p>
+    <button type="button" class="dyn-retry btn btn-sm">Retry</button>
+  </div>
+
+  <!-- Rendered content target -->
+  <div id="site-content" class="site-content" hidden></div>
+</div>
+
+<!-- Load after the shell so the bootstrap finds #dynamic-content -->
+<script defer src="{{ '/assets/js/content-loader.js' | relative_url | bust_file_cache }}"></script>

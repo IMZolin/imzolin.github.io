@@ -1,0 +1,16 @@
+---
+layout: none
+permalink: /assets/json/search.json
+sitemap: false
+---
+[
+{%- assign first = true -%}
+{%- for p in site.pages -%}{%- if p.title and p.url != '/404.html' and p.nav and p.autogen == nil -%}
+{%- unless first -%},{%- endunless -%}{%- assign first = false -%}
+{"title": {{ p.title | jsonify }}, "url": {{ p.url | relative_url | jsonify }}, "text": {{ p.description | default: '' | jsonify }}}
+{%- endif -%}{%- endfor -%}
+{%- for p in site.posts -%}
+{%- unless first -%},{%- endunless -%}{%- assign first = false -%}
+{"title": {{ p.title | jsonify }}, "url": {{ p.url | relative_url | jsonify }}, "text": {{ p.content | strip_html | strip_newlines | truncate: 600 | jsonify }}}
+{%- endfor -%}
+]
