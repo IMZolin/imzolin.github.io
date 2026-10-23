@@ -1,0 +1,113 @@
+.site-search-btn {
+  padding: 0;
+  border: 0;
+  background-color: inherit;
+  color: var(--global-text-color);
+  cursor: pointer;
+
+  &:hover { color: var(--global-hover-color); }
+
+  kbd {
+    margin-left: 0.4rem;
+    font-size: 0.7rem;
+    color: var(--global-text-color-light);
+    border: 1px solid var(--global-divider-color);
+    background: transparent;
+  }
+}
+
+.site-search {
+  position: fixed;
+  inset: 0;
+  z-index: 2000;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  padding: 12vh 1rem 1rem;
+  background: rgba(0, 0, 0, 0.45);
+
+  &[hidden] { display: none; }
+}
+
+.site-search-panel {
+  width: 100%;
+  max-width: 600px;
+  background: var(--global-bg-color);
+  color: var(--global-text-color);
+  border: 1px solid var(--global-divider-color);
+  border-radius: 8px;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+  overflow: hidden;
+}
+
+.site-search-input {
+  width: 100%;
+  padding: 0.9rem 1rem;
+  border: 0;
+  border-bottom: 1px solid var(--global-divider-color);
+  background: transparent;
+  color: inherit;
+  font-size: 1.05rem;
+  outline: none;
+}
+
+.site-search-results {
+  max-height: 50vh;
+  overflow-y: auto;
+}
+
+.site-search-hit {
+  display: block;
+  padding: 0.6rem 1rem;
+  color: var(--global-text-color);
+  text-decoration: none;
+
+  &.active, &:hover {
+    background: var(--global-code-bg-color);
+    text-decoration: none;
+    color: var(--global-text-color);
+  }
+}
+
+.site-search-title { font-weight: 600; }
+.site-search-sub { font-size: 0.75rem; text-transform: capitalize; color: var(--global-text-color-light); }
+.site-search-snippet { font-size: 0.85rem; color: var(--global-text-color-light); }
+.site-search-empty { padding: 1rem; color: var(--global-text-color-light); }
+.site-search-foot {
+  padding: 0.4rem 1rem;
+  font-size: 0.75rem;
+  color: var(--global-text-color-light);
+  border-top: 1px solid var(--global-divider-color);
+}
+body.site-search-open { overflow: hidden; }
+
+// Header icon buttons (language, search, theme) share vertical centering.
+.navbar .navbar-nav .toggle-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  &[hidden] { display: none; }
+
+  button {
+    display: inline-flex;
+    align-items: center;
+    padding: 0 0.5rem;
+    line-height: 1;
+  }
+}
+
+.lang-toggle-btn {
+  border: 0;
+  background-color: inherit;
+  color: var(--global-text-color);
+  cursor: pointer;
+
+  &:hover { color: var(--global-hover-color); }
+
+  .lang-toggle-code {
+    margin-left: 0.3rem;
+    font-size: 0.75rem;
+    font-weight: 600;
+  }
+}

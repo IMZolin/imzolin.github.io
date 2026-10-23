@@ -117,6 +117,12 @@ blockquote {
 .profile {
   width: 100%;
 
+  img {
+    aspect-ratio: 1 / 1;
+    object-fit: cover;
+    border-radius: 14% !important;
+  }
+
   .address {
     margin-bottom: 5px;
     margin-top: 5px;
@@ -348,7 +354,8 @@ footer.fixed-bottom {
   }
 }
 
-footer.sticky-bottom {
+footer.static-footer {
+  position: static;
   border-top: 1px solid var(--global-divider-color);
   padding-top: 40px;
   padding-bottom: 40px;

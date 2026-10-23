@@ -1,0 +1,15 @@
+# Contact page data (_pages/contact.md). `footer: true` also shows the link in the site footer. Keep in sync with links in content.json.
+email: zolin_im@outlook.com
+location: Saint-Petersburg, Russia
+timezone: UTC+3
+timezone_iana: Europe/Moscow
+socials:
+  - { title: Email,          icon: "fas fa-envelope",   url: "mailto:zolin_im@outlook.com", footer: true }
+  - { title: Telegram,       icon: "fab fa-telegram",    url: "https://t.me/zolin_work", footer: true }
+  - { title: X (Twitter),    icon: "icon-x", url: "https://x.com/i1_zolin" }
+  - { title: LinkedIn,       icon: "fab fa-linkedin",    url: "https://www.linkedin.com/in/ivan-zolin" }
+  - { title: GitHub,         icon: "fab fa-github",      url: "https://github.com/IMZolin", footer: true }
+  - { title: Google Scholar, icon: "ai ai-google-scholar", url: "https://scholar.google.com/citations?user=JWYh92gAAAAJ", footer: true }
+  - { title: Scopus,         icon: "ai ai-scopus",      url: "https://www.scopus.com/authid/detail.uri?authorId=59473355300" }
+  - { title: ORCID,          icon: "ai ai-orcid",        url: "https://orcid.org/0009-0005-3498-7880" }
+  - { title: ResearchGate,   icon: "ai ai-researchgate", url: "https://www.researchgate.net/profile/Ivan-Zolin-2" }

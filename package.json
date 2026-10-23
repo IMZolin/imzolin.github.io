@@ -1,0 +1,9 @@
+{
+  "name": "imzolin-github-io-tests",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Frontend tests for the dynamic content-loader (content.json contract).",
+  "scripts": {
+    "test": "node --test"
+  }
+}

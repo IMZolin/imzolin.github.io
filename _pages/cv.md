@@ -1,9 +1,19 @@
 ---
-layout: cv
+layout: page
 permalink: /cv/
 title: cv
 nav: true
 nav_order: 4
-cv_pdf: example_pdf.pdf
-description: This is a description of the page. You can modify it in 'pages/_cv.md'. You can also change or remove the top pdf download button.
+description: Experience, education, projects, achievements and skills.
 ---
+
+<h4>Table of contents</h4>
+<ul class="timeline">
+  <li><a href="#section-experience"><span class="badge-toc">Experience</span></a></li>
+  <li><a href="#section-education"><span class="badge-toc">Education</span></a></li>
+  <li><a href="#section-projects"><span class="badge-toc">Projects</span></a></li>
+  <li><a href="#section-achievements"><span class="badge-toc">Achievements</span></a></li>
+  <li><a href="#section-skills"><span class="badge-toc">Skills</span></a></li>
+</ul>
+
+{% include dynamic_content.html sections="experience,education,projects,achievements,skills" %}
