@@ -46,6 +46,8 @@
       present: "Present",
       sections: {
         profile: "About",
+        news: "Recent news",
+        selected: "Selected papers",
         experience: "Experience",
         education: "Education",
         projects: "Projects",
@@ -82,6 +84,8 @@
       present: "Настоящее время",
       sections: {
         profile: "Обо мне",
+        news: "Новости",
+        selected: "Избранные статьи",
         experience: "Опыт",
         education: "Образование",
         projects: "Проекты",
@@ -718,10 +722,26 @@
       .map(function (x) { return x.item; });
   }
 
-  function renderPublications(doc, data, lang) {
+  /**
+   * `selectedIds` (optional) renders only those publications, under the
+   * "Selected papers" heading, in the order given.
+   */
+  function renderPublications(doc, data, lang, selectedIds) {
     var t = ui(lang);
-    var wrap = section(doc, "publications", t.sections.publications);
-    var pubs = sortPublicationsByYear(data.publications);
+    var pubs;
+    var wrap;
+    if (selectedIds) {
+      pubs = [];
+      for (var s = 0; s < selectedIds.length; s++) {
+        for (var k = 0; k < data.publications.length; k++) {
+          if (data.publications[k].id === selectedIds[s]) { pubs.push(data.publications[k]); }
+        }
+      }
+      wrap = section(doc, "selected", t.sections.selected);
+    } else {
+      pubs = sortPublicationsByYear(data.publications);
+      wrap = section(doc, "publications", t.sections.publications);
+    }
     for (var i = 0; i < pubs.length; i++) {
       var item = pubs[i];
       var card = el(doc, "div", "dyn-card dyn-publication");
@@ -855,6 +875,23 @@
     return wrap;
   }
 
+  /** News rows: { date: "YYYY-MM", en, ru }. A missing ru falls back to en. */
+  function renderNews(doc, news, lang) {
+    var t = ui(lang);
+    var wrap = section(doc, "news", t.sections.news);
+    var list = el(doc, "div", "dyn-news");
+    for (var i = 0; i < news.length; i++) {
+      var text = (lang === "ru" && news[i].ru) ? news[i].ru : news[i].en;
+      if (!text) { continue; }
+      var row = el(doc, "div", "dyn-news-item");
+      row.appendChild(el(doc, "span", "dyn-news-date", formatMonth(news[i].date, lang)));
+      row.appendChild(el(doc, "span", "dyn-news-text", text));
+      list.appendChild(row);
+    }
+    wrap.appendChild(list);
+    return wrap;
+  }
+
   function renderBlog(doc, data, lang) {
     var t = ui(lang);
     var wrap = section(doc, "blog", t.sections.blog);
@@ -887,11 +924,19 @@
    * `sections` (optional array of section ids) limits what is rendered; when
    * omitted every section is rendered. Pages choose theirs via data-sections.
    */
-  function renderAll(doc, data, lang, sections) {
+  function renderAll(doc, data, lang, sections, extras) {
     lang = normalizeLang(lang);
+    extras = extras || {};
     var frag = doc.createDocumentFragment();
     function want(id) { return !sections || sections.indexOf(id) !== -1; }
     if (want("profile")) { frag.appendChild(renderProfile(doc, data, lang)); }
+    // News and selected papers are opt-in: only pages that list them render them.
+    if (sections && want("news") && isArray(extras.news) && extras.news.length) {
+      frag.appendChild(renderNews(doc, extras.news, lang));
+    }
+    if (sections && want("selected") && isArray(extras.selected) && extras.selected.length) {
+      frag.appendChild(renderPublications(doc, data, lang, extras.selected));
+    }
     if (want("experience") && data.experience.length) { frag.appendChild(renderExperience(doc, data, lang)); }
     if (want("education") && data.education.length) { frag.appendChild(renderEducation(doc, data, lang)); }
     if (want("projects") && data.projects.length) { frag.appendChild(renderProjects(doc, data, lang)); }
@@ -958,6 +1003,10 @@
     var url = root.getAttribute("data-content-url") || DEFAULT_CONTENT_URL;
     var sectionAttr = root.getAttribute("data-sections");
     var sections = sectionAttr ? sectionAttr.split(",").map(function (x) { return x.trim(); }) : null;
+    var newsUrl = root.getAttribute("data-news-url");
+    var selectedAttr = root.getAttribute("data-selected");
+    var selected = selectedAttr ? selectedAttr.split(",").map(function (x) { return x.trim(); }) : null;
+    var news = [];
     var loadingEl = doc.getElementById("site-loading");
     var errorEl = doc.getElementById("site-error");
     var contentEl = doc.getElementById("site-content");
@@ -979,7 +1028,7 @@
       while (contentEl.firstChild) {
         contentEl.removeChild(contentEl.firstChild);
       }
-      contentEl.appendChild(renderAll(doc, currentData, lang, sections));
+      contentEl.appendChild(renderAll(doc, currentData, lang, sections, { news: news, selected: selected }));
       doc.documentElement.setAttribute("data-content-lang", lang);
       updateLangButtons();
       if (!scrolledToHash && win.location && win.location.hash.length > 1) {
@@ -1027,7 +1076,15 @@
     function load() {
       setState("loading");
       updateLangButtons();
-      loadContent(url).then(function (data) {
+      // News is optional: a failure just leaves the section out.
+      var newsLoad = (newsUrl && typeof win.fetch === "function")
+        ? win.fetch(newsUrl, { cache: "no-cache" })
+            .then(function (r) { return r.ok ? r.json() : []; })
+            ["catch"](function () { return []; })
+        : Promise.resolve([]);
+      Promise.all([loadContent(url), newsLoad]).then(function (res) {
+        var data = res[0];
+        news = isArray(res[1]) ? res[1] : [];
         currentData = data;
         setState("ready");
         paint();

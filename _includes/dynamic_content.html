@@ -9,6 +9,12 @@
 <div id="dynamic-content"
      class="dynamic-content"
      data-content-url="{{ '/assets/json/content.json' | relative_url }}"
+     {%- if include.news %}
+     data-news-url="{{ '/assets/json/news.json' | relative_url }}"
+     {%- endif %}
+     {%- if include.selected %}
+     data-selected="{{ include.selected }}"
+     {%- endif %}
      {%- if include.sections %}
      data-sections="{{ include.sections }}"
      {%- endif %}>

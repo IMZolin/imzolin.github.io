@@ -238,3 +238,24 @@ test("renderAll RU output omits (not fabricates) the inream Russian role", () =>
   // organization name for the title, never an invented Russian string.
   assert.ok(frag.textContent.includes("Inream (Startup)"));
 });
+
+test("renderAll renders news and selected papers only when the page opts in", () => {
+  const raw = fs.readFileSync(path.join(__dirname, "..", "assets", "json", "content.json"), "utf8");
+  const data = SC.validateContent(JSON.parse(raw));
+  const news = [
+    { date: "2026-06", en: "English item", ru: "Русский пункт" },
+    { date: "2025-08", en: "Only English", ru: null }
+  ];
+  const extras = { news, selected: ["tridefusion-v1"] };
+
+  const home = SC.renderAll(fakeDoc, data, "en", ["profile", "news", "selected"], extras).textContent;
+  assert.ok(home.includes("Recent news") && home.includes("English item"));
+  assert.ok(home.includes("Selected papers") && home.includes("TriDeFusion"));
+  assert.ok(!home.includes("TriDeFusion-v2"), "only the selected paper is rendered");
+
+  const ru = SC.renderAll(fakeDoc, data, "ru", ["news"], extras).textContent;
+  assert.ok(ru.includes("Русский пункт") && ru.includes("Only English"), "missing ru falls back to en");
+
+  const other = SC.renderAll(fakeDoc, data, "en", ["publications"], extras).textContent;
+  assert.ok(!other.includes("Recent news") && !other.includes("Selected papers"));
+});

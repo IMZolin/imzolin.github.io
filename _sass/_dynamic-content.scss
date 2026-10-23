@@ -243,3 +243,21 @@
 
 // Keep anchored sections clear of the fixed navbar.
 .dyn-section { scroll-margin-top: 70px; }
+
+// --- Recent news ---------------------------------------------------------------
+.dynamic-content {
+  .dyn-news-item {
+    display: flex;
+    gap: 1rem;
+    padding: 0.35rem 0;
+  }
+  .dyn-news-date {
+    flex: 0 0 6.5rem;
+    font-weight: 600;
+    color: var(--global-text-color-light);
+    white-space: nowrap;
+  }
+  @media (max-width: 575px) {
+    .dyn-news-item { flex-direction: column; gap: 0.1rem; }
+  }
+}
