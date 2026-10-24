@@ -18,7 +18,6 @@ description: Experience, education, projects, achievements, patents and skills.
   </nav>
   <div class="cv-actions">
     <a class="cv-download" data-cv-link="view" href="{{ site.data.cv.en.view | relative_url }}" target="_blank" rel="noopener noreferrer"><i class="fas fa-eye"></i> <span data-cv-label>View CV</span></a>
-    <a class="cv-download" data-cv-link="download" href="{{ site.data.cv.en.download | relative_url }}" download><i class="fas fa-download"></i> <span data-cv-label>Download CV</span></a>
   </div>
 </div>
 

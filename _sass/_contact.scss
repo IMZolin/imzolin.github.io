@@ -222,8 +222,37 @@ body { padding-bottom: 64px !important; }
   border-radius: 8px;
   color: var(--global-text-color);
   white-space: nowrap;
+  -webkit-tap-highlight-color: transparent;
 
-  &:hover { background: var(--global-text-color); color: var(--global-bg-color); text-decoration: none; }
+  // The theme colors every <span> with the text color; the label must follow the button instead.
+  span, i { color: inherit; }
+
+  // Same colors in every link state, so a visited / focused / pressed button
+  // never ends up with text matching its fill.
+  &:visited { color: var(--global-text-color); }
+
+  &:hover, &:active, &:focus-visible {
+    background: var(--global-text-color);
+    color: var(--global-bg-color) !important;
+    text-decoration: none;
+    outline: none;
+  }
+
+  &:focus:not(:focus-visible):not(:hover):not(:active) {
+    background: transparent;
+    color: var(--global-text-color);
+  }
+}
+
+// "View CV" under the photo: as wide as the photo.
+.profile-cv {
+  margin-top: 0.75rem;
+
+  .cv-download {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+  }
 }
 
 html { scroll-behavior: smooth; }
@@ -234,4 +263,17 @@ html { scroll-behavior: smooth; }
   body { padding: 0 !important; }
   .dyn-card, .dyn-section { break-inside: avoid; }
   .dyn-panel[hidden] { display: none !important; }
+}
+
+// Header, right side: icons and the contact button are separated by one equal gap
+// (no per-item padding / margins).
+.navbar .navbar-nav.nav-actions {
+  gap: 0.9rem;
+
+  .toggle-container button { padding: 0; }
+  .nav-contact .nav-link { margin: 0; }
+}
+
+@media (min-width: 576px) {
+  .navbar .navbar-nav.nav-actions { align-items: center; }
 }
