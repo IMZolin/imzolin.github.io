@@ -3,7 +3,5 @@
 # (published there from personal-os) by the deploy workflow before every build.
 en:
   view: assets/pdf/cv.pdf
-  download: assets/pdf/cv.pdf
 ru:
   view: assets/pdf/cv_ru.pdf
-  download: assets/pdf/cv_ru.pdf

@@ -29,6 +29,9 @@ layout: default
               alt=page.profile.image
               cache_bust=true -%}
             {% endif -%}
+            <div class="profile-cv">
+              <a class="cv-download" data-cv-link="view" href="{{ site.data.cv.en.view | relative_url }}" target="_blank" rel="noopener noreferrer"><i class="fas fa-eye"></i> <span data-cv-label>View CV</span></a>
+            </div>
             {%- if page.profile.address %}
             <div class="address">
               {{ page.profile.address }}

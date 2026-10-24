@@ -34,7 +34,8 @@
   function load() {
     if (index) { return Promise.resolve(index); }
     if (loading) { return loading; }
-    var base = document.getElementById("site-search").getAttribute("data-base");
+    // baseurl is "/" here: without trimming, base + "/assets/..." becomes "//assets/..." (another host).
+    var base = (document.getElementById("site-search").getAttribute("data-base") || "").replace(/\/+$/, "");
     loading = Promise.all([
       fetchJson(base + "/assets/json/content.json"),
       fetchJson(base + "/assets/json/search.json")
@@ -44,8 +45,10 @@
       if (content) {
         SECTIONS.forEach(function (s) {
           (content[s] || []).forEach(function (it) {
-            var title = pick(it.title) || pick(it.role) || it.organization || it.institution || it.id;
-            var sub = pick(it.role) && it.organization ? it.organization : (it.venue || it.degree || "");
+            var degree = [pick(it.degree), pick(it.field)].filter(Boolean).join(", ");
+            var title = String(pick(it.title) || pick(it.role) || degree || it.organization || pick(it.institution) || it.id);
+            var sub = pick(it.role) && it.organization ? it.organization :
+              ((it.venue && it.venue.name) || pick(it.institution) || "");
             items.push({
               title: title, sub: s + (sub ? " · " + sub : ""),
               url: base + (PAGE_OF[s] || (CV_SECTIONS.indexOf(s) !== -1 ? "/cv/" : "/")) + "#section-" + (s === "achievements" && /^patent-/.test(it.id) ? "patents" : s),

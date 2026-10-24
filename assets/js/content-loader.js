@@ -50,7 +50,6 @@
       huggingface: "Hugging Face",
       project: "Project Page",
       viewCv: "View CV",
-      downloadCv: "Download CV",
       copy: "Copy",
       copied: "Copied",
       present: "Present",
@@ -98,7 +97,6 @@
       huggingface: "Hugging Face",
       project: "Страница проекта",
       viewCv: "Смотреть CV",
-      downloadCv: "Скачать CV",
       copy: "Копировать",
       copied: "Скопировано",
       present: "Настоящее время",
@@ -487,7 +485,7 @@
   // Section renderers
   // ---------------------------------------------------------------------------
 
-  function renderProfile(doc, data, lang, cv) {
+  function renderProfile(doc, data, lang) {
     var t = ui(lang);
     var p = data.profile;
     // The profile opens the page, so it has no "About" heading or divider.
@@ -511,16 +509,6 @@
       loc.appendChild(el(doc, "i", "fas fa-map-marker-alt"));
       loc.appendChild(doc.createTextNode(" " + p.location));
       wrap.appendChild(loc);
-    }
-    var cvUrls = cv && (cv[lang] || cv.en);
-    if (cvUrls && isSafeUrlOrPath(cvUrls.view)) {
-      var cvRow = el(doc, "div", "dyn-links-row");
-      var cvLink = el(doc, "a", "dyn-cv-btn", t.viewCv);
-      cvLink.href = resolveSitePath(cvUrls.view, cv.__base);
-      cvLink.target = "_blank";
-      cvLink.rel = "noopener noreferrer";
-      cvRow.appendChild(cvLink);
-      wrap.appendChild(cvRow);
     }
     if (isArray(p.interests) && p.interests.length) {
       wrap.appendChild(el(doc, "h3", "dyn-subheading", t.interests));
@@ -1243,7 +1231,7 @@
     extras = extras || {};
     var frag = doc.createDocumentFragment();
     function want(id) { return !sections || sections.indexOf(id) !== -1; }
-    if (want("profile")) { frag.appendChild(renderProfile(doc, data, lang, extras.cv)); }
+    if (want("profile")) { frag.appendChild(renderProfile(doc, data, lang)); }
     // News and selected papers are opt-in: only pages that list them render them.
     if (sections && want("news") && isArray(extras.news) && extras.news.length) {
       frag.appendChild(renderNews(doc, extras.news, lang));
@@ -1384,7 +1372,7 @@
         var urls = cv && (cv[lang] || cv.en);
         if (urls && isSafeUrlOrPath(urls[kind])) { cvLinks[c].setAttribute("href", resolveSitePath(urls[kind], siteBase)); }
         var cvLabel = cvLinks[c].querySelector("[data-cv-label]");
-        if (cvLabel) { cvLabel.textContent = kind === "download" ? cvT.downloadCv : cvT.viewCv; }
+        if (cvLabel) { cvLabel.textContent = cvT.viewCv; }
       }
       var codes = doc.querySelectorAll("[data-lang-code]");
       for (var j = 0; j < codes.length; j++) { codes[j].textContent = lang.toUpperCase(); }

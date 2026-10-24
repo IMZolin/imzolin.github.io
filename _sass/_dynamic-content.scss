@@ -376,13 +376,7 @@
   .dyn-panel { max-height: 340px; overflow-y: auto; }
 }
 
-// "View CV" button in the profile (same look as the CV page buttons).
-.dynamic-content .dyn-cv-btn {
-  display: inline-flex;
-  align-items: center;
-  padding: 0.3rem 0.9rem;
-  border: 1px solid var(--global-text-color);
-  border-radius: 8px;
-  color: var(--global-text-color);
-  &:hover { background: var(--global-text-color); color: var(--global-bg-color); text-decoration: none; }
-}
+
+// The profile photo floats to the right and can be taller than the profile text:
+// start the next section below it so the photo / CV button never overlap it.
+.dynamic-content .dyn-section + .dyn-section { clear: both; }
