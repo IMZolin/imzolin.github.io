@@ -43,6 +43,14 @@
       errorTitle: "Unable to load website content.",
       errorBody: "Please try again later.",
       retry: "Retry",
+      pdf: "PDF",
+      cite: "Cite",
+      abstractLabel: "Abstract",
+      github: "GitHub",
+      huggingface: "Hugging Face",
+      project: "Project Page",
+      copy: "Copy",
+      copied: "Copied",
       present: "Present",
       sections: {
         profile: "About",
@@ -81,6 +89,14 @@
       errorTitle: "Не удалось загрузить содержимое сайта.",
       errorBody: "Пожалуйста, попробуйте позже.",
       retry: "Повторить",
+      pdf: "PDF",
+      cite: "Цитировать",
+      abstractLabel: "Аннотация",
+      github: "GitHub",
+      huggingface: "Hugging Face",
+      project: "Страница проекта",
+      copy: "Копировать",
+      copied: "Скопировано",
       present: "Настоящее время",
       sections: {
         profile: "Обо мне",
@@ -448,7 +464,7 @@
         return;
       }
       if (isObject(node) && typeof node.url === "string") {
-        out.push({ url: node.url, label: node.label || node.url });
+        out.push({ url: node.url, label: node.label || node.url, key: fallbackLabel || "" });
         return;
       }
       if (isObject(node)) {
@@ -722,6 +738,182 @@
       .map(function (x) { return x.item; });
   }
 
+  // ---------------------------------------------------------------------------
+  // Publication buttons: PDF / Cite / Abstract (+ GitHub, Hugging Face, Project)
+  // ---------------------------------------------------------------------------
+
+  function urlHost(url) {
+    var m = /^https?:\/\/([^\/?#]+)/i.exec(String(url));
+    return m ? m[1].toLowerCase().replace(/^www\./, "") : "";
+  }
+
+  /**
+   * Split a publication's links into the standard buttons and the rest.
+   * A link is a PDF if its key is "pdf" or its path ends in .pdf; GitHub /
+   * Hugging Face by key or host; Project Page by key (project, website, ...).
+   */
+  function classifyPublicationLinks(item) {
+    var out = { pdf: null, github: null, huggingface: null, project: null, other: [] };
+    var links = flattenLinks(item.links);
+    for (var i = 0; i < links.length; i++) {
+      var l = links[i];
+      var key = String(l.key || "").toLowerCase();
+      var host = urlHost(l.url);
+      var path = String(l.url).split(/[?#]/)[0].toLowerCase();
+      if (!out.pdf && (key === "pdf" || /\.pdf$/.test(path))) { out.pdf = l; }
+      else if (!out.github && (key === "github" || host === "github.com")) { out.github = l; }
+      else if (!out.huggingface && (/hugging/.test(key) || host === "huggingface.co")) { out.huggingface = l; }
+      else if (!out.project && /^(project|project_page|projectpage|website|homepage|page)$/.test(key)) { out.project = l; }
+      else { out.other.push(l); }
+    }
+    return out;
+  }
+
+  function bibtexEscape(text) {
+    return String(text).replace(/([&%$#_])/g, "\\$1");
+  }
+
+  function bibtexName(name) {
+    var parts = String(name).trim().split(/\s+/);
+    if (parts.length < 2) { return parts[0] || ""; }
+    var last = parts.pop();
+    return last + ", " + parts.join(" ");
+  }
+
+  /** Build a BibTeX entry from the publication fields (no invented data). */
+  function buildBibtex(item) {
+    var title = (isObject(item.title) ? (item.title.en || "") : String(item.title || "")) || item.id;
+    var venue = isObject(item.venue) ? item.venue : {};
+    var venueName = venue.name || "";
+    var isConf = /conference|proceedings|symposium|workshop|congress|sibircon/i.test(venueName) ||
+      !!venue.isbn;
+    var authors = isArray(item.authors) ? item.authors : [];
+    var surname = authors.length ? String(authors[0]).trim().split(/\s+/).pop() : "";
+    var firstWord = (title.match(/[A-Za-z0-9]+/) || ["paper"])[0];
+    var key = (surname + (item.year || "") + firstWord).replace(/[^A-Za-z0-9]/g, "").toLowerCase() || item.id;
+
+    var fields = [];
+    function add(name, value) {
+      if (value !== null && typeof value !== "undefined" && value !== "") {
+        fields.push("  " + name + " = {" + value + "}");
+      }
+    }
+    add("author", authors.map(bibtexName).map(bibtexEscape).join(" and "));
+    add("title", "{" + bibtexEscape(title) + "}");
+    add(isConf ? "booktitle" : "journal", bibtexEscape(venueName));
+    add("year", item.year);
+    add("pages", venue.pages ? String(venue.pages).replace(/\s*[-\u2013]+\s*/, "--") : "");
+    add("publisher", venue.publisher ? bibtexEscape(venue.publisher) : "");
+    add("isbn", venue.isbn);
+    add("doi", item.doi);
+    return "@" + (isConf ? "inproceedings" : "article") + "{" + key + ",\n" + fields.join(",\n") + "\n}";
+  }
+
+  /** The "## Abstract" section of the description (original paper text, kept as is). */
+  function abstractMarkdown(item, lang) {
+    var md = localized(item.description, lang);
+    if (!md && isObject(item.description)) { md = item.description.en; }
+    if (!md) { return null; }
+    var lines = String(md).split(/\r?\n/);
+    var out = [];
+    var inside = false;
+    for (var i = 0; i < lines.length; i++) {
+      if (/^#{1,6}\s*abstract\s*$/i.test(lines[i])) { inside = true; continue; }
+      if (inside && /^#{1,6}\s/.test(lines[i])) { break; }
+      if (inside) { out.push(lines[i]); }
+    }
+    var text = out.join("\n").trim();
+    return text || null;
+  }
+
+  function actionButton(doc, label, extraClass) {
+    var b = el(doc, "button", "dyn-link dyn-action " + (extraClass || ""), label);
+    b.setAttribute("type", "button");
+    b.setAttribute("aria-expanded", "false");
+    return b;
+  }
+
+  function renderPublicationActions(doc, item, lang) {
+    var t = ui(lang);
+    var row = el(doc, "div", "dyn-links-row");
+    var panels = el(doc, "div", "dyn-panels");
+    var cls = classifyPublicationLinks(item);
+    var published = item.status === "published";
+    var toggles = [];
+
+    function register(button, panel) {
+      panel.hidden = true;
+      toggles.push({ button: button, panel: panel });
+      if (button.addEventListener) {
+        button.addEventListener("click", function () {
+          var open = panel.hidden;
+          for (var i = 0; i < toggles.length; i++) {
+            toggles[i].panel.hidden = true;
+            toggles[i].button.setAttribute("aria-expanded", "false");
+          }
+          panel.hidden = !open;
+          button.setAttribute("aria-expanded", open ? "true" : "false");
+        });
+      }
+      panels.appendChild(panel);
+    }
+
+    var usedFallback = null;
+    if (published) {
+      // PDF: explicit PDF link, else the publisher page / DOI where it is served.
+      var pdf = cls.pdf;
+      if (!pdf) {
+        for (var o = 0; o < cls.other.length; o++) {
+          if (String(cls.other[o].key).toLowerCase() === "paper") { pdf = cls.other[o]; usedFallback = pdf; break; }
+        }
+      }
+      if (!pdf && item.doi) { pdf = { url: "https://doi.org/" + item.doi }; }
+      if (pdf) { row.appendChild(safeLink(doc, pdf.url, t.pdf)); }
+
+      var citeBtn = actionButton(doc, t.cite);
+      var citePanel = el(doc, "div", "dyn-panel dyn-cite");
+      var bib = buildBibtex(item);
+      citePanel.appendChild(el(doc, "pre", "dyn-bibtex", bib));
+      var copyBtn = el(doc, "button", "dyn-link dyn-copy", t.copy);
+      copyBtn.setAttribute("type", "button");
+      if (copyBtn.addEventListener) {
+        copyBtn.addEventListener("click", function () {
+          var nav = typeof navigator !== "undefined" ? navigator : null;
+          if (nav && nav.clipboard && nav.clipboard.writeText) {
+            nav.clipboard.writeText(bib).then(function () {
+              copyBtn.textContent = t.copied;
+              setTimeout(function () { copyBtn.textContent = t.copy; }, 1500);
+            });
+          }
+        });
+      }
+      citePanel.appendChild(copyBtn);
+      row.appendChild(citeBtn);
+      register(citeBtn, citePanel);
+    }
+
+    var abs = abstractMarkdown(item, lang);
+    if (abs) {
+      var absBtn = actionButton(doc, t.abstractLabel);
+      var absPanel = el(doc, "div", "dyn-panel dyn-abstract");
+      renderMarkdownInto(absPanel, abs, doc);
+      row.appendChild(absBtn);
+      register(absBtn, absPanel);
+    }
+
+    if (cls.github) { row.appendChild(safeLink(doc, cls.github.url, t.github)); }
+    if (cls.huggingface) { row.appendChild(safeLink(doc, cls.huggingface.url, t.huggingface)); }
+    if (cls.project) { row.appendChild(safeLink(doc, cls.project.url, t.project)); }
+
+    // Remaining links (publisher page, DOI, ...) stay available as plain links.
+    if (item.doi) { row.appendChild(safeLink(doc, "https://doi.org/" + item.doi, "DOI")); }
+    for (var r = 0; r < cls.other.length; r++) {
+      if (cls.other[r] === usedFallback) { continue; }
+      row.appendChild(safeLink(doc, cls.other[r].url, cls.other[r].label));
+    }
+    return { row: row, panels: panels, hasRow: row.childNodes.length > 0, hasPanels: toggles.length > 0 };
+  }
+
   /**
    * `selectedIds` (optional) renders only those publications, under the
    * "Selected papers" heading, in the order given.
@@ -769,16 +961,12 @@
         card.appendChild(el(doc, "p", "dyn-venue", venueLine.join(", ")));
       }
 
-      var linkRow = el(doc, "div", "dyn-links-row");
-      if (item.doi) {
-        linkRow.appendChild(safeLink(doc, "https://doi.org/" + item.doi, "DOI"));
+      var actions = renderPublicationActions(doc, item, lang);
+      if (actions.hasRow) {
+        card.appendChild(actions.row);
       }
-      var links = flattenLinks(item.links);
-      for (var l = 0; l < links.length; l++) {
-        linkRow.appendChild(safeLink(doc, links[l].url, links[l].label));
-      }
-      if (linkRow.childNodes.length) {
-        card.appendChild(linkRow);
+      if (actions.hasPanels) {
+        card.appendChild(actions.panels);
       }
       wrap.appendChild(card);
     }
@@ -1124,6 +1312,9 @@
     isPatent: isPatent,
     formatMetric: formatMetric,
     flattenLinks: flattenLinks,
+    classifyPublicationLinks: classifyPublicationLinks,
+    buildBibtex: buildBibtex,
+    abstractMarkdown: abstractMarkdown,
     renderMarkdownInto: renderMarkdownInto,
     appendInline: appendInline,
     renderAll: renderAll,
