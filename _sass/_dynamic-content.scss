@@ -212,6 +212,39 @@
     text-decoration: none;
     &:hover { background: var(--global-theme-color); color: var(--global-hover-text-color); }
   }
+  button.dyn-link {
+    background: transparent;
+    cursor: pointer;
+    font-family: inherit;
+    line-height: inherit;
+  }
+  button.dyn-action[aria-expanded="true"] {
+    background: var(--global-theme-color);
+    color: var(--global-hover-text-color);
+  }
+
+  .dyn-panel {
+    margin-top: 0.7rem;
+    padding: 0.8rem 1rem;
+    border: 1px solid var(--global-divider-color);
+    border-radius: 8px;
+    background: var(--global-bg-color);
+    font-size: 0.92rem;
+
+    &[hidden] { display: none; }
+    p:last-child { margin-bottom: 0; }
+  }
+
+  .dyn-bibtex {
+    margin: 0 0 0.6rem;
+    padding: 0;
+    background: transparent;
+    white-space: pre-wrap;
+    word-break: break-word;
+    font-size: 0.82rem;
+    color: var(--global-text-color);
+  }
+
   .dyn-link-disabled { font-size: 0.9rem; color: var(--global-text-color-light); }
 
   // --- Markdown details ------------------------------------------------------
@@ -243,3 +276,21 @@
 
 // Keep anchored sections clear of the fixed navbar.
 .dyn-section { scroll-margin-top: 70px; }
+
+// --- Recent news ---------------------------------------------------------------
+.dynamic-content {
+  .dyn-news-item {
+    display: flex;
+    gap: 1rem;
+    padding: 0.35rem 0;
+  }
+  .dyn-news-date {
+    flex: 0 0 6.5rem;
+    font-weight: 600;
+    color: var(--global-text-color-light);
+    white-space: nowrap;
+  }
+  @media (max-width: 575px) {
+    .dyn-news-item { flex-direction: column; gap: 0.1rem; }
+  }
+}

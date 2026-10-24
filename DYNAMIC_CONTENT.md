@@ -66,3 +66,12 @@ links, so hostile strings such as `<script>…</script>` or
 ```
 node --test        # or: npm test
 ```
+
+## Recent news and selected papers (start page)
+
+- **Recent news** comes from the Jekyll `_news/` collection (one file per item,
+  `date:` in front matter, optional `ru:` translation, English text as the body).
+  `news.json` publishes it at `/assets/json/news.json`; the loader fetches it
+  alongside `content.json`. A missing `ru:` falls back to the English text.
+- **Selected papers** are chosen by publication id in `_pages/about.md`
+  (`selected="tridefusion-v1,tridefusion-v2"`); the cards come from `content.json`.

@@ -1,0 +1,12 @@
+---
+layout: none
+permalink: /assets/json/news.json
+sitemap: false
+---
+[
+{%- assign items = site.news | sort: 'date' | reverse -%}
+{%- for n in items -%}
+{%- unless forloop.first -%},{%- endunless %}
+{"date": {{ n.date | date: '%Y-%m' | jsonify }}, "en": {{ n.content | strip_html | strip_newlines | strip | replace: '&amp;', '&' | jsonify }}, "ru": {{ n.ru | default: nil | jsonify }}}
+{%- endfor %}
+]

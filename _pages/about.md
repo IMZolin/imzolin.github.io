@@ -20,4 +20,4 @@ selected_papers: false
 social: false
 ---
 
-{% include dynamic_content.html sections="profile,blog" %}
+{% include dynamic_content.html sections="profile,news,selected,blog" news=true selected="tridefusion-v1,tridefusion-v2" %}

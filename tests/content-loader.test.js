@@ -238,3 +238,65 @@ test("renderAll RU output omits (not fabricates) the inream Russian role", () =>
   // organization name for the title, never an invented Russian string.
   assert.ok(frag.textContent.includes("Inream (Startup)"));
 });
+
+test("renderAll renders news and selected papers only when the page opts in", () => {
+  const raw = fs.readFileSync(path.join(__dirname, "..", "assets", "json", "content.json"), "utf8");
+  const data = SC.validateContent(JSON.parse(raw));
+  const news = [
+    { date: "2026-06", en: "English item", ru: "Русский пункт" },
+    { date: "2025-08", en: "Only English", ru: null }
+  ];
+  const extras = { news, selected: ["tridefusion-v1"] };
+
+  const home = SC.renderAll(fakeDoc, data, "en", ["profile", "news", "selected"], extras).textContent;
+  assert.ok(home.includes("Recent news") && home.includes("English item"));
+  assert.ok(home.includes("Selected papers") && home.includes("TriDeFusion"));
+  assert.ok(!home.includes("TriDeFusion-v2"), "only the selected paper is rendered");
+
+  const ru = SC.renderAll(fakeDoc, data, "ru", ["news"], extras).textContent;
+  assert.ok(ru.includes("Русский пункт") && ru.includes("Only English"), "missing ru falls back to en");
+
+  const other = SC.renderAll(fakeDoc, data, "en", ["publications"], extras).textContent;
+  assert.ok(!other.includes("Recent news") && !other.includes("Selected papers"));
+});
+
+test("published papers get PDF / Cite / Abstract buttons; optional links only when present", () => {
+  const base = {
+    id: "p1", year: 2024, authors: ["Ivan Zolin", "Jane Doe"],
+    title: { en: "A & B", ru: null },
+    venue: { name: "Some Conference", pages: "1-5", isbn: null, publisher: null },
+    description: { en: "## Abstract\n\nThe abstract text.\n\n## Key words\n\n- x", ru: null }
+  };
+  const doc = (pub) => SC.renderAll(fakeDoc, { schema_version: "1", profile: {}, experience: [], education: [], projects: [], publications: [pub], achievements: [], skills: {}, links: {} }, "en", ["publications"]).textContent;
+
+  const published = doc(Object.assign({}, base, {
+    status: "published",
+    links: { official: { url: "https://x.org/paper.pdf", label: "Proc" } }
+  }));
+  ["PDF", "Cite", "Abstract"].forEach((b) => assert.ok(published.includes(b), `${b} button`));
+  assert.ok(!published.includes("GitHub") && !published.includes("Hugging Face") && !published.includes("Project Page"));
+  assert.ok(published.includes("The abstract text.") && !published.includes("Key words"), "only the abstract section");
+
+  const extras = doc(Object.assign({}, base, {
+    status: "published",
+    doi: "10.1/x",
+    links: {
+      github: { url: "https://github.com/a/b", label: "repo" },
+      hf: { url: "https://huggingface.co/a/b", label: "model" },
+      project: { url: "https://a.github.io", label: "site" }
+    }
+  }));
+  ["GitHub", "Hugging Face", "Project Page", "PDF"].forEach((b) => assert.ok(extras.includes(b), `${b} button`));
+
+  const review = doc(Object.assign({}, base, { status: "under_review", links: {} }));
+  assert.ok(!review.includes("PDF") && !review.includes("Cite"), "no PDF/Cite before publication");
+});
+
+test("buildBibtex escapes special characters and detects proceedings", () => {
+  const bib = SC.buildBibtex({
+    id: "p", year: 2024, authors: ["Ivan Zolin"], title: { en: "R&D at 50%" },
+    venue: { name: "SIBIRCON 2024", pages: "211-216", isbn: "123", publisher: null }, doi: "10.1/x"
+  });
+  assert.ok(bib.startsWith("@inproceedings{zolin2024r"));
+  assert.ok(bib.includes("R\\&D at 50\\%") && bib.includes("pages = {211--216}"));
+});
