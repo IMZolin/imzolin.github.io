@@ -4,7 +4,7 @@
 
   var SECTIONS = ["experience", "education", "projects", "publications", "achievements"];
   var PAGE_OF = { publications: "/research/" };
-  var CV_SECTIONS = ["experience", "education", "projects", "achievements", "skills"];
+  var CV_SECTIONS = ["experience", "education", "projects", "achievements", "patents", "skills"];
   var index = null;
   var loading = null;
   var modal, input, results, lastFocus, active = 0, hits = [];
@@ -48,7 +48,7 @@
             var sub = pick(it.role) && it.organization ? it.organization : (it.venue || it.degree || "");
             items.push({
               title: title, sub: s + (sub ? " · " + sub : ""),
-              url: base + (PAGE_OF[s] || (CV_SECTIONS.indexOf(s) !== -1 ? "/cv/" : "/")) + "#section-" + s,
+              url: base + (PAGE_OF[s] || (CV_SECTIONS.indexOf(s) !== -1 ? "/cv/" : "/")) + "#section-" + (s === "achievements" && /^patent-/.test(it.id) ? "patents" : s),
               text: flatten(it, []).join(" ")
             });
           });

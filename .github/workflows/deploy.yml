@@ -10,6 +10,9 @@ on:
       - master
       - main
   workflow_dispatch:
+  schedule:
+    # Daily rebuild so a CV published from personal-os reaches the site without a push.
+    - cron: '17 3 * * *'
 
 permissions:
   contents: write
@@ -26,6 +29,17 @@ jobs:
       with:
         ruby-version: '3.2.2'
         bundler-cache: true
+    - name: Fetch CV PDFs 📄
+      run: |
+        mkdir -p assets/pdf
+        for f in cv.pdf cv_ru.pdf; do
+          if curl -fsSL "https://raw.githubusercontent.com/IMZolin/IMZolin/main/$f" -o "assets/pdf/$f.tmp"; then
+            mv "assets/pdf/$f.tmp" "assets/pdf/$f"
+          else
+            rm -f "assets/pdf/$f.tmp"
+            echo "::warning::Could not refresh $f, using the committed copy"
+          fi
+        done
     - name: Install and Build 🔧
       run: |
         pip3 install --upgrade jupyter

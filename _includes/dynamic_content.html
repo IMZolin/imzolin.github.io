@@ -12,6 +12,16 @@
      {%- if include.news %}
      data-news-url="{{ '/assets/json/news.json' | relative_url }}"
      {%- endif %}
+     data-site-base="{{ '/' | relative_url }}"
+     {%- if include.images %}
+     data-pub-images="{{ site.data.publication_images | jsonify | escape }}"
+     {%- endif %}
+     {%- if include.cv %}
+     data-cv="{{ site.data.cv | jsonify | escape }}"
+     {%- endif %}
+     {%- if include.logos %}
+     data-org-logos="{{ site.data.org_logos | jsonify | escape }}"
+     {%- endif %}
      {%- if include.selected %}
      data-selected="{{ include.selected }}"
      {%- endif %}

@@ -4,12 +4,8 @@ permalink: /cv/
 title: cv
 nav: true
 nav_order: 4
-description: Experience, education, projects, achievements and skills.
-cv_pdf: Ivan_Zolin_CV.pdf # put the file in assets/pdf/ — the button appears once it exists
+description: Experience, education, projects, achievements, patents and skills.
 ---
-
-{%- assign cv_pdf_path = page.cv_pdf | prepend: '/assets/pdf/' -%}
-{%- assign cv_pdf_file = site.static_files | where: 'path', cv_pdf_path | first -%}
 
 <div class="cv-toolbar">
   <nav class="cv-toc" aria-label="CV sections">
@@ -17,11 +13,13 @@ cv_pdf: Ivan_Zolin_CV.pdf # put the file in assets/pdf/ — the button appears o
     <a href="#section-education">Education</a>
     <a href="#section-projects">Projects</a>
     <a href="#section-achievements">Achievements</a>
+    <a href="#section-patents">Patents</a>
     <a href="#section-skills">Skills</a>
   </nav>
-  {%- if cv_pdf_file %}
-  <a class="cv-download" href="{{ cv_pdf_path | relative_url }}" download><i class="fas fa-download"></i> Download CV</a>
-  {%- endif %}
+  <div class="cv-actions">
+    <a class="cv-download" data-cv-link="view" href="{{ site.data.cv.en.view | relative_url }}" target="_blank" rel="noopener noreferrer"><i class="fas fa-eye"></i> <span data-cv-label>View CV</span></a>
+    <a class="cv-download" data-cv-link="download" href="{{ site.data.cv.en.download | relative_url }}" download><i class="fas fa-download"></i> <span data-cv-label>Download CV</span></a>
+  </div>
 </div>
 
-{% include dynamic_content.html sections="experience,education,projects,achievements,skills" %}
+{% include dynamic_content.html sections="experience,education,projects,achievements,patents,skills" logos=true cv=true %}
