@@ -1,0 +1,21 @@
+# Organization logos for the Experience and Education sections, keyed by the entry id from content.json.
+# `src` is relative to the site root. Experience entries without a logo get a monogram.
+# Logos are the organizations' own site icons (SPbPU, ITMO, Inream).
+inream:
+  src: assets/img/orgs/inream.png
+  alt: Inream
+itmo-dpht:
+  src: assets/img/orgs/itmo.png
+  alt: ITMO University
+labid:
+  src: assets/img/orgs/spbpu.png
+  alt: SPbPU
+lmn:
+  src: assets/img/orgs/spbpu.png
+  alt: SPbPU
+itmo:
+  src: assets/img/orgs/itmo.png
+  alt: ITMO University
+spbpu:
+  src: assets/img/orgs/spbpu.png
+  alt: SPbPU

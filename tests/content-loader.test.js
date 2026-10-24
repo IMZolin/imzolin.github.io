@@ -300,3 +300,22 @@ test("buildBibtex escapes special characters and detects proceedings", () => {
   assert.ok(bib.startsWith("@inproceedings{zolin2024r"));
   assert.ok(bib.includes("R\\&D at 50\\%") && bib.includes("pages = {211--216}"));
 });
+
+test("patents render as their own section, not inside achievements", () => {
+  const raw = fs.readFileSync(path.join(__dirname, "..", "assets", "json", "content.json"), "utf8");
+  const data = SC.validateContent(JSON.parse(raw));
+  const patentTitle = data.achievements.find((a) => SC.isPatent(a)).title.en;
+
+  const achievementsOnly = SC.renderAll(fakeDoc, data, "en", ["achievements"]).textContent;
+  assert.ok(!achievementsOnly.includes(patentTitle), "no patents in achievements");
+
+  const patentsOnly = SC.renderAll(fakeDoc, data, "en", ["patents"]).textContent;
+  assert.ok(patentsOnly.includes("Patents") && patentsOnly.includes(patentTitle));
+});
+
+test("project cards are compact: summary + Details / Key results buttons, links kept", () => {
+  const raw = fs.readFileSync(path.join(__dirname, "..", "assets", "json", "content.json"), "utf8");
+  const data = SC.validateContent(JSON.parse(raw));
+  const text = SC.renderAll(fakeDoc, data, "en", ["projects"]).textContent;
+  assert.ok(text.includes("Details") && text.includes("Key results") && text.includes("GitHub"));
+});

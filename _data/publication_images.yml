@@ -1,0 +1,14 @@
+# Thumbnails for publications, keyed by publication id from content.json.
+# `src` is relative to the site root. A GIF works too (put it in assets/img/publications/).
+# Sources: neurorag - figures/architecture.png from the NeuroRAG repo;
+# tridefusion-v1 - pipeline figure from the SIBIRCON 2024 paper;
+# tridefusion-v2 - figures/assets/tridefusion_v2.png from the TriDeFusion repo.
+neurorag:
+  src: assets/img/publications/neurorag.png
+  alt: NeuroRAG architecture
+tridefusion-v1:
+  src: assets/img/publications/tridefusion-v1.png
+  alt: TriDeFusion processing pipeline
+tridefusion-v2:
+  src: assets/img/publications/tridefusion-v2.jpg
+  alt: TriDeFusion-v2 overview

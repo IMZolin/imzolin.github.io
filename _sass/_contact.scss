@@ -208,7 +208,12 @@ body { padding-bottom: 64px !important; }
   }
 }
 
+.cv-actions { display: flex; gap: 0.5rem; flex-wrap: wrap; }
+
 .cv-download {
+  background: transparent;
+  font: inherit;
+  cursor: pointer;
   display: inline-flex;
   align-items: center;
   gap: 0.45rem;
@@ -222,3 +227,11 @@ body { padding-bottom: 64px !important; }
 }
 
 html { scroll-behavior: smooth; }
+
+// Printing the CV page ("Print / Save as PDF"): content only.
+@media print {
+  header, footer.static-footer, .cv-toolbar, #site-search { display: none !important; }
+  body { padding: 0 !important; }
+  .dyn-card, .dyn-section { break-inside: avoid; }
+  .dyn-panel[hidden] { display: none !important; }
+}

@@ -49,6 +49,8 @@
       github: "GitHub",
       huggingface: "Hugging Face",
       project: "Project Page",
+      viewCv: "View CV",
+      downloadCv: "Download CV",
       copy: "Copy",
       copied: "Copied",
       present: "Present",
@@ -95,6 +97,8 @@
       github: "GitHub",
       huggingface: "Hugging Face",
       project: "Страница проекта",
+      viewCv: "Смотреть CV",
+      downloadCv: "Скачать CV",
       copy: "Копировать",
       copied: "Скопировано",
       present: "Настоящее время",
@@ -483,7 +487,7 @@
   // Section renderers
   // ---------------------------------------------------------------------------
 
-  function renderProfile(doc, data, lang) {
+  function renderProfile(doc, data, lang, cv) {
     var t = ui(lang);
     var p = data.profile;
     // The profile opens the page, so it has no "About" heading or divider.
@@ -507,6 +511,16 @@
       loc.appendChild(el(doc, "i", "fas fa-map-marker-alt"));
       loc.appendChild(doc.createTextNode(" " + p.location));
       wrap.appendChild(loc);
+    }
+    var cvUrls = cv && (cv[lang] || cv.en);
+    if (cvUrls && isSafeUrlOrPath(cvUrls.view)) {
+      var cvRow = el(doc, "div", "dyn-links-row");
+      var cvLink = el(doc, "a", "dyn-cv-btn", t.viewCv);
+      cvLink.href = resolveSitePath(cvUrls.view, cv.__base);
+      cvLink.target = "_blank";
+      cvLink.rel = "noopener noreferrer";
+      cvRow.appendChild(cvLink);
+      wrap.appendChild(cvRow);
     }
     if (isArray(p.interests) && p.interests.length) {
       wrap.appendChild(el(doc, "h3", "dyn-subheading", t.interests));
@@ -546,23 +560,64 @@
       .map(function (x) { return x.item; });
   }
 
-  function renderExperience(doc, data, lang) {
+  /** Site-relative paths and http(s) URLs only. */
+  function isSafeUrlOrPath(u) {
+    return typeof u === "string" && u !== "" && !(/^[a-z][a-z0-9+.-]*:/i.test(u) && !/^https?:/i.test(u));
+  }
+
+  /** Site-relative paths get the site base prepended; absolute URLs pass through. */
+  function resolveSitePath(u, base) {
+    if (/^([a-z][a-z0-9+.-]*:|\/)/i.test(u)) { return u; }
+    return (base || "/") + u;
+  }
+
+  /** Organization (experience) or institution (education) name, English. */
+  function orgName(item) {
+    return item.organization || localized(item.institution, "en") || "";
+  }
+
+  /** Organization logo from the {id: {src, alt}} map, else a monogram of the name. */
+  function orgLogo(doc, item, logos, base) {
+    var fig = el(doc, "div", "dyn-logo");
+    var spec = logos && logos[item.id];
+    var src = spec && spec.src;
+    if (src && !(/^[a-z][a-z0-9+.-]*:/i.test(src) && !/^https?:/i.test(src))) {
+      var img = el(doc, "img");
+      var isAbsolute = /^([a-z][a-z0-9+.-]*:|\/)/i.test(src);
+      img.src = (!isAbsolute && base) ? base + src : src;
+      img.alt = spec.alt || orgName(item);
+      img.loading = "lazy";
+      fig.appendChild(img);
+      return fig;
+    }
+    var words = String(orgName(item)).replace(/\(.*?\)/g, " ").trim().split(/\s+/).filter(Boolean);
+    var initials = words.slice(0, 2).map(function (w) { return w.charAt(0); }).join("").toUpperCase();
+    fig.className += " dyn-logo-monogram";
+    fig.setAttribute("aria-hidden", "true");
+    fig.textContent = initials || "?";
+    return fig;
+  }
+
+  function renderExperience(doc, data, lang, logos, base) {
     var t = ui(lang);
     var wrap = section(doc, "experience", t.sections.experience);
     var list = el(doc, "div", "dyn-timeline");
     var jobs = sortByPeriod(data.experience);
     for (var i = 0; i < jobs.length; i++) {
       var item = jobs[i];
-      var card = el(doc, "div", "dyn-card dyn-timeline-item");
+      var card = el(doc, "div", "dyn-card dyn-timeline-item has-logo");
+      card.appendChild(orgLogo(doc, item, logos, base));
+      var body = el(doc, "div", "dyn-card-main");
 
       var header = el(doc, "div", "dyn-card-header");
       var role = localized(item.role, lang);
       header.appendChild(el(doc, "h3", "dyn-card-title", role || item.organization));
-      var badge = renderStatusBadge(doc, item.status, lang);
+      // "Completed" is the default for past roles; only highlight other states (e.g. current).
+      var badge = item.status === "completed" ? null : renderStatusBadge(doc, item.status, lang);
       if (badge) {
         header.appendChild(badge);
       }
-      card.appendChild(header);
+      body.appendChild(header);
 
       var meta = el(doc, "div", "dyn-card-meta");
       var orgLink = item.links && item.links.organization;
@@ -578,7 +633,7 @@
       if (item.location) {
         meta.appendChild(el(doc, "span", "dyn-loc", item.location));
       }
-      card.appendChild(meta);
+      body.appendChild(meta);
 
       var resp = localizedList(item.responsibilities, lang);
       if (resp.length) {
@@ -586,25 +641,28 @@
         for (var r = 0; r < resp.length; r++) {
           ul.appendChild(el(doc, "li", null, resp[r]));
         }
-        card.appendChild(ul);
+        body.appendChild(ul);
       }
+      card.appendChild(body);
       list.appendChild(card);
     }
     wrap.appendChild(list);
     return wrap;
   }
 
-  function renderEducation(doc, data, lang) {
+  function renderEducation(doc, data, lang, logos, base) {
     var t = ui(lang);
     var wrap = section(doc, "education", t.sections.education);
     for (var i = 0; i < data.education.length; i++) {
       var item = data.education[i];
-      var card = el(doc, "div", "dyn-card");
+      var card = el(doc, "div", "dyn-card has-logo");
+      card.appendChild(orgLogo(doc, item, logos, base));
+      var body = el(doc, "div", "dyn-card-main");
 
       var degree = localized(item.degree, lang);
       var field = localized(item.field, lang);
       var titleText = [degree, field].filter(Boolean).join(", ");
-      card.appendChild(el(doc, "h3", "dyn-card-title", titleText || localized(item.institution, lang)));
+      body.appendChild(el(doc, "h3", "dyn-card-title", titleText || localized(item.institution, lang)));
 
       var meta = el(doc, "div", "dyn-card-meta");
       meta.appendChild(el(doc, "span", "dyn-org", localized(item.institution, lang)));
@@ -612,7 +670,7 @@
       if (period) {
         meta.appendChild(el(doc, "span", "dyn-period", period));
       }
-      card.appendChild(meta);
+      body.appendChild(meta);
 
       if (isArray(item.gpa) && item.gpa.length) {
         var gpaParts = [];
@@ -621,15 +679,16 @@
           // Preserve each scale exactly as published; never convert between scales.
           gpaParts.push(gp.value + " / " + gp.scale);
         }
-        card.appendChild(el(doc, "p", "dyn-gpa", t.gpa + ": " + gpaParts.join("  ·  ")));
+        body.appendChild(el(doc, "p", "dyn-gpa", t.gpa + ": " + gpaParts.join("  ·  ")));
       }
       var thesis = localized(item.thesis, lang);
       if (thesis) {
         var th = el(doc, "p", "dyn-thesis");
         th.appendChild(el(doc, "strong", null, t.thesis + ": "));
         th.appendChild(doc.createTextNode(thesis));
-        card.appendChild(th);
+        body.appendChild(th);
       }
+      card.appendChild(body);
       wrap.appendChild(card);
     }
     return wrap;
@@ -656,6 +715,41 @@
     return grid;
   }
 
+  /** Buttons that open/close one panel at a time (same behaviour as publication cards). */
+  function toggleGroup(doc) {
+    var row = el(doc, "div", "dyn-links-row");
+    var panels = el(doc, "div", "dyn-panels");
+    var items = [];
+    return {
+      row: row,
+      panels: panels,
+      add: function (label, panel) {
+        var button = actionButton(doc, label);
+        panel.hidden = true;
+        items.push({ button: button, panel: panel });
+        if (button.addEventListener) {
+          button.addEventListener("click", function () {
+            var open = panel.hidden;
+            for (var i = 0; i < items.length; i++) {
+              items[i].panel.hidden = true;
+              items[i].button.setAttribute("aria-expanded", "false");
+            }
+            panel.hidden = !open;
+            button.setAttribute("aria-expanded", open ? "true" : "false");
+          });
+        }
+        row.appendChild(button);
+        panels.appendChild(panel);
+      },
+      link: function (url, label) { row.appendChild(safeLink(doc, url, label)); },
+      isEmpty: function () { return row.childNodes.length === 0; }
+    };
+  }
+
+  /**
+   * Compact project card: title, period, one-paragraph summary, technologies;
+   * the full description and the key results sit behind buttons.
+   */
   function renderProjects(doc, data, lang) {
     var t = ui(lang);
     var wrap = section(doc, "projects", t.sections.projects);
@@ -679,17 +773,7 @@
 
       var highlights = localizedList(item.highlights, lang);
       if (highlights.length) {
-        var ul = el(doc, "ul", "dyn-list");
-        for (var h = 0; h < highlights.length; h++) {
-          ul.appendChild(el(doc, "li", null, highlights[h]));
-        }
-        card.appendChild(ul);
-      }
-
-      var metrics = renderMetricsGrid(doc, item.metrics, lang);
-      if (metrics) {
-        card.appendChild(el(doc, "h4", "dyn-mini-heading", t.metrics));
-        card.appendChild(metrics);
+        card.appendChild(el(doc, "p", "dyn-project-summary", highlights[0]));
       }
 
       if (isArray(item.technologies) && item.technologies.length) {
@@ -700,25 +784,34 @@
         card.appendChild(chips);
       }
 
-      // Full markdown description behind a <details> to keep cards compact and
-      // to render markdown safely (no raw markdown text, no innerHTML).
+      var group = toggleGroup(doc);
       var description = localized(item.description, lang);
       if (description) {
-        var details = el(doc, "details", "dyn-details");
-        details.appendChild(el(doc, "summary", null, t.details));
-        var body = el(doc, "div", "dyn-markdown");
-        renderMarkdownInto(body, description, doc);
-        details.appendChild(body);
-        card.appendChild(details);
-      }
-
-      var links = flattenLinks(item.links);
-      if (links.length) {
-        var linkRow = el(doc, "div", "dyn-links-row");
-        for (var l = 0; l < links.length; l++) {
-          linkRow.appendChild(safeLink(doc, links[l].url, links[l].label));
+        var detailsPanel = el(doc, "div", "dyn-panel dyn-markdown");
+        renderMarkdownInto(detailsPanel, description, doc);
+        group.add(t.details, detailsPanel);
+      } else if (highlights.length > 1) {
+        var more = el(doc, "div", "dyn-panel");
+        var ul = el(doc, "ul", "dyn-list");
+        for (var h = 1; h < highlights.length; h++) {
+          ul.appendChild(el(doc, "li", null, highlights[h]));
         }
-        card.appendChild(linkRow);
+        more.appendChild(ul);
+        group.add(t.details, more);
+      }
+      var metrics = renderMetricsGrid(doc, item.metrics, lang);
+      if (metrics) {
+        var metricsPanel = el(doc, "div", "dyn-panel");
+        metricsPanel.appendChild(metrics);
+        group.add(t.metrics, metricsPanel);
+      }
+      var links = flattenLinks(item.links);
+      for (var l = 0; l < links.length; l++) {
+        group.link(links[l].url, links[l].label);
+      }
+      if (!group.isEmpty()) {
+        card.appendChild(group.row);
+        card.appendChild(group.panels);
       }
       grid.appendChild(card);
     }
@@ -915,10 +1008,34 @@
   }
 
   /**
+   * Thumbnail for a publication: `item.image` (string path or {src, alt}) from
+   * content.json wins, else the site-side map {id: {src, alt}} (_data/publication_images.yml).
+   */
+  function publicationImage(doc, item, images) {
+    var spec = item.image || (images && images[item.id]);
+    if (!spec) { return null; }
+    var src = typeof spec === "string" ? spec : spec.src;
+    var alt = (typeof spec === "object" && spec.alt) || localized(item.title, "en") || item.id;
+    // Only site-relative paths and http(s) URLs; never javascript:/data: schemes.
+    if (!src || (/^[a-z][a-z0-9+.-]*:/i.test(src) && !/^https?:/i.test(src))) {
+      return null;
+    }
+    var fig = el(doc, "div", "dyn-pub-thumb");
+    var img = el(doc, "img");
+    var isAbsolute = /^([a-z][a-z0-9+.-]*:|\/)/i.test(src);
+    img.src = (!isAbsolute && images && images.__base) ? images.__base + src : src;
+    img.alt = alt;
+    img.loading = "lazy";
+    fig.appendChild(img);
+    return fig;
+  }
+
+  /**
    * `selectedIds` (optional) renders only those publications, under the
    * "Selected papers" heading, in the order given.
+   * `images` is the optional {id: {src, alt}} thumbnail map.
    */
-  function renderPublications(doc, data, lang, selectedIds) {
+  function renderPublications(doc, data, lang, selectedIds, images) {
     var t = ui(lang);
     var pubs;
     var wrap;
@@ -937,6 +1054,12 @@
     for (var i = 0; i < pubs.length; i++) {
       var item = pubs[i];
       var card = el(doc, "div", "dyn-card dyn-publication");
+      var thumb = publicationImage(doc, item, images);
+      if (thumb) {
+        card.className += " has-thumb";
+        card.appendChild(thumb);
+      }
+      var body = el(doc, "div", "dyn-pub-body");
 
       var header = el(doc, "div", "dyn-card-header");
       header.appendChild(el(doc, "h3", "dyn-card-title", localized(item.title, lang) || item.id));
@@ -944,10 +1067,10 @@
       if (badge) {
         header.appendChild(badge);
       }
-      card.appendChild(header);
+      body.appendChild(header);
 
       if (isArray(item.authors) && item.authors.length) {
-        card.appendChild(el(doc, "p", "dyn-authors", item.authors.join(", ")));
+        body.appendChild(el(doc, "p", "dyn-authors", item.authors.join(", ")));
       }
 
       var venueLine = [];
@@ -958,16 +1081,17 @@
         venueLine.push(String(item.year));
       }
       if (venueLine.length) {
-        card.appendChild(el(doc, "p", "dyn-venue", venueLine.join(", ")));
+        body.appendChild(el(doc, "p", "dyn-venue", venueLine.join(", ")));
       }
 
       var actions = renderPublicationActions(doc, item, lang);
       if (actions.hasRow) {
-        card.appendChild(actions.row);
+        body.appendChild(actions.row);
       }
       if (actions.hasPanels) {
-        card.appendChild(actions.panels);
+        body.appendChild(actions.panels);
       }
+      card.appendChild(body);
       wrap.appendChild(card);
     }
     return wrap;
@@ -998,23 +1122,25 @@
     return card;
   }
 
+  /** Achievements without patents; patents get their own section (renderPatents). */
   function renderAchievements(doc, data, lang) {
     var t = ui(lang);
     var wrap = section(doc, "achievements", t.sections.achievements);
-    var patents = [];
-    var others = [];
     for (var i = 0; i < data.achievements.length; i++) {
-      (isPatent(data.achievements[i]) ? patents : others).push(data.achievements[i]);
+      if (!isPatent(data.achievements[i])) {
+        wrap.appendChild(renderAchievementItem(doc, data.achievements[i], lang));
+      }
     }
-    for (var a = 0; a < others.length; a++) {
-      wrap.appendChild(renderAchievementItem(doc, others[a], lang));
-    }
-    // Patents rendered as a visually distinct subsection, still sourced from
-    // achievements[] — no separate patent model.
-    if (patents.length) {
-      wrap.appendChild(el(doc, "h3", "dyn-subheading", t.sections.patents));
-      for (var p = 0; p < patents.length; p++) {
-        wrap.appendChild(renderAchievementItem(doc, patents[p], lang));
+    return wrap;
+  }
+
+  // Patents are still sourced from achievements[] (ids "patent-*") - no separate model.
+  function renderPatents(doc, data, lang) {
+    var t = ui(lang);
+    var wrap = section(doc, "patents", t.sections.patents);
+    for (var i = 0; i < data.achievements.length; i++) {
+      if (isPatent(data.achievements[i])) {
+        wrap.appendChild(renderAchievementItem(doc, data.achievements[i], lang));
       }
     }
     return wrap;
@@ -1117,19 +1243,22 @@
     extras = extras || {};
     var frag = doc.createDocumentFragment();
     function want(id) { return !sections || sections.indexOf(id) !== -1; }
-    if (want("profile")) { frag.appendChild(renderProfile(doc, data, lang)); }
+    if (want("profile")) { frag.appendChild(renderProfile(doc, data, lang, extras.cv)); }
     // News and selected papers are opt-in: only pages that list them render them.
     if (sections && want("news") && isArray(extras.news) && extras.news.length) {
       frag.appendChild(renderNews(doc, extras.news, lang));
     }
     if (sections && want("selected") && isArray(extras.selected) && extras.selected.length) {
-      frag.appendChild(renderPublications(doc, data, lang, extras.selected));
+      frag.appendChild(renderPublications(doc, data, lang, extras.selected, extras.images));
     }
-    if (want("experience") && data.experience.length) { frag.appendChild(renderExperience(doc, data, lang)); }
-    if (want("education") && data.education.length) { frag.appendChild(renderEducation(doc, data, lang)); }
+    if (want("experience") && data.experience.length) { frag.appendChild(renderExperience(doc, data, lang, extras.logos, extras.base)); }
+    if (want("education") && data.education.length) { frag.appendChild(renderEducation(doc, data, lang, extras.logos, extras.base)); }
     if (want("projects") && data.projects.length) { frag.appendChild(renderProjects(doc, data, lang)); }
-    if (want("publications") && data.publications.length) { frag.appendChild(renderPublications(doc, data, lang)); }
-    if (want("achievements") && data.achievements.length) { frag.appendChild(renderAchievements(doc, data, lang)); }
+    if (want("publications") && data.publications.length) { frag.appendChild(renderPublications(doc, data, lang, null, extras.images)); }
+    var hasPatents = data.achievements.some(isPatent);
+    var hasOthers = data.achievements.some(function (a) { return !isPatent(a); });
+    if (want("achievements") && hasOthers) { frag.appendChild(renderAchievements(doc, data, lang)); }
+    if (want("patents") && hasPatents) { frag.appendChild(renderPatents(doc, data, lang)); }
     if (want("skills")) { frag.appendChild(renderSkills(doc, data, lang)); }
     if (want("links")) { frag.appendChild(renderLinks(doc, data, lang)); }
     if (want("blog") && isArray(data.blog) && data.blog.length) {
@@ -1195,6 +1324,25 @@
     var selectedAttr = root.getAttribute("data-selected");
     var selected = selectedAttr ? selectedAttr.split(",").map(function (x) { return x.trim(); }) : null;
     var news = [];
+    var cv = null;
+    try {
+      var cvAttr = root.getAttribute("data-cv");
+      if (cvAttr) { cv = JSON.parse(cvAttr); cv.__base = root.getAttribute("data-site-base") || "/"; }
+    } catch (e3) { cv = null; }
+    var images = null;
+    var logos = null;
+    var siteBase = root.getAttribute("data-site-base") || "/";
+    try {
+      var logoAttr = root.getAttribute("data-org-logos");
+      if (logoAttr) { logos = JSON.parse(logoAttr); }
+    } catch (e2) { logos = null; }
+    try {
+      var imgAttr = root.getAttribute("data-pub-images");
+      if (imgAttr) {
+        images = JSON.parse(imgAttr);
+        images.__base = root.getAttribute("data-site-base") || "/";
+      }
+    } catch (e) { images = null; }
     var loadingEl = doc.getElementById("site-loading");
     var errorEl = doc.getElementById("site-error");
     var contentEl = doc.getElementById("site-content");
@@ -1216,7 +1364,7 @@
       while (contentEl.firstChild) {
         contentEl.removeChild(contentEl.firstChild);
       }
-      contentEl.appendChild(renderAll(doc, currentData, lang, sections, { news: news, selected: selected }));
+      contentEl.appendChild(renderAll(doc, currentData, lang, sections, { news: news, selected: selected, images: images, logos: logos, base: siteBase, cv: cv }));
       doc.documentElement.setAttribute("data-content-lang", lang);
       updateLangButtons();
       if (!scrolledToHash && win.location && win.location.hash.length > 1) {
@@ -1229,6 +1377,15 @@
     function updateLangButtons() {
       var items = doc.querySelectorAll("[data-lang-item]");
       for (var i = 0; i < items.length; i++) { items[i].hidden = false; }
+      var cvLinks = doc.querySelectorAll("[data-cv-link]");
+      var cvT = ui(lang);
+      for (var c = 0; c < cvLinks.length; c++) {
+        var kind = cvLinks[c].getAttribute("data-cv-link");
+        var urls = cv && (cv[lang] || cv.en);
+        if (urls && isSafeUrlOrPath(urls[kind])) { cvLinks[c].setAttribute("href", resolveSitePath(urls[kind], siteBase)); }
+        var cvLabel = cvLinks[c].querySelector("[data-cv-label]");
+        if (cvLabel) { cvLabel.textContent = kind === "download" ? cvT.downloadCv : cvT.viewCv; }
+      }
       var codes = doc.querySelectorAll("[data-lang-code]");
       for (var j = 0; j < codes.length; j++) { codes[j].textContent = lang.toUpperCase(); }
       var t = ui(lang);
