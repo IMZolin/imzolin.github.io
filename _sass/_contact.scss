@@ -168,7 +168,6 @@ footer.static-footer {
 
 // Room for the fixed footer so content is never hidden behind it.
 body { padding-bottom: 64px !important; }
-@media (max-width: 575px) { body { padding-bottom: 110px !important; } }
 
 // X (Twitter) logo as a CSS mask, so it does not depend on the Font Awesome version.
 .icon-x {
@@ -265,15 +264,39 @@ html { scroll-behavior: smooth; }
   .dyn-panel[hidden] { display: none !important; }
 }
 
-// Header, right side: icons and the contact button are separated by one equal gap
-// (no per-item padding / margins).
-.navbar .navbar-nav.nav-actions {
+// Header, right side: icons (always visible) and the contact button are separated by
+// one equal gap (no per-item padding / margins).
+.navbar .navbar-nav.nav-icons {
   gap: 0.9rem;
+  align-items: center;
+  margin-left: auto;
+  margin-right: 0.9rem;
 
   .toggle-container button { padding: 0; }
-  .nav-contact .nav-link { margin: 0; }
 }
 
+.navbar .nav-contact .nav-link { margin: 0; }
+
+// Wide screens: logo, page links (grow), icons, contact button.
 @media (min-width: 576px) {
-  .navbar .navbar-nav.nav-actions { align-items: center; }
+  .navbar .navbar-brand { order: 0; }
+  .navbar .navbar-collapse { order: 1; }
+  .navbar .navbar-nav.nav-icons { order: 2; margin-left: 0; }
+  .navbar .navbar-nav.nav-contact-desktop { order: 3; align-items: center; }
+}
+
+// Responsive header ------------------------------------------------------------
+// Opaque bar, so the opened mobile menu never shows page text through it.
+#navbar { background-color: var(--global-bg-color); opacity: 1; }
+
+// From the "sm" breakpoint the container's own padding already aligns the logo
+// with the page content; the navbar's extra side padding pushed it 16px in.
+@media (min-width: 576px) {
+  #navbar { padding-left: 0; padding-right: 0; }
+}
+
+// Collapsed (phone) menu: page links, then the contact button; icons stay in the top bar.
+@media (max-width: 575px) {
+  .navbar .navbar-nav.nav-actions { align-items: flex-end; padding: 0.25rem 0 0.75rem; }
+  .navbar .navbar-nav.nav-main { padding-top: 0.25rem; }
 }
