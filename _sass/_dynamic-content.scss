@@ -394,7 +394,7 @@
   &.blog-graph {
     margin: 0 0 0.75rem;
     .related-graph { max-width: none; background: var(--global-bg-color); }
-    .rg-svg { height: 230px; }
+    .rg-svg { height: 260px; }
   }
 
   .related-articles-title { margin: 0 0 0.5rem; font-size: 1rem; font-weight: 600; }
@@ -428,5 +428,24 @@
   .rg-dim {
     .rg-node:not(.rg-hot) { opacity: 0.25; }
     .rg-edge:not(.rg-hot) { opacity: 0.1; }
+  }
+}
+
+// --- Blog page: post list with the all-posts graph at the top right ----------------
+.blog-layout {
+  display: flex;
+  align-items: flex-start;
+  gap: 1.5rem;
+
+  .blog-main { flex: 1 1 auto; min-width: 0; }
+  .blog-side {
+    flex: 0 0 300px;
+    position: sticky;
+    top: 5rem;
+    margin-top: 1rem;
+  }
+  @media (max-width: 767px) {
+    flex-direction: column;
+    .blog-side { order: -1; flex-basis: auto; position: static; width: 100%; }
   }
 }
