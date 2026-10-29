@@ -230,13 +230,14 @@ test("renderAll renders the real content.json in EN and RU without null/undefine
   });
 });
 
-test("renderAll RU output omits (not fabricates) the inream Russian role", () => {
+test("renderAll RU fills the missing inream role only from the curated translation table", () => {
   const raw = fs.readFileSync(path.join(__dirname, "..", "assets", "json", "content.json"), "utf8");
   const data = SC.validateContent(JSON.parse(raw));
   const frag = SC.renderAll(fakeDoc, data, "ru");
-  // inream role.ru is null -> renderer falls back to the (non-localized)
-  // organization name for the title, never an invented Russian string.
-  assert.ok(frag.textContent.includes("Inream (Startup)"));
+  // inream role.ru is null; a curated exact-match translation is used, never a guess.
+  assert.ok(frag.textContent.includes("Kotlin Full-Stack разработчик"));
+  // Unknown missing values still stay absent.
+  assert.equal(SC.localized({ en: "Unlisted text", ru: null }, "ru"), null);
 });
 
 test("renderAll renders news and selected papers only when the page opts in", () => {

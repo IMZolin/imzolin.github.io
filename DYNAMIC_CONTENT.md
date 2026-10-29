@@ -45,7 +45,11 @@ regenerates and republishes `assets/json/content.json`. On the next push to
 `EN` / `RU` toggle: a language icon button in the site header (shown only on pages with dynamic content). Choice is persisted in `localStorage` and the
 initial value is derived from that or the browser language. Missing localized
 values (e.g. `"ru": null`) are **omitted**, never machine-translated or
-back-filled from English.
+back-filled from English, except exact strings listed in the curated `TR_RU`
+table of `content-loader.js` (organisations, metric labels, link labels).
+Static page text (header, page titles, contact form, search) is translated by
+`assets/js/i18n.js` via `data-i18n` attributes; it owns the header toggle and
+fires `site-lang-change`, which the content loader listens to.
 
 ## Caching
 

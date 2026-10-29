@@ -147,6 +147,74 @@
     return v !== null && typeof v === "object" && !isArray(v);
   }
 
+
+  // Exact-match Russian renderings for strings that the published content only
+  // carries in English (organisation names, metric labels, link labels, ...).
+  // Project names, skills and technologies are intentionally absent: they stay as is.
+  var TR_RU = {
+    "Saint Petersburg, Russia": "Санкт-Петербург, Россия",
+    "Digital Public Health Technologies (DPHT), ITMO University": "Цифровые технологии общественного здоровья (DPHT), Университет ИТМО",
+    "Laboratory of Biomedical Imaging and Data Analysis (LABID), SPbPU": "Лаборатория биомедицинской визуализации и анализа данных (LABID), СПбПУ",
+    "Laboratory of Molecular Neurodegeneration (LMN), SPbPU": "Лаборатория молекулярной нейродегенерации (LMN), СПбПУ",
+    "Partner Finder (startup)": "Partner Finder (стартап)",
+    "NLP R&D engineer": "NLP R&D инженер",
+    "AI Researcher": "ИИ-исследователь",
+    "AI Researcher (Computer Vision & NLP)": "ИИ-исследователь (компьютерное зрение и NLP)",
+    "Software developer": "Разработчик ПО",
+    "Kotlin Full-Stack Developer": "Kotlin Full-Stack разработчик",
+    "Developed a web interface for personalized language-learning tasks and deployed the system using Heroku.": "Разработал веб-интерфейс для персонализированных заданий по изучению языков и развернул систему на Heroku.",
+    "Event page": "Страница мероприятия",
+    "Thesis PDF": "Тезисы (PDF)",
+    "Web service": "Веб-сервис",
+    "MAS-EHR Presentation": "Презентация MAS-EHR",
+    "Selectel": "Селектел",
+    "ITMO": "ИТМО",
+    "Accuracy": "Точность",
+    "Accuracy margin over BioMistral": "Преимущество в точности над BioMistral",
+    "Best-response rate in blind expert evaluation": "Доля лучших ответов при слепой экспертной оценке",
+    "CUDA wavelet module speedup": "Ускорение вейвлет-модуля на CUDA",
+    "Cosine similarity": "Косинусное сходство",
+    "MMLU biomedical subsets ranked first or tied for first": "Биомедицинские подмножества MMLU: первое место или делёж первого",
+    "Noise mean-intensity reduction": "Снижение средней интенсивности шума",
+    "Noise variance reduction": "Снижение дисперсии шума",
+    "PSNR increase": "Рост PSNR",
+    "Parameter and inference-time reduction": "Сокращение числа параметров и времени инференса",
+    "RMSE reduction": "Снижение RMSE",
+    "6 of 9": "6 из 9",
+    "over 50%": "более 50%",
+    "up to 54%": "до 54%",
+    "20–41 percentage points": "20–41 п. п.",
+    "real data": "реальные данные",
+    "synthetic data": "синтетические данные",
+    "synthetic tubular volumes, high noise (Poisson α=1, σ=0.2)": "синтетические трубчатые объёмы, высокий шум (Пуассон α=1, σ=0.2)",
+    "MMLU biomedical subsets (every subset)": "биомедицинские подмножества MMLU (все)",
+    "MMLU biomedical subsets (nine categories)": "биомедицинские подмножества MMLU (девять категорий)",
+    "MMLU — Clinical Knowledge": "MMLU — клинические знания",
+    "MMLU — High School Chemistry": "MMLU — химия (старшая школа)",
+    "MMLU — Medical Genetics": "MMLU — медицинская генетика",
+    "PubMed Summary QA (curated free-text benchmark)": "PubMed Summary QA (отобранный бенчмарк со свободным текстом)",
+    "PubMedQA, open-ended (n=50)": "PubMedQA, открытые вопросы (n=50)",
+    "160 evaluated responses to 12 neurobiological questions rated by 13 domain specialists; 103 best-response selections out of 142 decisive preferences (9 ties and 9 'all inadequate' verdicts excluded)": "160 оценённых ответов на 12 нейробиологических вопросов от 13 профильных специалистов; 103 выбора лучшего ответа из 142 однозначных предпочтений (исключены 9 ничьих и 9 вердиктов «все неадекватны»)"
+  };
+
+  var SKILL_CATEGORIES_RU = {
+    languages: "Языки",
+    ml_ai: "ML / ИИ",
+    frameworks: "Фреймворки",
+    data: "Данные",
+    mlops: "MLOps и бэкенд",
+    core_cs: "Основы CS и математика",
+    tools: "Инструменты"
+  };
+
+  // Language of the render in progress (set by renderAll); tr() reads it.
+  var activeLang = DEFAULT_LANG;
+
+  function tr(text, lang) {
+    if (typeof text !== "string") { return text; }
+    return (lang || activeLang) === "ru" && Object.prototype.hasOwnProperty.call(TR_RU, text) ? TR_RU[text] : text;
+  }
+
   function isArray(v) {
     return Object.prototype.toString.call(v) === "[object Array]";
   }
@@ -208,8 +276,13 @@
       return value;
     }
     if (isObject(value)) {
-      var v = value[normalizeLang(lang)];
-      return (v === null || typeof v === "undefined") ? null : v;
+      var l = normalizeLang(lang);
+      var v = value[l];
+      if (v === null || typeof v === "undefined") {
+        // Only a curated exact-match translation may fill a gap; never a guess.
+        return (l === "ru" && typeof value.en === "string" && TR_RU[value.en]) ? TR_RU[value.en] : null;
+      }
+      return tr(v, l);
     }
     return null;
   }
@@ -223,8 +296,13 @@
       return value;
     }
     if (isObject(value)) {
-      var v = value[normalizeLang(lang)];
-      return isArray(v) ? v : [];
+      var l = normalizeLang(lang);
+      var v = value[l];
+      if (!isArray(v) && l === "ru" && isArray(value.en)) {
+        var mapped = value.en.map(function (x) { return TR_RU[x]; });
+        if (mapped.every(Boolean)) { return mapped; }
+      }
+      return isArray(v) ? v.map(function (x) { return tr(x, l); }) : [];
     }
     return [];
   }
@@ -422,7 +500,7 @@
       node.className = className;
     }
     if (typeof text !== "undefined" && text !== null) {
-      node.textContent = text;
+      node.textContent = tr(text);
     }
     return node;
   }
@@ -1145,7 +1223,7 @@
       }
       var block = el(doc, "div", "dyn-skill-group");
       // Category label: humanize the raw key generically (works for new keys).
-      block.appendChild(el(doc, "h3", "dyn-subheading", humanize(group.category)));
+      block.appendChild(el(doc, "h3", "dyn-subheading", (activeLang === "ru" && SKILL_CATEGORIES_RU[group.category]) || humanize(group.category)));
       var chips = el(doc, "div", "dyn-chips");
       for (var s = 0; s < group.items.length; s++) {
         chips.appendChild(chip(doc, group.items[s]));
@@ -1228,6 +1306,7 @@
    */
   function renderAll(doc, data, lang, sections, extras) {
     lang = normalizeLang(lang);
+    activeLang = lang;
     extras = extras || {};
     var frag = doc.createDocumentFragment();
     function want(id) { return !sections || sections.indexOf(id) !== -1; }
@@ -1391,20 +1470,11 @@
       }
     }
 
-    function setLang(next) {
-      lang = normalizeLang(next);
-      try { win.localStorage.setItem(STORAGE_KEY, lang); } catch (e) { /* ignore */ }
+    // The header toggle lives in i18n.js, which stores the choice and fires this event.
+    doc.addEventListener("site-lang-change", function (e) {
+      lang = normalizeLang(e && e.detail && e.detail.lang);
       paint();
-    }
-
-    function wireLangButtons() {
-      var buttons = doc.querySelectorAll("[data-lang-toggle]");
-      for (var i = 0; i < buttons.length; i++) {
-        buttons[i].addEventListener("click", function () {
-          setLang(lang === "en" ? "ru" : "en");
-        });
-      }
-    }
+    });
 
     function load() {
       setState("loading");
@@ -1431,7 +1501,6 @@
       });
     }
 
-    wireLangButtons();
     var retryBtn = errorEl ? errorEl.querySelector(".dyn-retry") : null;
     if (retryBtn) {
       retryBtn.addEventListener("click", load);

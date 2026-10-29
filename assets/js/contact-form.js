@@ -2,6 +2,10 @@
 (function () {
   "use strict";
 
+  function T(key, vars, fallback) {
+    return window.SiteI18n ? window.SiteI18n.t(key, vars, fallback) : (fallback || "");
+  }
+
   var MAX_FILES = 5;
   var MAX_FILE_BYTES = 100 * 1024 * 1024;
   var MAX_TOTAL_BYTES = 25 * 1024 * 1024;
@@ -25,9 +29,9 @@
   function addFiles(incoming) {
     var problems = [];
     Array.prototype.forEach.call(incoming, function (f) {
-      if (files.length >= MAX_FILES) { problems.push("Up to " + MAX_FILES + " files allowed."); return; }
-      if (f.size > MAX_FILE_BYTES) { problems.push(f.name + " is larger than 100 MB."); return; }
-      if (total() + f.size > MAX_TOTAL_BYTES) { problems.push(f.name + " would exceed the 25 MB total."); return; }
+      if (files.length >= MAX_FILES) { problems.push(T("contact.maxFiles", { n: MAX_FILES })); return; }
+      if (f.size > MAX_FILE_BYTES) { problems.push(T("contact.tooBig", { name: f.name })); return; }
+      if (total() + f.size > MAX_TOTAL_BYTES) { problems.push(T("contact.totalBig", { name: f.name })); return; }
       files.push(f);
     });
     renderFiles();
@@ -42,7 +46,7 @@
       name.textContent = f.name + " (" + fmt(f.size) + ")";
       var rm = document.createElement("button");
       rm.type = "button";
-      rm.setAttribute("aria-label", "Remove " + f.name);
+      rm.setAttribute("aria-label", T("contact.remove", { name: f.name }));
       rm.textContent = "×";
       rm.addEventListener("click", function () { files.splice(i, 1); renderFiles(); say(""); });
       li.appendChild(name);
@@ -60,7 +64,7 @@
     files.forEach(function (f, i) { data.append("attachment" + (i ? i + 1 : ""), f, f.name); });
 
     btn.disabled = true;
-    say("Sending…");
+    say(T("contact.sending"));
     fetch(form.action, { method: "POST", body: data, headers: { Accept: "application/json" } })
       .then(function (r) { return r.json().then(function (j) { return { ok: r.ok, body: j }; }); })
       .then(function (res) {
@@ -72,12 +76,12 @@
         form.reset();
         files = [];
         renderFiles();
-        say("Thank you! Your message has been sent.");
+        say(T("contact.thanks"));
       })
       .catch(function (err) {
         if (window.console && console.error) { console.error("[contact-form]", err); }
         var detail = err && err.fromServer ? " (" + err.message + ")" : "";
-        say("Could not send the message" + detail + ". Please try again or email me directly.", true);
+        say(T("contact.fail") + detail + T("contact.failTail"), true);
       })
       .then(function () { btn.disabled = false; });
   }
@@ -88,7 +92,7 @@
     var tz = el.getAttribute("data-contact-tz");
     function tick() {
       try {
-        el.textContent = "· " + new Intl.DateTimeFormat([], { hour: "2-digit", minute: "2-digit", timeZone: tz }).format(new Date());
+        el.textContent = "· " + new Intl.DateTimeFormat(window.SiteI18n && window.SiteI18n.getLang() === "ru" ? "ru" : [], { hour: "2-digit", minute: "2-digit", timeZone: tz }).format(new Date());
       } catch (err) { el.textContent = ""; }
     }
     tick();

@@ -1,0 +1,142 @@
+/*
+ * Site-wide EN / RU switch for static text (header, page titles, CV toolbar,
+ * contact page, search). Elements opt in with:
+ *   data-i18n="key"                      -> textContent
+ *   data-i18n-attr="placeholder:key;..." -> attributes
+ * The English text already in the markup is kept as the fallback.
+ * The language is shared with content-loader.js through localStorage and the
+ * "site-lang-change" event (dispatched on document).
+ */
+(function () {
+  "use strict";
+
+  var STORAGE_KEY = "site-content-lang";
+  var LANGS = ["en", "ru"];
+
+  var RU = {
+    "brand": "Иван Золин",
+    "nav.research": "Публикации",
+    "nav.cv": "Опыт работы",
+    "nav.contact": "Контакты",
+    "page.research.title": "Публикации",
+    "page.research.desc": "Публикации и научные работы.",
+    "page.cv.title": "Опыт работы",
+    "page.cv.desc": "Опыт, образование, проекты, достижения, патенты и навыки.",
+    "page.contact.title": "Связаться со мной",
+    "page.contact.desc": "Напишите мне.",
+    "cv.experience": "Опыт",
+    "cv.education": "Образование",
+    "cv.projects": "Проекты",
+    "cv.achievements": "Достижения",
+    "cv.patents": "Патенты",
+    "cv.skills": "Навыки",
+    "cv.toc": "Разделы резюме",
+    "contact.lead": "Вопросы, сотрудничество или идея проекта? Напишите, и я отвечу.",
+    "contact.location": "Санкт-Петербург, Россия",
+    "contact.name": "Имя",
+    "contact.email": "Email",
+    "contact.message": "Сообщение",
+    "contact.attach": "Прикрепить файлы",
+    "contact.choose": "Выберите файлы",
+    "contact.drop": " или перетащите их сюда",
+    "contact.limits": "До 5 файлов, по 100 МБ каждый (всего 25 МБ)",
+    "contact.send": "Отправить сообщение",
+    "contact.sending": "Отправка…",
+    "contact.thanks": "Спасибо! Ваше сообщение отправлено.",
+    "contact.fail": "Не удалось отправить сообщение",
+    "contact.failTail": ". Попробуйте ещё раз или напишите мне на почту.",
+    "contact.maxFiles": "Не более {n} файлов.",
+    "contact.tooBig": "{name} больше 100 МБ.",
+    "contact.totalBig": "{name} превысит общий лимит 25 МБ.",
+    "contact.remove": "Удалить {name}",
+    "search.placeholder": "Поиск…",
+    "search.label": "Поиск",
+    "search.none": "Ничего не найдено",
+    "search.navigate": "навигация",
+    "search.open": "открыть",
+    "search.close": "закрыть",
+    "search.btn": "Поиск (Ctrl/Cmd + K)",
+    "lang.btn": "Сменить язык (EN / RU)",
+    "theme.btn": "Сменить тему"
+  };
+
+  var EN = {
+    "contact.sending": "Sending…",
+    "contact.thanks": "Thank you! Your message has been sent.",
+    "contact.fail": "Could not send the message",
+    "contact.failTail": ". Please try again or email me directly.",
+    "contact.maxFiles": "Up to {n} files allowed.",
+    "contact.tooBig": "{name} is larger than 100 MB.",
+    "contact.totalBig": "{name} would exceed the 25 MB total.",
+    "contact.remove": "Remove {name}",
+    "search.none": "No results"
+  };
+
+  var lang = "en";
+
+  function initialLang() {
+    try {
+      var s = window.localStorage.getItem(STORAGE_KEY);
+      if (s && LANGS.indexOf(s) !== -1) { return s; }
+    } catch (e) { /* storage may be blocked */ }
+    var nav = (navigator.language || "").toLowerCase();
+    return nav.indexOf("ru") === 0 ? "ru" : "en";
+  }
+
+  /** Translate a key; `vars` fills {placeholders}. Unknown keys return ""/fallback. */
+  function t(key, vars, fallback) {
+    var s = (lang === "ru" ? RU[key] : EN[key]);
+    if (s == null) { s = EN[key] != null ? EN[key] : (fallback || ""); }
+    if (vars) {
+      Object.keys(vars).forEach(function (k) { s = s.replace("{" + k + "}", vars[k]); });
+    }
+    return s;
+  }
+
+  function apply() {
+    document.documentElement.setAttribute("lang", lang);
+    var nodes = document.querySelectorAll("[data-i18n]");
+    Array.prototype.forEach.call(nodes, function (n) {
+      if (!n.hasAttribute("data-i18n-en")) { n.setAttribute("data-i18n-en", n.textContent); }
+      var key = n.getAttribute("data-i18n");
+      n.textContent = lang === "ru" && RU[key] != null ? RU[key] : n.getAttribute("data-i18n-en");
+    });
+    var attrNodes = document.querySelectorAll("[data-i18n-attr]");
+    Array.prototype.forEach.call(attrNodes, function (n) {
+      n.getAttribute("data-i18n-attr").split(";").forEach(function (pair) {
+        var p = pair.split(":");
+        if (p.length !== 2) { return; }
+        var enKey = "data-i18n-en-" + p[0];
+        if (!n.hasAttribute(enKey)) { n.setAttribute(enKey, n.getAttribute(p[0]) || ""); }
+        n.setAttribute(p[0], lang === "ru" && RU[p[1]] != null ? RU[p[1]] : n.getAttribute(enKey));
+      });
+    });
+    Array.prototype.forEach.call(document.querySelectorAll("[data-lang-item]"), function (n) { n.hidden = false; });
+    Array.prototype.forEach.call(document.querySelectorAll("[data-lang-code]"), function (n) {
+      n.textContent = lang.toUpperCase();
+    });
+  }
+
+  function setLang(next) {
+    lang = LANGS.indexOf(next) !== -1 ? next : "en";
+    try { window.localStorage.setItem(STORAGE_KEY, lang); } catch (e) { /* ignore */ }
+    apply();
+    var ev;
+    try { ev = new CustomEvent("site-lang-change", { detail: { lang: lang } }); }
+    catch (e) { ev = document.createEvent("CustomEvent"); ev.initCustomEvent("site-lang-change", false, false, { lang: lang }); }
+    document.dispatchEvent(ev);
+  }
+
+  function init() {
+    lang = initialLang();
+    apply();
+    Array.prototype.forEach.call(document.querySelectorAll("[data-lang-toggle]"), function (b) {
+      b.addEventListener("click", function () { setLang(lang === "en" ? "ru" : "en"); });
+    });
+  }
+
+  window.SiteI18n = { t: t, getLang: function () { return lang; }, setLang: setLang };
+
+  if (document.readyState === "loading") { document.addEventListener("DOMContentLoaded", init); }
+  else { init(); }
+})();
