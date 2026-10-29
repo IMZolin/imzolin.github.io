@@ -15,9 +15,12 @@
 
   var RU = {
     "brand": "Иван Золин",
+    "nav.blog": "Блог",
     "nav.research": "Публикации",
     "nav.cv": "Опыт работы",
     "nav.contact": "Контакты",
+    "page.blog.title": "Блог",
+    "page.blog.desc": "Заметки об исследованиях и разработке.",
     "page.research.title": "Публикации",
     "page.research.desc": "Публикации и научные работы.",
     "page.cv.title": "Опыт работы",
