@@ -136,11 +136,8 @@
 
   var MONTHS = {
     en: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
-    ru: ["янв", "фев", "мар", "апр", "май", "июн", "июл", "авг", "сен", "окт", "ноя", "дек"]
+    ru: ["Январь", "Февраль", "Март", "Апрель", "Май", "Июнь", "Июль", "Август", "Сентябрь", "Октябрь", "Ноябрь", "Декабрь"]
   };
-
-  // Full month names for news dates (Russian: nominative, "Август 2025").
-  var MONTHS_FULL_RU = ["Январь", "Февраль", "Март", "Апрель", "Май", "Июнь", "Июль", "Август", "Сентябрь", "Октябрь", "Ноябрь", "Декабрь"];
 
   // ---------------------------------------------------------------------------
   // Pure helpers (unit-testable, no DOM required)
@@ -160,13 +157,12 @@
     "Laboratory of Biomedical Imaging and Data Analysis (LABID), SPbPU": "Лаборатория биомедицинской визуализации и анализа данных (LABID), СПбПУ",
     "Laboratory of Molecular Neurodegeneration (LMN), SPbPU": "Лаборатория молекулярной нейродегенерации (LMN), СПбПУ",
     "Partner Finder (startup)": "Partner Finder (стартап)",
-    "NLP R&D engineer": "NLP R&D инженер",
-    "AI Researcher": "ИИ-исследователь",
-    "AI Researcher (Computer Vision & NLP)": "ИИ-исследователь (компьютерное зрение и NLP)",
-    "Software developer": "Разработчик ПО",
-    "Kotlin Full-Stack Developer": "Kotlin Full-Stack разработчик",
     "Developed a web interface for personalized language-learning tasks and deployed the system using Heroku.": "Разработал веб-интерфейс для персонализированных заданий по изучению языков и развернул систему на Heroku.",
     "Event page": "Страница мероприятия",
+    "Certificate": "Сертификат",
+    "Slides": "Слайды",
+    "Thesis": "Тезисы",
+    "Registration": "Свидетельство о регистрации",
     "Thesis PDF": "Тезисы (PDF)",
     "Web service": "Веб-сервис",
     "MAS-EHR Presentation": "Презентация MAS-EHR",
@@ -679,7 +675,8 @@
       var body = el(doc, "div", "dyn-card-main");
 
       var header = el(doc, "div", "dyn-card-header");
-      var role = localized(item.role, lang);
+      // Role titles are kept in their original (English) form in every language.
+      var role = localized(item.role, "en");
       header.appendChild(el(doc, "h3", "dyn-card-title", role || item.organization));
       // "Completed" is the default for past roles; only highlight other states (e.g. current).
       var badge = item.status === "completed" ? null : renderStatusBadge(doc, item.status, lang);
@@ -742,13 +739,12 @@
       body.appendChild(meta);
 
       if (isArray(item.gpa) && item.gpa.length) {
-        var gpaParts = [];
+        // Both universities are Russian: show only the 5.00-scale score (never convert scales).
+        var gp = item.gpa[0];
         for (var g = 0; g < item.gpa.length; g++) {
-          var gp = item.gpa[g];
-          // Preserve each scale exactly as published; never convert between scales.
-          gpaParts.push(gp.value + " / " + gp.scale);
+          if (String(item.gpa[g].scale) === "5.00") { gp = item.gpa[g]; break; }
         }
-        body.appendChild(el(doc, "p", "dyn-gpa", t.gpa + ": " + gpaParts.join("  ·  ")));
+        body.appendChild(el(doc, "p", "dyn-gpa", t.gpa + ": " + gp.value + " / " + gp.scale));
       }
       var thesis = localized(item.thesis, lang);
       if (thesis) {
@@ -1181,10 +1177,12 @@
     if (result) {
       card.appendChild(el(doc, "p", "dyn-result", result));
     }
-    if (isArray(item.links) && item.links.length) {
+    // Event/thesis links plus supporting evidence (certificate, slides, registration).
+    var proofs = (isArray(item.links) ? item.links : []).concat(isArray(item.evidence) ? item.evidence : []);
+    if (proofs.length) {
       var linkRow = el(doc, "div", "dyn-links-row");
-      for (var l = 0; l < item.links.length; l++) {
-        linkRow.appendChild(safeLink(doc, item.links[l].url, item.links[l].label));
+      for (var l = 0; l < proofs.length; l++) {
+        if (proofs[l] && proofs[l].url) { linkRow.appendChild(safeLink(doc, proofs[l].url, proofs[l].label)); }
       }
       card.appendChild(linkRow);
     }
@@ -1259,12 +1257,6 @@
   }
 
   /** News rows: { date: "YYYY-MM", en, ru }. A missing ru falls back to en. */
-  function formatNewsDate(date, lang) {
-    var m = /^(\d{4})-(\d{2})/.exec(String(date || ""));
-    if (lang === "ru" && m && MONTHS_FULL_RU[+m[2] - 1]) { return MONTHS_FULL_RU[+m[2] - 1] + " " + m[1]; }
-    return formatMonth(date, lang);
-  }
-
   function renderNews(doc, news, lang) {
     var t = ui(lang);
     var wrap = section(doc, "news", t.sections.news);
@@ -1273,7 +1265,7 @@
       var text = (lang === "ru" && news[i].ru) ? news[i].ru : news[i].en;
       if (!text) { continue; }
       var row = el(doc, "div", "dyn-news-item");
-      row.appendChild(el(doc, "span", "dyn-news-date", formatNewsDate(news[i].date, lang)));
+      row.appendChild(el(doc, "span", "dyn-news-date", formatMonth(news[i].date, lang)));
       row.appendChild(el(doc, "span", "dyn-news-text", text));
       list.appendChild(row);
     }
