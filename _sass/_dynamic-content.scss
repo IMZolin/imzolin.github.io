@@ -291,10 +291,13 @@
     color: var(--global-text-color-light);
     white-space: nowrap;
   }
+  // Full Russian month names are longer ("Сентябрь 2025").
+  :root[data-content-lang="ru"] & .dyn-news-date { flex-basis: 9rem; }
   @media (max-width: 575px) {
     // Keep the date and the text on one line; just a narrower date column.
     .dyn-news-item { gap: 0.6rem; font-size: 0.95rem; }
     .dyn-news-date { flex-basis: 5rem; }
+    :root[data-content-lang="ru"] & .dyn-news-date { flex-basis: 7.2rem; }
   }
 }
 

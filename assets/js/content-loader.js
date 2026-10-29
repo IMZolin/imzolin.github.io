@@ -139,6 +139,9 @@
     ru: ["янв", "фев", "мар", "апр", "май", "июн", "июл", "авг", "сен", "окт", "ноя", "дек"]
   };
 
+  // Full month names for news dates (Russian: nominative, "Август 2025").
+  var MONTHS_FULL_RU = ["Январь", "Февраль", "Март", "Апрель", "Май", "Июнь", "Июль", "Август", "Сентябрь", "Октябрь", "Ноябрь", "Декабрь"];
+
   // ---------------------------------------------------------------------------
   // Pure helpers (unit-testable, no DOM required)
   // ---------------------------------------------------------------------------
@@ -1256,6 +1259,12 @@
   }
 
   /** News rows: { date: "YYYY-MM", en, ru }. A missing ru falls back to en. */
+  function formatNewsDate(date, lang) {
+    var m = /^(\d{4})-(\d{2})/.exec(String(date || ""));
+    if (lang === "ru" && m && MONTHS_FULL_RU[+m[2] - 1]) { return MONTHS_FULL_RU[+m[2] - 1] + " " + m[1]; }
+    return formatMonth(date, lang);
+  }
+
   function renderNews(doc, news, lang) {
     var t = ui(lang);
     var wrap = section(doc, "news", t.sections.news);
@@ -1264,7 +1273,7 @@
       var text = (lang === "ru" && news[i].ru) ? news[i].ru : news[i].en;
       if (!text) { continue; }
       var row = el(doc, "div", "dyn-news-item");
-      row.appendChild(el(doc, "span", "dyn-news-date", formatMonth(news[i].date, lang)));
+      row.appendChild(el(doc, "span", "dyn-news-date", formatNewsDate(news[i].date, lang)));
       row.appendChild(el(doc, "span", "dyn-news-text", text));
       list.appendChild(row);
     }
