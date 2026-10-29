@@ -449,3 +449,37 @@
     .blog-side { order: -1; flex-basis: auto; position: static; width: 100%; }
   }
 }
+
+// --- Tag filter, year groups, talks and news pages -----------------------------------
+.dynamic-content {
+  .dyn-tagbar { display: flex; flex-wrap: wrap; gap: 0.4rem; margin: 0 0 1.25rem; }
+  .dyn-tag {
+    padding: 0.1rem 0.6rem;
+    border: 1px solid var(--global-divider-color);
+    border-radius: 999px;
+    background: transparent;
+    color: var(--global-text-color-light);
+    font-size: 0.8rem;
+    cursor: pointer;
+    &:hover { color: var(--global-theme-color); border-color: var(--global-theme-color); }
+    &.is-active { color: var(--global-bg-color); background: var(--global-theme-color); border-color: var(--global-theme-color); }
+  }
+  .dyn-year {
+    margin: 1.5rem 0 0.5rem;
+    padding-bottom: 0.25rem;
+    border-bottom: 1px solid var(--global-divider-color);
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: var(--global-text-color-light);
+  }
+  .dyn-tags { display: flex; flex-wrap: wrap; gap: 0.3rem; margin-top: 0.5rem; }
+  .dyn-news-meta { display: block; margin-top: 0.2rem; }
+  .dyn-news-meta > * { margin-right: 0.5rem; font-size: 0.8rem; }
+  .dyn-more { display: inline-block; margin-top: 0.5rem; font-size: 0.9rem; }
+  .dyn-talk { margin-bottom: 0.75rem; }
+}
+
+.post-talks {
+  margin-top: 2rem;
+  max-width: 38rem;
+}

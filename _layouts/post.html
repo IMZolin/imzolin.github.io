@@ -59,6 +59,20 @@ layout: default
   </div>
   {%- endif %}
 
+  {%- if page.talks and page.talks.size > 0 -%}
+  <aside class="post-talks">
+    <h3 class="related-articles-title" data-i18n="blog.talks">Talks &amp; media</h3>
+    <ul class="related-articles-list">
+      {%- for talk_id in page.talks -%}
+      {%- for t in site.data.talks -%}{%- if t.id == talk_id -%}
+      <li><a href="{{ '/talks/' | relative_url }}#talk-{{ t.id }}"><span data-ru="{{ t.title.ru }}">{{ t.title.en | default: t.title }}</span></a>
+        <span class="related-articles-why"><span data-ru="{{ t.event.ru }}">{{ t.event.en | default: t.event }}</span></span></li>
+      {%- endif -%}{%- endfor -%}
+      {%- endfor -%}
+    </ul>
+  </aside>
+  {%- endif %}
+
   {%- if site.related_blog_posts.enabled -%}
     {%- if page.related_posts == null or page.related_posts -%}
       {% include related_posts.html %}

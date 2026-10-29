@@ -1,0 +1,109 @@
+# Talks, conference presentations and interviews/media appearances (page /talks/).
+# Hand-maintained for now; the shape is meant to move into personal-os (content.json) later.
+#
+# kind:  talk       -> "Talks & conferences" (talks, conference presentations)
+#        interview  -> "Interviews" (podcasts, video interviews, press / text media)
+# date:  "YYYY", "YYYY-MM" or "YYYY-MM-DD" (use what is actually known)
+# tags:  free-form lowercase keywords; the page can be filtered by them
+# links: type is one of recording, slides, event, thesis, certificate, article, audio, paper
+# Fields title / event / description accept a plain string or {en, ru}.
+- id: ods-data-fest-2026
+  kind: talk
+  date: "2026"
+  title:
+    en: "MAS-EHR: A Multi-Agent System for Clinical Data Integration and Harmonization"
+    ru: "MAS-EHR: Мультиагентная система для интеграции, гармонизации и анализа клинических данных"
+  event:
+    en: "ODS Data Fest 2026, \"Medical Data Horror Stories\" track"
+    ru: "ODS Data Fest 2026, секция «Ужасы медицинских данных»"
+  tags: [medical-ai, multi-agent]
+  links:
+    - { type: slides, url: "https://docs.google.com/presentation/d/14XiuaF-5ua-QV6dpbdqHJP_R_0dLqgYx/edit?usp=sharing&ouid=116971123936620311925&rtpof=true&sd=true" }
+
+- id: open-data-forum-2025
+  kind: talk
+  date: "2025"
+  title:
+    en: "Conference presentation"
+    ru: "Доклад на конференции"
+  event:
+    en: "Open Data Forum 2025"
+    ru: "Открытые данные 2025"
+  tags: [medical-ai]
+  links:
+    - { type: slides, url: "https://docs.google.com/presentation/d/1gQT8OrvrH6E40rM1-HP4kEyvRyX4uWEP/edit?usp=sharing&ouid=116971123936620311925&rtpof=true&sd=true" }
+
+- id: polytech-life-sciences-2025
+  kind: talk
+  date: "2025"
+  title:
+    en: "Conference presentation"
+    ru: "Доклад на конференции"
+  event:
+    en: "Polytech for Life Sciences 2025"
+    ru: "Политех наукам жизнь 2025"
+  tags: [microscopy]
+  links:
+    - { type: thesis, url: "https://docs.google.com/document/d/1KRhvQgBEqJj7-yWsRPRPzALlSuo0K4G-/edit?usp=sharing&ouid=116971123936620311925&rtpof=true&sd=true" }
+
+- id: itmo-young-professionals-2024
+  kind: talk
+  date: "2024"
+  title:
+    en: "Winner, \"Best Popular Science Talk\""
+    ru: "Победа в номинации «Лучшее научно-популярное выступление»"
+  event:
+    en: "International ITMO Conference \"Young Professionals\""
+    ru: "Международная конференция ИТМО «Молодые профессионалы»"
+  tags: [popular-science]
+  links:
+    - { type: certificate, url: "https://drive.google.com/file/d/1gJMmNKZ5tfxXkk9-28jvsbnAzT9gbikD/view?usp=sharing" }
+
+- id: sibircon-2024
+  kind: talk
+  date: "2024"
+  title:
+    en: "TriDeFusion: Enhanced denoising algorithm for 3D fluorescence microscopy images integrating modified Noise2Noise and Non-local means"
+  event:
+    en: "IEEE SIBIRCON 2024"
+  tags: [microscopy, denoising]
+  links: []
+
+- id: medicine-modern-technologies-2024
+  kind: talk
+  date: "2024"
+  title:
+    en: "Conference presentation"
+    ru: "Доклад на конференции"
+  event:
+    en: "Medicine at the Intersection of Modern Technologies"
+    ru: "Медицина на стыке современных технологий"
+  tags: [medical-ai]
+  links:
+    - { type: certificate, url: "https://drive.google.com/file/d/1aSon3RMKt165d2SzuAxwcUR54zpGmAMG/view?usp=sharing" }
+
+- id: polytech-life-sciences-2023
+  kind: talk
+  date: "2023"
+  title:
+    en: "Conference presentation"
+    ru: "Доклад на конференции"
+  event:
+    en: "Polytech for Life Sciences 2023"
+    ru: "Политех наукам жизнь 2023"
+  tags: [microscopy]
+  links:
+    - { type: thesis, url: "https://docs.google.com/document/d/1jeW4NJu1LznsTfta8Qvbf2lSQ1pLEleQ/edit?usp=sharing&ouid=116971123936620311925&rtpof=true&sd=true" }
+
+- id: cbai-personalized-medicine-2023
+  kind: talk
+  date: "2023"
+  title:
+    en: "Conference presentation (thesis)"
+    ru: "Доклад на конференции (тезисы)"
+  event:
+    en: "CB&AI – Computational Biology and Artificial Intelligence for Personalized Medicine 2023"
+    ru: "CB&AI — Вычислительная биология и искусственный интеллект для персонализированной медицины 2023"
+  tags: [medical-ai]
+  links:
+    - { type: thesis, url: "https://www.endocrincentr.ru/sites/default/files/all/EVENTS_2023/09-11.08_vychislitelnaya_biologiya_i_iskusstvennyj_intellekt_dlya_personalizirovannoj_mediciny/theses/039.pdf" }

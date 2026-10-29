@@ -75,7 +75,7 @@
               {%- if p.nav and p.autogen == nil -%}
               {%- if p.dropdown %}
               <li class="nav-item dropdown {% if page.title == p.title %}active{% endif %}">
-                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span data-i18n="nav.{{ p.title }}">{{ p.title }}</span>
+                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span data-i18n="nav.{{ p.i18n_key | default: p.title }}">{{ p.title }}</span>
                   {%- if page.title == p.title -%}
                   <span class="sr-only">(current)</span>
                   {%- endif -%}
@@ -92,7 +92,7 @@
               </li>
               {%- else %}
               <li class="nav-item {% if page.title == p.title %}active{% endif %}">
-                <a class="nav-link" href="{{ p.url | relative_url }}"><span data-i18n="nav.{{ p.title }}">{{ p.title }}</span>
+                <a class="nav-link" href="{{ p.url | relative_url }}"><span data-i18n="nav.{{ p.i18n_key | default: p.title }}">{{ p.title }}</span>
                   {%- if page.title == p.title -%}
                   <span class="sr-only">(current)</span>
                   {%- endif -%}

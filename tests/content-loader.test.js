@@ -29,6 +29,7 @@ function makeNode(tag) {
     _textContent: "",
     appendChild(child) { this.childNodes.push(child); return child; },
     setAttribute(k, v) { this.attributes[k] = v; },
+    addEventListener() {},
     querySelector() { return null; }
   };
   Object.defineProperty(node, "textContent", {
@@ -328,4 +329,41 @@ test("RU CV: roles stay English, one GPA (5.00 scale), evidence links shown", ()
   assert.ok(text.includes("NLP R&D Engineer"));
   assert.ok(!text.includes("/ 4.00"));
   assert.ok(text.includes("Сертификат") && text.includes("Свидетельство о регистрации"));
+});
+
+// ---------------------------------------------------------------------------
+// News page, talks & media
+// ---------------------------------------------------------------------------
+const rawContent = () => SC.validateContent(JSON.parse(fs.readFileSync(path.join(__dirname, "..", "assets", "json", "content.json"), "utf8")));
+
+test("home news is limited and ends with a link to the full news page", () => {
+  const news = Array.from({ length: 8 }, (_, i) => ({ id: "n" + i, date: "2026-0" + (i + 1), en: "Item " + i, ru: null, tag: "work" }));
+  const out = SC.renderAll(fakeDoc, rawContent(), "ru", ["news"], { news, base: "/" });
+  const text = out.textContent;
+  assert.ok(text.includes("Item 4") && !text.includes("Item 5"));
+  assert.ok(text.includes("Все новости"));
+});
+
+test("news page groups by year, filters by tag and links to a talk", () => {
+  const news = [
+    { id: "a", date: "2026-06", en: "Talk news", ru: "Новость о выступлении", tag: "talk", talk: "t1" },
+    { id: "b", date: "2025-08", en: "Job news", ru: null, tag: "work" }
+  ];
+  const all = SC.renderAll(fakeDoc, rawContent(), "ru", ["newsall"], { news, base: "/" }).textContent;
+  assert.ok(all.includes("2026") && all.includes("2025") && all.includes("Выступление") && all.includes("#работа"));
+  const only = SC.renderAll(fakeDoc, rawContent(), "en", ["newsall"], { news, base: "/", activeTag: "work" }).textContent;
+  assert.ok(only.includes("Job news") && !only.includes("Talk news"));
+});
+
+test("talks page: years, tag filter, empty interviews, news back-link", () => {
+  const talks = [
+    { id: "t1", kind: "talk", date: "2026", title: { en: "Talk One", ru: "Доклад" }, event: "Event", tags: ["medical-ai"], links: [{ type: "slides", url: "https://example.org/s" }] },
+    { id: "t2", kind: "talk", date: "2024", title: "Talk Two", tags: ["microscopy"], links: [] }
+  ];
+  const news = [{ id: "a", date: "2026-06", en: "x", talk: "t1" }];
+  const ru = SC.renderAll(fakeDoc, rawContent(), "ru", ["talks", "interviews"], { talks, news, base: "/" }).textContent;
+  assert.ok(ru.includes("Доклад") && ru.includes("Слайды") && ru.includes("Новость") && ru.includes("#медицинский ИИ"));
+  assert.ok(ru.includes("Интервью") && ru.includes("Пока нет записей."));
+  const filtered = SC.renderAll(fakeDoc, rawContent(), "en", ["talks"], { talks, base: "/", activeTag: "microscopy" }).textContent;
+  assert.ok(filtered.includes("Talk Two") && !filtered.includes("Talk One"));
 });

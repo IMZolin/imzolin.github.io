@@ -38,7 +38,8 @@
     var base = (document.getElementById("site-search").getAttribute("data-base") || "").replace(/\/+$/, "");
     loading = Promise.all([
       fetchJson(base + "/assets/json/content.json"),
-      fetchJson(base + "/assets/json/search.json")
+      fetchJson(base + "/assets/json/search.json"),
+      fetchJson(base + "/assets/json/talks.json")
     ]).then(function (r) {
       var items = [];
       var content = r[0];
@@ -61,6 +62,14 @@
                        text: flatten(content.skills, []).join(" ") });
         }
       }
+      (r[2] || []).forEach(function (it) {
+        items.push({
+          title: String(pick(it.title) || it.id),
+          sub: (it.kind === "interview" ? "interviews" : "talks") + (pick(it.event) ? " · " + pick(it.event) : ""),
+          url: base + "/talks/#talk-" + it.id,
+          text: flatten(it, []).join(" ")
+        });
+      });
       (r[1] || []).forEach(function (p) {
         items.push({ title: p.title, sub: "page", url: p.url, text: p.text || "" });
       });
