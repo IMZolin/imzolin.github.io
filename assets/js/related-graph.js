@@ -8,7 +8,6 @@
   "use strict";
 
   var NS = "http://www.w3.org/2000/svg";
-  var HEIGHT = 320;
 
   function svgEl(tag, attrs) {
     var n = document.createElementNS(NS, tag);
@@ -23,13 +22,16 @@
     if (!data.nodes || data.nodes.length < 2) { return; }
 
     var width = box.clientWidth || 400;
+    var HEIGHT = parseInt(box.getAttribute("data-height"), 10) || 320;
+    var narrow = width < 360;
+    var many = data.nodes.length > 8;
     var nodes = data.nodes.map(function (n, i) {
       var a = (i / data.nodes.length) * Math.PI * 2;
       return {
         id: n.id, title: n.title, url: n.url, current: n.current,
         x: width / 2 + (n.current ? 0 : Math.cos(a) * 80),
         y: HEIGHT / 2 + (n.current ? 0 : Math.sin(a) * 80),
-        vx: 0, vy: 0, r: n.current ? 9 : 6, fixed: false
+        vx: 0, vy: 0, r: n.current ? 9 : (many ? 4.5 : 6), fixed: false
       };
     });
     var edges = data.edges.map(function (e) {
@@ -38,8 +40,8 @@
     var neighbours = nodes.map(function () { return {}; });
     edges.forEach(function (e) { neighbours[e.s.id][e.t.id] = true; neighbours[e.t.id][e.s.id] = true; });
 
-    var svg = svgEl("svg", { "class": "rg-svg", viewBox: "0 0 " + width + " " + HEIGHT, role: "img",
-      "aria-label": "Graph of related articles" });
+    var svg = svgEl("svg", { "class": "rg-svg" + (many ? " rg-many" : ""), viewBox: "0 0 " + width + " " + HEIGHT, role: "img",
+      "aria-label": "Graph of blog articles" });
     var edgeEls = edges.map(function (e) {
       var l = svgEl("line", { "class": "rg-edge rg-edge-" + e.kind });
       svg.appendChild(l);
@@ -79,7 +81,7 @@
           a = nodes[i]; b = nodes[j];
           dx = b.x - a.x; dy = b.y - a.y;
           d = Math.sqrt(dx * dx + dy * dy) || 1;
-          f = 2600 / (d * d);
+          f = (narrow ? 900 : 2600) * Math.max(1, nodes.length / 6) / (d * d);
           a.vx -= dx / d * f; a.vy -= dy / d * f;
           b.vx += dx / d * f; b.vy += dy / d * f;
         }
@@ -87,13 +89,13 @@
       edges.forEach(function (e) {
         dx = e.t.x - e.s.x; dy = e.t.y - e.s.y;
         d = Math.sqrt(dx * dx + dy * dy) || 1;
-        f = (d - 110) * 0.04;
+        f = (d - (narrow ? 55 : 110)) * 0.04;
         e.s.vx += dx / d * f; e.s.vy += dy / d * f;
         e.t.vx -= dx / d * f; e.t.vy -= dy / d * f;
       });
       nodes.forEach(function (n) {
-        n.vx += (width / 2 - n.x) * 0.012;
-        n.vy += (HEIGHT / 2 - n.y) * 0.012;
+        n.vx += (width / 2 - n.x) * (many ? 0.006 : 0.012);
+        n.vy += (HEIGHT / 2 - n.y) * (many ? 0.006 : 0.012);
         if (!n.fixed) {
           n.x += n.vx * alpha; n.y += n.vy * alpha;
         }

@@ -390,6 +390,13 @@
 .related-articles {
   margin-top: 2rem;
 
+  // Home page graph: sits at the top of the right-hand profile column.
+  &.blog-graph {
+    margin: 0 0 0.75rem;
+    .related-graph { max-width: none; background: var(--global-bg-color); }
+    .rg-svg { height: 230px; }
+  }
+
   .related-articles-title { margin: 0 0 0.5rem; font-size: 1rem; font-weight: 600; }
   .related-articles-list { margin: 0; padding-left: 1.1rem; }  // no-JS fallback
 
@@ -400,6 +407,8 @@
     max-width: 38rem;
   }
   .rg-svg { display: block; width: 100%; height: 320px; touch-action: none; }
+  .rg-svg.rg-many .rg-label { display: none; }  // many nodes: label only on hover
+  .rg-svg.rg-many .rg-node:hover .rg-label, .rg-svg.rg-many .rg-node:focus .rg-label { display: block; }
 
   .rg-edge {
     stroke: var(--global-text-color-light);
