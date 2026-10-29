@@ -1,19 +1,52 @@
-{% assign have_related_posts = false %}
+{%- comment -%}
+  Related articles box. A post is related when
+    - one post links to the other (a mention, e.g. via post_url), or
+    - the two posts share at least one tag.
+  Mentions rank first, then posts with more shared tags, then newer posts.
+  Opt out per post with `related_posts: false`.
+{%- endcomment -%}
+{%- assign this_slug = page.name | remove: '.md' | remove: '.markdown' -%}
+{%- assign mention_list = '' | split: '' -%}
+{%- assign tag_list = '' | split: '' -%}
+{%- assign shown = '' -%}
 
-{% for post in site.related_posts | limit: site.related_blog_posts.max_related %}
-  {% unless have_related_posts %}
-    {% assign have_related_posts = true %}
-    <br>
-    <hr>
-    <br>
-    <ul class="list-disc pl-8"></ul>
+{%- for other in site.posts -%}
+  {%- if other.url == page.url -%}{%- continue -%}{%- endif -%}
+  {%- assign other_slug = other.name | remove: '.md' | remove: '.markdown' -%}
+  {%- assign mentioned = false -%}
+  {%- if other.content contains page.url or other.content contains this_slug -%}{%- assign mentioned = true -%}{%- endif -%}
+  {%- if page.content contains other.url or page.content contains other_slug -%}{%- assign mentioned = true -%}{%- endif -%}
 
-    <!-- Adds related posts to the end of an article -->
-    <h2 class="text-3xl font-semibold mb-4 mt-12">Enjoy Reading This Article?</h2>
-    <p class="mb-2">Here are some more articles you might like to read next:</p>
-  {% endunless %}
+  {%- assign shared = '' -%}
+  {%- for tag in page.tags -%}
+    {%- if other.tags contains tag -%}{%- assign shared = shared | append: tag | append: ', ' -%}{%- endif -%}
+  {%- endfor -%}
 
-  <li class="my-2">
-    <a class="text-pink-700 underline font-semibold hover:text-pink-800" href="{{ site.baseurl }}{{ post.url }}">{{ post.title }}</a>
-  </li>
-{% endfor %}
+  {%- if mentioned -%}
+    {%- assign mention_list = mention_list | push: other -%}
+  {%- elsif shared != '' -%}
+    {%- assign tag_list = tag_list | push: other -%}
+  {%- endif -%}
+{%- endfor -%}
+
+{%- assign related = mention_list | concat: tag_list -%}
+{%- if related.size > 0 -%}
+<aside class="related-articles">
+  <h3 class="related-articles-title">Related articles</h3>
+  <ul class="related-articles-list">
+    {%- for post in related limit: site.related_blog_posts.max_related -%}
+    {%- assign is_mention = false -%}
+    {%- for m in mention_list -%}{%- if m.url == post.url -%}{%- assign is_mention = true -%}{%- endif -%}{%- endfor -%}
+    {%- assign shared = '' -%}
+    {%- for tag in page.tags -%}{%- if post.tags contains tag -%}{%- assign shared = shared | append: '#' | append: tag | append: ' ' -%}{%- endif -%}{%- endfor %}
+    <li>
+      <a href="{{ post.url | relative_url }}">{{ post.title }}</a>
+      <span class="related-articles-why">
+        {%- if is_mention -%}<i class="fas fa-link fa-sm"></i> mentioned{%- endif -%}
+        {%- if shared != '' -%}{%- if is_mention %} · {% endif -%}{{ shared | strip }}{%- endif -%}
+      </span>
+    </li>
+    {%- endfor -%}
+  </ul>
+</aside>
+{%- endif -%}

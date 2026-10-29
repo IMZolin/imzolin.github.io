@@ -1,0 +1,12 @@
+# LOCAL TESTING ONLY. The blog stays hidden on the live site (see `exclude` in _config.yml).
+# Run:  bundle exec jekyll serve --config _config.yml,_config.dev.yml
+blog_nav_title: blog
+exclude:
+  - bin
+  - Gemfile
+  - Gemfile.lock
+  - vendor
+  - tests
+  - package.json
+  - node_modules
+  - DYNAMIC_CONTENT.md

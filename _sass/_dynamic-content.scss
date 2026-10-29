@@ -385,3 +385,30 @@
 // The profile photo floats to the right and can be taller than the profile text:
 // start the next section below it so the photo / CV button never overlap it.
 .dynamic-content .dyn-section + .dyn-section { clear: both; }
+
+// --- Related articles box (blog posts) -------------------------------------------
+.related-articles {
+  margin-top: 2rem;
+  padding: 0.9rem 1.1rem;
+  max-width: 28rem;
+  border: 1px solid var(--global-divider-color);
+  border-radius: 8px;
+  font-size: 0.95rem;
+
+  .related-articles-title {
+    margin: 0 0 0.5rem;
+    font-size: 1rem;
+    font-weight: 600;
+  }
+  .related-articles-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    li { margin: 0.35rem 0; }
+  }
+  .related-articles-why {
+    display: block;
+    font-size: 0.8rem;
+    color: var(--global-text-color-light);
+  }
+}
