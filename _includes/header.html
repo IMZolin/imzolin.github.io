@@ -16,14 +16,14 @@
                 {{- site.last_name -}}
               {%- endif -%}
             {%- else -%}
-              {{- site.title -}}
+              <span data-i18n="brand">{{- site.title -}}</span>
             {%- endif -%}
           </a>
           <!-- Always-visible icons: language, search, theme -->
           <ul class="navbar-nav nav-icons flex-row flex-nowrap">
             <!-- Language toggle (shown by content-loader.js on pages with dynamic content) -->
             <li class="toggle-container" data-lang-item hidden>
-              <button type="button" class="lang-toggle-btn" data-lang-toggle title="Switch language (EN / RU)" aria-label="Switch language">
+              <button type="button" class="lang-toggle-btn" data-lang-toggle title="Switch language (EN / RU)" data-i18n-attr="title:lang.btn;aria-label:lang.btn" aria-label="Switch language">
                 <i class="fas fa-language"></i>
                 <span class="lang-toggle-code" data-lang-code>EN</span>
               </button>
@@ -31,7 +31,7 @@
 
             <!-- Search -->
             <li class="toggle-container">
-              <button type="button" class="site-search-btn" data-search-open title="Search (Ctrl/Cmd + K)" aria-label="Search">
+              <button type="button" class="site-search-btn" data-search-open title="Search (Ctrl/Cmd + K)" aria-label="Search" data-i18n-attr="title:search.btn;aria-label:search.label">
                 <i class="fas fa-search"></i>
               </button>
             </li>
@@ -40,7 +40,7 @@
 
             <!-- Toogle theme mode -->
             <li class="toggle-container">
-              <button id="light-toggle" title="Change theme">
+              <button id="light-toggle" title="Change theme" data-i18n-attr="title:theme.btn">
                 <i class="fas fa-moon"></i>
                 <i class="fas fa-sun"></i>
               </button>
@@ -75,7 +75,7 @@
               {%- if p.nav and p.autogen == nil -%}
               {%- if p.dropdown %}
               <li class="nav-item dropdown {% if page.title == p.title %}active{% endif %}">
-                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">{{ p.title }}
+                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span data-i18n="nav.{{ p.title }}">{{ p.title }}</span>
                   {%- if page.title == p.title -%}
                   <span class="sr-only">(current)</span>
                   {%- endif -%}
@@ -92,7 +92,7 @@
               </li>
               {%- else %}
               <li class="nav-item {% if page.title == p.title %}active{% endif %}">
-                <a class="nav-link" href="{{ p.url | relative_url }}">{{ p.title }}
+                <a class="nav-link" href="{{ p.url | relative_url }}"><span data-i18n="nav.{{ p.title }}">{{ p.title }}</span>
                   {%- if page.title == p.title -%}
                   <span class="sr-only">(current)</span>
                   {%- endif -%}
@@ -107,7 +107,7 @@
             <ul class="navbar-nav nav-actions d-sm-none">
               <!-- Contact -->
               <li class="nav-item nav-contact {% if page.url == '/contact/' %}active{% endif %}">
-                <a class="nav-link" href="{{ '/contact/' | relative_url }}">contact</a>
+                <a class="nav-link" href="{{ '/contact/' | relative_url }}"><span data-i18n="nav.contact">contact</span></a>
               </li>
             </ul>
           </div>
@@ -116,7 +116,7 @@
           <ul class="navbar-nav nav-contact-desktop d-none d-sm-flex">
               <!-- Contact -->
               <li class="nav-item nav-contact {% if page.url == '/contact/' %}active{% endif %}">
-                <a class="nav-link" href="{{ '/contact/' | relative_url }}">contact</a>
+                <a class="nav-link" href="{{ '/contact/' | relative_url }}"><span data-i18n="nav.contact">contact</span></a>
               </li>
           </ul>
         </div>

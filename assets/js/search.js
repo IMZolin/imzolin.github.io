@@ -103,7 +103,7 @@
     if (!hits.length) {
       var empty = document.createElement("div");
       empty.className = "site-search-empty";
-      empty.textContent = "No results";
+      empty.textContent = window.SiteI18n ? window.SiteI18n.t("search.none") : "No results";
       results.appendChild(empty);
       return;
     }

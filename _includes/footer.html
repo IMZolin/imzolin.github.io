@@ -1,6 +1,6 @@
     <footer class="static-footer mt-3">
       <div class="container footer-inner">
-        <div class="footer-copy">&copy; {{ site.time | date: '%Y' }} {{ site.first_name }} {{ site.last_name }}.</div>
+        <div class="footer-copy">&copy; {{ site.time | date: '%Y' }} <span data-i18n="brand">{{ site.first_name }} {{ site.last_name }}</span>.</div>
 
         <div class="footer-socials">
           {%- for s in site.data.contact.socials %}{% if s.footer %}

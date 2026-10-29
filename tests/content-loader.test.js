@@ -133,7 +133,7 @@ test("formatMonth formats machine-readable YYYY-MM", () => {
 
 test("formatPeriod renders the localized Present token for ongoing items", () => {
   assert.strictEqual(SC.formatPeriod({ start: "2025-08", end: null }, "current", "en"), "Aug 2025 – Present");
-  assert.strictEqual(SC.formatPeriod({ start: "2025-08", end: null }, "current", "ru"), "авг 2025 – Настоящее время");
+  assert.strictEqual(SC.formatPeriod({ start: "2025-08", end: null }, "current", "ru"), "Август 2025 – Настоящее время");
   assert.strictEqual(SC.formatPeriod({ start: "2022-11", end: "2022-12" }, "completed", "en"), "Nov 2022 – Dec 2022");
 });
 
@@ -230,13 +230,14 @@ test("renderAll renders the real content.json in EN and RU without null/undefine
   });
 });
 
-test("renderAll RU output omits (not fabricates) the inream Russian role", () => {
+test("renderAll RU fills the missing inream responsibilities only from the curated translation table", () => {
   const raw = fs.readFileSync(path.join(__dirname, "..", "assets", "json", "content.json"), "utf8");
   const data = SC.validateContent(JSON.parse(raw));
   const frag = SC.renderAll(fakeDoc, data, "ru");
-  // inream role.ru is null -> renderer falls back to the (non-localized)
-  // organization name for the title, never an invented Russian string.
-  assert.ok(frag.textContent.includes("Inream (Startup)"));
+  // inream responsibilities.ru is null; a curated exact-match translation is used, never a guess.
+  assert.ok(frag.textContent.includes("Разработал веб-интерфейс"));
+  // Unknown missing values still stay absent.
+  assert.equal(SC.localized({ en: "Unlisted text", ru: null }, "ru"), null);
 });
 
 test("renderAll renders news and selected papers only when the page opts in", () => {
@@ -318,4 +319,13 @@ test("project cards are compact: summary + Details / Key results buttons, links 
   const data = SC.validateContent(JSON.parse(raw));
   const text = SC.renderAll(fakeDoc, data, "en", ["projects"]).textContent;
   assert.ok(text.includes("Details") && text.includes("Key results") && text.includes("GitHub"));
+});
+
+test("RU CV: roles stay English, one GPA (5.00 scale), evidence links shown", () => {
+  const raw = fs.readFileSync(path.join(__dirname, "..", "assets", "json", "content.json"), "utf8");
+  const data = SC.validateContent(JSON.parse(raw));
+  const text = SC.renderAll(fakeDoc, data, "ru").textContent;
+  assert.ok(text.includes("NLP R&D Engineer"));
+  assert.ok(!text.includes("/ 4.00"));
+  assert.ok(text.includes("Сертификат") && text.includes("Свидетельство о регистрации"));
 });
