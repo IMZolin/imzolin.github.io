@@ -1,0 +1,70 @@
+// Hover tooltips (assets/js/tooltips.js), modeled on the HeroUI tooltip:
+// a bubble with a 12px radius and a soft shadow, a rotated-square arrow behind it,
+// and a scale-in from the arrow side. Colors and shadows are HeroUI's light / dark tokens.
+:root {
+  --tooltip-bg: #ffffff;
+  --tooltip-color: #11181c;
+  --tooltip-shadow: 0 0 15px 0 rgba(0, 0, 0, 0.03), 0 2px 30px 0 rgba(0, 0, 0, 0.08), 0 0 1px 0 rgba(0, 0, 0, 0.3);
+  --tooltip-arrow-shadow: 0 0 5px 0 rgba(0, 0, 0, 0.02), 0 2px 10px 0 rgba(0, 0, 0, 0.06), 0 0 1px 0 rgba(0, 0, 0, 0.3);
+}
+
+html[data-theme='dark'] {
+  --tooltip-bg: #18181b;
+  --tooltip-color: #fafafa;
+  --tooltip-shadow: 0 0 15px 0 rgba(0, 0, 0, 0.06), 0 2px 30px 0 rgba(0, 0, 0, 0.22), inset 0 0 1px 0 rgba(255, 255, 255, 0.15);
+  --tooltip-arrow-shadow: 0 0 5px 0 rgba(0, 0, 0, 0.05), 0 2px 10px 0 rgba(0, 0, 0, 0.2), inset 0 0 1px 0 rgba(255, 255, 255, 0.15);
+}
+
+.site-tooltip {
+  position: fixed;
+  z-index: 2100; // above the navbar and the search dialog (2000)
+  pointer-events: none;
+  opacity: 0;
+  transform: scale(0.85);
+  transition: opacity 0.15s ease-out, transform 0.15s ease-out;
+
+  &[data-placement="top"] { transform-origin: var(--tooltip-arrow-x, 50%) 100%; }
+  &[data-placement="bottom"] { transform-origin: var(--tooltip-arrow-x, 50%) 0; }
+
+  &.is-open {
+    opacity: 1;
+    transform: scale(1);
+    transition-duration: 0.2s;
+    transition-timing-function: cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  // Arrow: painted below the bubble, so only its tip shows.
+  &::before {
+    content: "";
+    position: absolute;
+    z-index: -1;
+    left: var(--tooltip-arrow-x, 50%);
+    width: 10px;
+    height: 10px;
+    border-radius: 2px;
+    background: var(--tooltip-bg);
+    box-shadow: var(--tooltip-arrow-shadow);
+    transform: translateX(-50%) rotate(45deg);
+  }
+
+  &[data-placement="top"]::before { bottom: -3.5px; }
+  &[data-placement="bottom"]::before { top: -3.5px; }
+}
+
+.site-tooltip-content {
+  padding: 4px 10px;
+  border-radius: 12px;
+  background: var(--tooltip-bg);
+  color: var(--tooltip-color);
+  box-shadow: var(--tooltip-shadow);
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+  font-weight: 400;
+  white-space: nowrap;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .site-tooltip, .site-tooltip.is-open { transition: none; transform: none; }
+}

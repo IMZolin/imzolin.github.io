@@ -65,8 +65,7 @@
     "search.navigate": "навигация",
     "search.open": "открыть",
     "search.close": "закрыть",
-    "search.btn": "Поиск (Ctrl/Cmd + K)",
-    "lang.btn": "Сменить язык (EN / RU)",
+    "lang.btn": "Сменить язык",
     "theme.btn": "Сменить тему"
   };
 
