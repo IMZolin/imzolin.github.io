@@ -60,10 +60,21 @@ pagination:
           <span data-i18n="page.blog.desc">{{ page.description }}</span>
           <span class="blog-desc-sep">&middot;</span>
           <span data-ru="{{ n_posts }} {{ ru_posts }}">{{ n_posts }} {% if n_posts == 1 %}post{% else %}posts{% endif %}</span>
+          {%- if site.newsletter.buttondown_username %}
+          <span class="blog-desc-sep">&middot;</span>
+          <a href="https://buttondown.com/{{ site.newsletter.buttondown_username | uri_escape }}" data-subscribe-toggle aria-expanded="false" aria-controls="blog-subscribe"><i class="fas fa-envelope fa-xs"></i> <span data-i18n="blog.subscribe">Subscribe</span></a>
+          {%- endif %}
           <span class="blog-desc-sep">&middot;</span>
           <a href="{{ '/feed.xml' | relative_url }}"><i class="fas fa-rss fa-xs"></i> RSS</a>
         </p>
       </header>
+
+      {%- if site.newsletter.buttondown_username %}
+      <div class="blog-subscribe" id="blog-subscribe" hidden>
+        {% include subscribe_form.html id="blog" %}
+        <p class="subscribe-note" data-i18n="blog.subscribeNote">One email per new post. No spam, unsubscribe anytime.</p>
+      </div>
+      {%- endif %}
 
       {%- if tag_rows.size > 0 %}
       <div class="blog-tags" data-blog-tags>

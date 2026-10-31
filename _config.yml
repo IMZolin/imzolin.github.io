@@ -135,6 +135,12 @@ related_blog_posts:
   enabled: true
   max_related: 5
 
+# Email subscription to new posts (_includes/subscribe_form.html), via Buttondown.
+# Set your Buttondown username to show "Subscribe" in the blog header and under every post;
+# empty hides it. In Buttondown, turn on Settings → RSS-to-email with this site's /feed.xml.
+newsletter:
+  buttondown_username:
+
 # Giscus comments (RECOMMENDED)
 # Follow instructions on https://giscus.app/ to setup for your repo to fill out
 # the information below.

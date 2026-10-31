@@ -61,6 +61,16 @@ layout: default
     </div>
   </article>
 
+  {%- if site.newsletter.buttondown_username %}
+  <aside class="post-subscribe">
+    <div class="post-subscribe-text">
+      <strong data-i18n="blog.subscribeTitle">Get new posts by email</strong>
+      <span class="subscribe-note" data-i18n="blog.subscribeNote">One email per new post. No spam, unsubscribe anytime.</span>
+    </div>
+    {% include subscribe_form.html id="post" %}
+  </aside>
+  {%- endif %}
+
   {%- if page.related_publications != null and page.related_publications.size > 0 -%}
   {% assign publications = page.related_publications | replace: ", ", "," | split: "," | join: "|" %}
   <h2>References</h2>

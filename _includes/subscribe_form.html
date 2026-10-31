@@ -1,0 +1,12 @@
+{%- comment -%}
+  Email subscription form posting straight to Buttondown (site.newsletter.buttondown_username);
+  Buttondown opens its confirmation page in a new tab and sends new posts from the RSS feed.
+  include.id: unique suffix for the input id (several forms can be on one page).
+{%- endcomment -%}
+{%- assign bd_user = site.newsletter.buttondown_username -%}
+<form class="subscribe-form" action="https://buttondown.com/api/emails/embed-subscribe/{{ bd_user | uri_escape }}" method="post" target="_blank">
+  <input type="hidden" name="embed" value="1">
+  <label class="sr-only" for="subscribe-email-{{ include.id }}" data-i18n="blog.emailLabel">Email</label>
+  <input class="subscribe-input" id="subscribe-email-{{ include.id }}" type="email" name="email" required autocomplete="email" placeholder="you@example.com">
+  <button class="subscribe-button" type="submit" data-i18n="blog.subscribe">Subscribe</button>
+</form>

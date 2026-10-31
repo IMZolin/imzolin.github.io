@@ -179,3 +179,79 @@
   .blog-graph-box:not(.is-open) .blog-graph { display: none; }
   .blog-graph-box.is-open .blog-graph { margin-top: 0.5rem; }
 }
+
+// Email subscription (_includes/subscribe_form.html): panel in the blog header, box under posts.
+.subscribe-form {
+  display: flex;
+  gap: 0.4rem;
+  max-width: 26rem;
+}
+
+.subscribe-input {
+  flex: 1 1 auto;
+  min-width: 0;
+  height: auto;
+  margin: 0;
+  padding: 0.3rem 0.75rem;
+  border: 1px solid var(--global-divider-color);
+  border-radius: 8px;
+  background: var(--global-bg-color);
+  box-shadow: none;
+  color: var(--global-text-color);
+  font: inherit;
+  font-size: 0.85rem;
+
+  &::placeholder { color: var(--global-text-color-light); }
+  &:focus { border-color: var(--global-text-color); box-shadow: none; outline: none; }
+}
+
+// Outlined like "View CV"; fills on hover.
+.subscribe-button {
+  flex: 0 0 auto;
+  padding: 0.3rem 0.9rem;
+  border: 1px solid var(--global-text-color);
+  border-radius: 8px;
+  background: transparent;
+  color: var(--global-text-color);
+  font: inherit;
+  font-size: 0.85rem;
+  cursor: pointer;
+  transition: background-color 0.15s ease, color 0.15s ease;
+
+  &:hover, &:focus-visible {
+    background: var(--global-text-color);
+    color: var(--global-bg-color);
+    outline: none;
+  }
+}
+
+.subscribe-note {
+  margin: 0.35rem 0 0;
+  color: var(--global-text-color-light);
+  font-size: 0.75rem;
+}
+
+.blog-subscribe { margin: 0 0 0.9rem; }
+
+.post-subscribe {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem 1.25rem;
+  margin: 2rem 0 1rem;
+  padding: 1rem 1.25rem;
+  border: 1px solid var(--global-divider-color);
+  border-radius: 8px;
+
+  .post-subscribe-text {
+    display: flex;
+    flex-direction: column;
+    gap: 0.15rem;
+
+    strong { font-size: 0.95rem; font-weight: 600; }
+    .subscribe-note { margin: 0; }
+  }
+
+  .subscribe-form { flex: 1 1 18rem; }
+}
