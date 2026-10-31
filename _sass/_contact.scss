@@ -115,6 +115,10 @@
     border-radius: 8px;
     color: var(--global-text-color);
 
+    // The theme colors every <span> with the text color; without this the label
+    // matches the hover fill and the button turns into a solid block.
+    span { color: inherit; }
+
     &:hover, &:focus {
       background: var(--global-text-color);
       color: var(--global-bg-color) !important;
