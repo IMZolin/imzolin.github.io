@@ -1,0 +1,257 @@
+// Blog page header (blog/index.html): title, description and tags on the left, the posts
+// graph on the right (fixed size), pinned posts under the tags; the post list follows full width.
+
+.blog-top {
+  display: flex;
+  align-items: flex-start;
+  gap: 1.5rem;
+  margin: 0 0 1rem;
+}
+
+.blog-intro { flex: 1 1 auto; min-width: 0; }
+
+.blog-title {
+  margin: 0 0 0.2rem;
+  font-size: 1.9rem;
+}
+
+.blog-desc {
+  margin: 0 0 0.9rem;
+  color: var(--global-text-color-light);
+  font-size: 0.9rem;
+
+  span { color: inherit; } // the theme colors every <span>
+  .blog-desc-sep { margin: 0 0.15rem; }
+
+  a {
+    color: inherit;
+    &:hover { color: var(--global-theme-color); text-decoration: none; }
+  }
+}
+
+// Tags: pills with post counts; the extra ones hide behind "+N".
+.blog-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+  margin: 0 0 0.9rem;
+}
+
+.blog-tag {
+  display: inline-flex;
+  flex: 0 0 auto;
+  align-items: center;
+  gap: 0.3rem;
+  padding: 0.1rem 0.6rem;
+  border: 1px solid var(--global-divider-color);
+  border-radius: 999px;
+  background: transparent;
+  color: var(--global-text-color-light);
+  font: inherit;
+  font-size: 0.78rem;
+  line-height: 1.4;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: background-color 0.15s ease, color 0.15s ease;
+
+  span { color: inherit; }
+
+  &:hover, &:focus-visible {
+    background: var(--global-divider-color);
+    color: var(--global-text-color);
+    text-decoration: none;
+    outline: none;
+  }
+
+  &.is-active, &.is-active:hover {
+    border-color: var(--global-text-color);
+    background: var(--global-text-color);
+    color: var(--global-bg-color);
+  }
+
+  &.is-extra { display: none; }
+}
+
+.blog-tag-count { font-size: 0.7rem; opacity: 0.7; }
+.blog-tag-more { border-style: dashed; }
+
+.blog-tags.is-expanded .blog-tag.is-extra { display: inline-flex; }
+
+// Two-state button labels ("+12" / "less", "Show graph" / "Hide graph").
+.when-expanded { display: none; }
+.blog-tags.is-expanded, .blog-graph-box.is-open {
+  .when-collapsed { display: none; }
+  .when-expanded { display: inline; }
+}
+
+// Pinned posts (at most three): title, and under it one small line with date, reading time, tags.
+.blog-pinned {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  font-size: 0.9rem;
+
+  li {
+    display: flex;
+    align-items: baseline;
+    gap: 0.5rem;
+    padding: 0.2rem 0;
+  }
+
+  i { font-size: 0.7rem; color: var(--global-text-color-light); }
+}
+
+.blog-pinned-body { flex: 1 1 auto; min-width: 0; }
+
+.blog-pinned-title,
+.blog-pinned-meta {
+  display: block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.blog-pinned-title {
+  color: var(--global-text-color);
+  line-height: 1.3;
+  &:hover { color: var(--global-theme-color); text-decoration: none; }
+}
+
+.blog-pinned-meta {
+  margin: 0.05rem 0 0;
+  color: var(--global-text-color-light);
+  font-size: 0.75rem;
+  line-height: 1.3;
+
+  a {
+    color: inherit;
+    &:hover { color: var(--global-theme-color); text-decoration: none; }
+  }
+}
+
+// Graph: fixed size next to the header on wide screens (graph styles: _dynamic-content.scss).
+// The view-transition name lets blog pages share it: it stays put while the page changes.
+.blog-graph-box {
+  flex: 0 0 280px;
+  width: 280px;
+  view-transition-name: blog-graph;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  ::view-transition-group(*), ::view-transition-old(*), ::view-transition-new(*) { animation: none !important; }
+}
+
+// Post pages: the header sits in the left column next to the graph.
+.blog-intro .post-header { margin-bottom: 0; }
+
+.rg-missing { font-size: 0.8rem; color: var(--global-text-color-light); }
+
+.blog-graph-toggle { display: none; }
+
+// Phones: one column, tags on one scrolling line, the graph behind "Show graph".
+@media (max-width: 767px) {
+  // stretch: otherwise the column sizes to the tag row's full width and the page scrolls sideways
+  .blog-top { flex-direction: column; align-items: stretch; gap: 0.5rem; }
+  .blog-graph-box { flex-basis: auto; width: 100%; }
+
+  .blog-tags:not(.is-expanded) {
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    scrollbar-width: none;
+    &::-webkit-scrollbar { display: none; }
+  }
+
+  .blog-graph-toggle {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0;
+    border: 0;
+    background: transparent;
+    color: var(--global-text-color-light);
+    font-size: 0.8rem;
+    cursor: pointer;
+
+    span { color: inherit; }
+    &:hover { color: var(--global-text-color); }
+  }
+
+  .blog-graph-box:not(.is-open) .blog-graph { display: none; }
+  .blog-graph-box.is-open .blog-graph { margin-top: 0.5rem; }
+}
+
+// Email subscription (_includes/subscribe_form.html): panel in the blog header, box under posts.
+.subscribe-form {
+  display: flex;
+  gap: 0.4rem;
+  max-width: 26rem;
+}
+
+.subscribe-input {
+  flex: 1 1 auto;
+  min-width: 0;
+  height: auto;
+  margin: 0;
+  padding: 0.3rem 0.75rem;
+  border: 1px solid var(--global-divider-color);
+  border-radius: 8px;
+  background: var(--global-bg-color);
+  box-shadow: none;
+  color: var(--global-text-color);
+  font: inherit;
+  font-size: 0.85rem;
+
+  &::placeholder { color: var(--global-text-color-light); }
+  &:focus { border-color: var(--global-text-color); box-shadow: none; outline: none; }
+}
+
+// Outlined like "View CV"; fills on hover.
+.subscribe-button {
+  flex: 0 0 auto;
+  padding: 0.3rem 0.9rem;
+  border: 1px solid var(--global-text-color);
+  border-radius: 8px;
+  background: transparent;
+  color: var(--global-text-color);
+  font: inherit;
+  font-size: 0.85rem;
+  cursor: pointer;
+  transition: background-color 0.15s ease, color 0.15s ease;
+
+  &:hover, &:focus-visible {
+    background: var(--global-text-color);
+    color: var(--global-bg-color);
+    outline: none;
+  }
+}
+
+.subscribe-note {
+  margin: 0.35rem 0 0;
+  color: var(--global-text-color-light);
+  font-size: 0.75rem;
+}
+
+.blog-subscribe { margin: 0 0 0.9rem; }
+
+.post-subscribe {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem 1.25rem;
+  margin: 2rem 0 1rem;
+  padding: 1rem 1.25rem;
+  border: 1px solid var(--global-divider-color);
+  border-radius: 8px;
+
+  .post-subscribe-text {
+    display: flex;
+    flex-direction: column;
+    gap: 0.15rem;
+
+    strong { font-size: 0.95rem; font-weight: 600; }
+    .subscribe-note { margin: 0; }
+  }
+
+  .subscribe-form { flex: 1 1 18rem; }
+}

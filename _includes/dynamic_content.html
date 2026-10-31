@@ -12,6 +12,9 @@
      {%- if include.news %}
      data-news-url="{{ '/assets/json/news.json' | relative_url }}"
      {%- endif %}
+     {%- if include.talks %}
+     data-talks-url="{{ '/assets/json/talks.json' | relative_url }}"
+     {%- endif %}
      data-site-base="{{ '/' | relative_url }}"
      {%- if include.images %}
      data-pub-images="{{ site.data.publication_images | jsonify | escape }}"

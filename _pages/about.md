@@ -20,4 +20,4 @@ selected_papers: false
 social: false
 ---
 
-{% include dynamic_content.html sections="profile,news,selected,blog" news=true images=true selected="tridefusion-v1,tridefusion-v2" cv=true %}
+{% include dynamic_content.html sections="profile,news,selected,blog" news=true images=true selected="neurorag,tridefusion-v1" cv=true %}

@@ -4,7 +4,7 @@
 
         <div class="footer-socials">
           {%- for s in site.data.contact.socials %}{% if s.footer %}
-          <a href="{{ s.url }}" title="{{ s.title }}" aria-label="{{ s.title }}"{% unless s.url contains 'mailto:' %} target="_blank" rel="noopener noreferrer"{% endunless %}><i class="{{ s.icon }}"></i></a>{% endif %}
+          <a href="{{ s.url }}" data-tooltip="{{ s.title }}" aria-label="{{ s.title }}"{% unless s.url contains 'mailto:' %} target="_blank" rel="noopener noreferrer"{% endunless %}><i class="{{ s.icon }}"></i></a>{% endif %}
           {%- endfor %}
         </div>
 

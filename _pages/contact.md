@@ -17,7 +17,7 @@ description: Get in touch.
 
     <div class="contact-socials">
       {%- for s in site.data.contact.socials %}
-      <a href="{{ s.url }}" title="{{ s.title }}" aria-label="{{ s.title }}"{% unless s.url contains 'mailto:' %} target="_blank" rel="noopener noreferrer"{% endunless %}><i class="{{ s.icon }}"></i></a>
+      <a href="{{ s.url }}" data-tooltip="{{ s.title }}" aria-label="{{ s.title }}"{% unless s.url contains 'mailto:' %} target="_blank" rel="noopener noreferrer"{% endunless %}><i class="{{ s.icon }}"></i></a>
       {%- endfor %}
     </div>
   </div>

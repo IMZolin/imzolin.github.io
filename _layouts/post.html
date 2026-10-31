@@ -15,6 +15,9 @@ layout: default
 
 <div class="post">
 
+  {%- comment -%} Header on the left; the blog graph with this post and its related posts on the right. {%- endcomment %}
+  <div class="blog-top">
+  <div class="blog-intro">
   <header class="post-header">
     <h1 class="post-title">{{ page.title }}</h1>
     <p class="post-meta">{{ page.date | date: "%B %-d, %Y" }}{%- if page.author -%} • {{ page.author }}{%- endif -%}{%- if page.meta -%} • {{ page.meta }}{%- endif -%}</p>
@@ -38,6 +41,13 @@ layout: default
 
     </p>
   </header>
+  </div>
+  {%- if site.related_blog_posts.enabled -%}
+    {%- if page.related_posts == null or page.related_posts -%}
+      {% include blog_graph.html focus=page.url %}
+    {%- endif %}
+  {%- endif %}
+  </div>
 
   <article class="post-content">
     {% if page.toc and page.toc.beginning %}
@@ -51,6 +61,16 @@ layout: default
     </div>
   </article>
 
+  {%- if site.newsletter.buttondown_username %}
+  <aside class="post-subscribe">
+    <div class="post-subscribe-text">
+      <strong data-i18n="blog.subscribeTitle">Get new posts by email</strong>
+      <span class="subscribe-note" data-i18n="blog.subscribeNote">One email per new post. No spam, unsubscribe anytime.</span>
+    </div>
+    {% include subscribe_form.html id="post" %}
+  </aside>
+  {%- endif %}
+
   {%- if page.related_publications != null and page.related_publications.size > 0 -%}
   {% assign publications = page.related_publications | replace: ", ", "," | split: "," | join: "|" %}
   <h2>References</h2>
@@ -59,10 +79,18 @@ layout: default
   </div>
   {%- endif %}
 
-  {%- if site.related_blog_posts.enabled -%}
-    {%- if page.related_posts == null or page.related_posts -%}
-      {% include related_posts.html %}
-    {%- endif %}
+  {%- if page.talks and page.talks.size > 0 -%}
+  <aside class="post-talks">
+    <h3 class="related-articles-title" data-i18n="blog.talks">Talks &amp; media</h3>
+    <ul class="related-articles-list">
+      {%- for talk_id in page.talks -%}
+      {%- for t in site.data.talks -%}{%- if t.id == talk_id -%}
+      <li><a href="{{ '/talks/' | relative_url }}#talk-{{ t.id }}"><span data-ru="{{ t.title.ru }}">{{ t.title.en | default: t.title }}</span></a>
+        <span class="related-articles-why"><span data-ru="{{ t.event.ru }}">{{ t.event.en | default: t.event }}</span></span></li>
+      {%- endif -%}{%- endfor -%}
+      {%- endfor -%}
+    </ul>
+  </aside>
   {%- endif %}
 
   {%- if site.disqus_shortname and page.disqus_comments -%}

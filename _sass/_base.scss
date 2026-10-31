@@ -414,7 +414,8 @@ footer.static-footer {
 .tag-category-list {
   border-bottom: 1px solid var(--global-divider-color);
   text-align: center;
-  padding-top: 1rem;
+  padding-top: 0.25rem;
+  font-size: 0.9rem;
 
   ul {
     justify-content: center;
@@ -438,19 +439,25 @@ footer.static-footer {
 
 .post-list {
   margin: 0;
-  margin-bottom: 40px;
+  margin-bottom: 1.5rem;
   padding: 0;
 
+  // No divider lines: posts are separated by space. The bold title carries the row;
+  // description and meta are secondary (muted, smaller).
   li {
-    border-bottom: 1px solid var(--global-divider-color);
     list-style: none;
-    padding-top: 2rem;
-    padding-bottom: 2rem;
+    padding-top: 0.75rem;
+    padding-bottom: 0.75rem;
+
+    h3 { font-size: 1.15rem; font-weight: 600; margin: 0 0 0.2rem; }
+    .post-desc { margin: 0 0 0.2rem; color: var(--global-text-color-light); font-size: 0.9rem; }
 
     .post-meta {
       color: var(--global-text-color-light);
-      font-size: 0.875rem;
+      font-size: 0.8rem;
       margin-bottom: 0;
+
+      a { color: var(--global-text-color-light); }
     }
 
     .post-tags {
@@ -475,25 +482,66 @@ footer.static-footer {
   }
 }
 
+// Blog pagination: plain small text, the current page in a small filled circle.
+// Selectors are spelled out to outrank Bootstrap / MDB's own .pagination rules.
 .pagination {
-  .page-item {
-    .page-link {
-      color: var(--global-text-color);
+  align-items: center;
+  gap: 0.2rem;
+  margin: 2rem 0 0;
+}
 
-      &:hover {
-        color: $black-color;
-      }
-    }
+.pagination .page-item .page-link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.3rem; // between the arrow and "Newer" / "Older" (flex drops the space)
+  min-width: 1.6rem;
+  height: 1.6rem;
+  padding: 0 0.3rem;
+  margin: 0;
+  border: 0;
+  border-radius: 999px;
+  background: transparent;
+  box-shadow: none;
+  color: var(--global-text-color-light);
+  font-size: 0.8rem;
+  line-height: 1;
+  transition: background-color 0.15s ease, color 0.15s ease;
 
-    &.active .page-link {
-      color: $white-color;
-      background-color: var(--global-theme-color);
+  span { color: inherit; } // the theme colors every <span>
+}
 
-      &:hover {
-        background-color: var(--global-theme-color);
-      }
-    }
-  }
+.pagination .page-item .page-link:hover,
+.pagination .page-item .page-link:focus-visible {
+  border-radius: 999px;
+  background: var(--global-divider-color);
+  color: var(--global-text-color);
+  text-decoration: none;
+}
+
+.pagination .page-item .page-link:focus { box-shadow: none; }
+
+.pagination .page-item.active .page-link,
+.pagination .page-item.active .page-link:hover {
+  border-radius: 999px;
+  background: var(--global-text-color);
+  color: var(--global-bg-color);
+  box-shadow: none;
+  font-weight: 600;
+}
+
+// "← Newer" / "Older →": text links, no circle.
+.pagination .page-item.page-prev .page-link,
+.pagination .page-item.page-next .page-link {
+  padding: 0 0.5rem;
+
+  &:hover { background: transparent; }
+}
+
+.pagination .page-item.disabled .page-link {
+  background: transparent;
+  opacity: 0.4;
+  pointer-events: none;
 }
 
 
@@ -1011,6 +1059,9 @@ nav[data-toggle="toc"] {
 }
 
 .featured-posts {
+  margin-top: 0.5rem;
+  .card-body { padding: 0.75rem 1rem; }
+  .card-title { font-size: 1.15rem; margin-bottom: 0.25rem; }
   a {
     color: var(--global-text-color-light);
     text-decoration: none;

@@ -21,17 +21,18 @@
           </a>
           <!-- Always-visible icons: language, search, theme -->
           <ul class="navbar-nav nav-icons flex-row flex-nowrap">
-            <!-- Language toggle (shown by content-loader.js on pages with dynamic content) -->
+            <!-- Language switch: "EN | RU", one button per language; i18n.js marks the current one with aria-pressed -->
             <li class="toggle-container" data-lang-item hidden>
-              <button type="button" class="lang-toggle-btn" data-lang-toggle title="Switch language (EN / RU)" data-i18n-attr="title:lang.btn;aria-label:lang.btn" aria-label="Switch language">
-                <i class="fas fa-language"></i>
-                <span class="lang-toggle-code" data-lang-code>EN</span>
-              </button>
+              <div class="lang-switch" role="group" data-tooltip="Switch language" data-tooltip-placement="bottom" data-i18n-attr="data-tooltip:lang.btn;aria-label:lang.btn" aria-label="Switch language">
+                <button type="button" class="lang-opt" data-lang-set="en" aria-pressed="true" aria-label="English">EN</button>
+                <button type="button" class="lang-opt" data-lang-set="ru" aria-pressed="false" aria-label="Русский">RU</button>
+              </div>
             </li>
 
             <!-- Search -->
             <li class="toggle-container">
-              <button type="button" class="site-search-btn" data-search-open title="Search (Ctrl/Cmd + K)" aria-label="Search" data-i18n-attr="title:search.btn;aria-label:search.label">
+              <button type="button" class="site-search-btn" data-search-open data-tooltip="Search" data-tooltip-placement="bottom" aria-label="Search" data-i18n-attr="data-tooltip:search.label;aria-label:search.label">
+                <kbd class="search-kbd" data-search-kbd aria-hidden="true">Ctrl K</kbd>
                 <i class="fas fa-search"></i>
               </button>
             </li>
@@ -40,7 +41,7 @@
 
             <!-- Toogle theme mode -->
             <li class="toggle-container">
-              <button id="light-toggle" title="Change theme" data-i18n-attr="title:theme.btn">
+              <button id="light-toggle" data-tooltip="Change theme" data-tooltip-placement="bottom" aria-label="Change theme" data-i18n-attr="data-tooltip:theme.btn;aria-label:theme.btn">
                 <i class="fas fa-moon"></i>
                 <i class="fas fa-sun"></i>
               </button>
@@ -61,7 +62,7 @@
               {% if site.blog_nav_title %}
               <!-- Blog -->
               <li class="nav-item {% if page.url contains 'blog' %}active{% endif %}">
-                <a class="nav-link" href="{{ '/blog/' | relative_url }}">{{ site.blog_nav_title }}
+                <a class="nav-link" href="{{ '/blog/' | relative_url }}"><span data-i18n="nav.blog">{{ site.blog_nav_title }}</span>
                   {%- if page.url contains 'blog' -%}
                   <span class="sr-only">(current)</span>
                   {%- endif -%}
@@ -75,7 +76,7 @@
               {%- if p.nav and p.autogen == nil -%}
               {%- if p.dropdown %}
               <li class="nav-item dropdown {% if page.title == p.title %}active{% endif %}">
-                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span data-i18n="nav.{{ p.title }}">{{ p.title }}</span>
+                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span data-i18n="nav.{{ p.i18n_key | default: p.title }}">{{ p.title }}</span>
                   {%- if page.title == p.title -%}
                   <span class="sr-only">(current)</span>
                   {%- endif -%}
@@ -92,7 +93,7 @@
               </li>
               {%- else %}
               <li class="nav-item {% if page.title == p.title %}active{% endif %}">
-                <a class="nav-link" href="{{ p.url | relative_url }}"><span data-i18n="nav.{{ p.title }}">{{ p.title }}</span>
+                <a class="nav-link" href="{{ p.url | relative_url }}"><span data-i18n="nav.{{ p.i18n_key | default: p.title }}">{{ p.title }}</span>
                   {%- if page.title == p.title -%}
                   <span class="sr-only">(current)</span>
                   {%- endif -%}

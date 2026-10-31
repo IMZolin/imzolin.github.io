@@ -53,6 +53,17 @@
       copy: "Copy",
       copied: "Copied",
       present: "Present",
+      allNews: "All news \u2192",
+      allTags: "All",
+      noEntries: "No entries yet.",
+      nothingFound: "Nothing found for this tag.",
+      relTalk: "Talk",
+      relPost: "Blog post",
+      relNews: "News",
+      linkTypes: {
+        recording: "Recording", slides: "Slides", event: "Event page", thesis: "Thesis",
+        certificate: "Certificate", article: "Article", audio: "Audio", paper: "Paper"
+      },
       sections: {
         profile: "About",
         news: "Recent news",
@@ -65,7 +76,9 @@
         patents: "Patents",
         skills: "Skills",
         links: "Links",
-        blog: "Blog"
+        blog: "Blog",
+        talks: "Talks & conferences",
+        interviews: "Interviews"
       },
       interests: "Interests",
       thesis: "Thesis",
@@ -100,6 +113,17 @@
       copy: "Копировать",
       copied: "Скопировано",
       present: "Настоящее время",
+      allNews: "Все новости \u2192",
+      allTags: "Все",
+      noEntries: "Пока нет записей.",
+      nothingFound: "По этому тегу ничего не найдено.",
+      relTalk: "Выступление",
+      relPost: "Запись в блоге",
+      relNews: "Новость",
+      linkTypes: {
+        recording: "Запись", slides: "Слайды", event: "Страница мероприятия", thesis: "Тезисы",
+        certificate: "Сертификат", article: "Статья", audio: "Аудио", paper: "Статья"
+      },
       sections: {
         profile: "Обо мне",
         news: "Новости",
@@ -112,7 +136,9 @@
         patents: "Патенты",
         skills: "Навыки",
         links: "Ссылки",
-        blog: "Блог"
+        blog: "Блог",
+        talks: "Выступления и конференции",
+        interviews: "Интервью"
       },
       interests: "Интересы",
       thesis: "Тема работы",
@@ -194,6 +220,14 @@
     "PubMed Summary QA (curated free-text benchmark)": "PubMed Summary QA (отобранный бенчмарк со свободным текстом)",
     "PubMedQA, open-ended (n=50)": "PubMedQA, открытые вопросы (n=50)",
     "160 evaluated responses to 12 neurobiological questions rated by 13 domain specialists; 103 best-response selections out of 142 decisive preferences (9 ties and 9 'all inadequate' verdicts excluded)": "160 оценённых ответов на 12 нейробиологических вопросов от 13 профильных специалистов; 103 выбора лучшего ответа из 142 однозначных предпочтений (исключены 9 ничьих и 9 вердиктов «все неадекватны»)"
+  };
+
+  // Russian labels for known tags; any other tag is shown as written.
+  var TAGS_RU = {
+    work: "работа", education: "образование", research: "исследования", talk: "выступление",
+    media: "медиа", award: "награда", publication: "публикация",
+    "medical-ai": "медицинский ИИ", "multi-agent": "мультиагентные системы",
+    microscopy: "микроскопия", denoising: "шумоподавление", "popular-science": "научпоп"
   };
 
   var SKILL_CATEGORIES_RU = {
@@ -1257,20 +1291,200 @@
   }
 
   /** News rows: { date: "YYYY-MM", en, ru }. A missing ru falls back to en. */
-  function renderNews(doc, news, lang) {
+  var HOME_NEWS_LIMIT = 5;
+
+  function tagLabel(tag, lang) {
+    return "#" + ((lang === "ru" && TAGS_RU[tag]) || tag);
+  }
+
+  function itemText(value, lang) {
+    if (isObject(value)) {
+      return (lang === "ru" && value.ru) ? value.ru : (value.en || "");
+    }
+    return typeof value === "string" ? value : "";
+  }
+
+  /** Clickable tag chip; clicking filters the page by that tag. */
+  function tagChip(doc, tag, lang, extras) {
+    var b = el(doc, "button", "dyn-tag" + (extras && extras.activeTag === tag ? " is-active" : ""), tagLabel(tag, lang));
+    b.type = "button";
+    b.addEventListener("click", function () {
+      if (extras && extras.onTag) { extras.onTag(extras.activeTag === tag ? null : tag); }
+    });
+    return b;
+  }
+
+  /** "All" + one button per tag. Hidden when there are no tags. */
+  function renderTagFilter(doc, tags, lang, extras) {
+    if (!tags.length) { return null; }
+    var bar = el(doc, "div", "dyn-tagbar");
+    var all = el(doc, "button", "dyn-tag" + (extras.activeTag ? "" : " is-active"), ui(lang).allTags);
+    all.type = "button";
+    all.addEventListener("click", function () { if (extras.onTag) { extras.onTag(null); } });
+    bar.appendChild(all);
+    for (var i = 0; i < tags.length; i++) { bar.appendChild(tagChip(doc, tags[i], lang, extras)); }
+    return bar;
+  }
+
+  function uniqueSorted(list) {
+    var seen = {};
+    return list.filter(function (x) { if (!x || seen[x]) { return false; } seen[x] = true; return true; }).sort();
+  }
+
+  function yearOf(date) {
+    var m = /^(\d{4})/.exec(String(date || ""));
+    return m ? m[1] : "";
+  }
+
+  /** Items (already sorted newest first) split into [{year, items}] runs. */
+  function groupByYear(items) {
+    var groups = [];
+    items.forEach(function (it) {
+      var y = yearOf(it.date);
+      if (!groups.length || groups[groups.length - 1].year !== y) { groups.push({ year: y, items: [] }); }
+      groups[groups.length - 1].items.push(it);
+    });
+    return groups;
+  }
+
+  function sortNewest(items) {
+    return items.slice().sort(function (a, b) { return String(b.date || "").localeCompare(String(a.date || "")); });
+  }
+
+  function newsRow(doc, n, lang, extras, full) {
+    var t = ui(lang);
+    var text = (lang === "ru" && n.ru) ? n.ru : n.en;
+    if (!text) { return null; }
+    var row = el(doc, "div", "dyn-news-item");
+    if (n.id) { row.id = "news-" + n.id; }
+    row.appendChild(el(doc, "span", "dyn-news-date", formatMonth(n.date, lang)));
+    var body = el(doc, "span", "dyn-news-text");
+    body.appendChild(doc.createTextNode(tr(text)));
+    if (full) {
+      var meta = el(doc, "span", "dyn-news-meta");
+      if (n.tag) { meta.appendChild(tagChip(doc, n.tag, lang, extras)); }
+      var base = (extras && extras.base) || "/";
+      if (n.talk) {
+        var a = el(doc, "a", "dyn-link dyn-rel", t.relTalk + " \u2192");
+        a.href = resolveSitePath("talks/", base) + "#talk-" + n.talk;
+        meta.appendChild(a);
+      }
+      if (n.post && isSafeUrlOrPath(n.post)) {
+        var b = el(doc, "a", "dyn-link dyn-rel", t.relPost + " \u2192");
+        b.href = n.post;
+        meta.appendChild(b);
+      }
+      if (meta.childNodes.length) { body.appendChild(meta); }
+    }
+    row.appendChild(body);
+    return row;
+  }
+
+  /** Home page: the latest items, then a link to the full list. */
+  function renderNews(doc, news, lang, extras) {
     var t = ui(lang);
     var wrap = section(doc, "news", t.sections.news);
     var list = el(doc, "div", "dyn-news");
-    for (var i = 0; i < news.length; i++) {
-      var text = (lang === "ru" && news[i].ru) ? news[i].ru : news[i].en;
-      if (!text) { continue; }
-      var row = el(doc, "div", "dyn-news-item");
-      row.appendChild(el(doc, "span", "dyn-news-date", formatMonth(news[i].date, lang)));
-      row.appendChild(el(doc, "span", "dyn-news-text", text));
-      list.appendChild(row);
+    for (var i = 0, shown = 0; i < news.length && shown < HOME_NEWS_LIMIT; i++) {
+      var row = newsRow(doc, news[i], lang, extras, false);
+      if (row) { list.appendChild(row); shown++; }
     }
     wrap.appendChild(list);
+    var more = el(doc, "a", "dyn-more", t.allNews);
+    more.href = resolveSitePath("news/", (extras && extras.base) || "/");
+    wrap.appendChild(more);
     return wrap;
+  }
+
+  /** News page: tag filter + items grouped by year. */
+  function renderNewsPage(doc, news, lang, extras) {
+    var t = ui(lang);
+    var wrap = section(doc, "newsall", null);
+    var all = sortNewest(news);
+    var bar = renderTagFilter(doc, uniqueSorted(all.map(function (n) { return n.tag; })), lang, extras);
+    if (bar) { wrap.appendChild(bar); }
+    var shown = all.filter(function (n) { return !extras.activeTag || n.tag === extras.activeTag; });
+    if (!shown.length) {
+      wrap.appendChild(el(doc, "p", "dyn-empty", extras.activeTag ? t.nothingFound : t.noEntries));
+      return wrap;
+    }
+    groupByYear(shown).forEach(function (g) {
+      wrap.appendChild(el(doc, "h3", "dyn-year", g.year));
+      var list = el(doc, "div", "dyn-news");
+      g.items.forEach(function (n) {
+        var row = newsRow(doc, n, lang, extras, true);
+        if (row) { list.appendChild(row); }
+      });
+      wrap.appendChild(list);
+    });
+    return wrap;
+  }
+
+  /**
+   * One talk as a compact row: title with its links on the right, then one muted line with
+   * the event, the month (the year is already the group heading) and the tags.
+   */
+  function renderTalkItem(doc, item, lang, extras) {
+    var t = ui(lang);
+    var row = el(doc, "div", "dyn-talk");
+    row.id = "talk-" + item.id;
+    var head = el(doc, "div", "dyn-talk-head");
+    head.appendChild(el(doc, "h3", "dyn-talk-title", itemText(item.title, lang) || item.id));
+
+    var links = el(doc, "span", "dyn-talk-links");
+    var list = isArray(item.links) ? item.links : [];
+    for (var l = 0; l < list.length; l++) {
+      if (!list[l] || !list[l].url) { continue; }
+      var label = list[l].label || t.linkTypes[list[l].type] || list[l].type || list[l].url;
+      links.appendChild(safeLink(doc, list[l].url, label));
+    }
+    var base = (extras && extras.base) || "/";
+    var news = isArray(extras && extras.news) ? extras.news : [];
+    for (var n = 0; n < news.length; n++) {
+      if (news[n].talk === item.id && news[n].id) {
+        var a = el(doc, "a", "dyn-link dyn-rel", t.relNews + " \u2192");
+        a.href = resolveSitePath("news/", base) + "#news-" + news[n].id;
+        links.appendChild(a);
+      }
+    }
+    if (links.childNodes.length) { head.appendChild(links); }
+    row.appendChild(head);
+
+    var meta = el(doc, "div", "dyn-talk-meta");
+    var event = itemText(item.event, lang);
+    if (event) { meta.appendChild(el(doc, "span", "dyn-talk-event", event)); }
+    var date = formatMonth(item.date, lang);
+    if (date && date !== String(item.date).slice(0, 4)) { meta.appendChild(el(doc, "span", "dyn-date", date)); }
+    var tags = isArray(item.tags) ? item.tags : [];
+    tags.forEach(function (tag) { meta.appendChild(tagChip(doc, tag, lang, extras)); });
+    if (meta.childNodes.length) { row.appendChild(meta); }
+
+    var description = itemText(item.description, lang);
+    if (description) { row.appendChild(el(doc, "p", "dyn-talk-desc", description)); }
+    return row;
+  }
+
+  /** One kind ("talk" | "interview") of the talks data, filtered by tag and grouped by year. */
+  function renderTalksSection(doc, talks, kind, lang, extras) {
+    var t = ui(lang);
+    var wrap = section(doc, kind === "interview" ? "interviews" : "talks", kind === "interview" ? t.sections.interviews : t.sections.talks);
+    var items = sortNewest(talks.filter(function (x) { return (x.kind || "talk") === kind; }));
+    var shown = items.filter(function (x) { return !extras.activeTag || (isArray(x.tags) && x.tags.indexOf(extras.activeTag) !== -1); });
+    if (!shown.length) {
+      wrap.appendChild(el(doc, "p", "dyn-empty", extras.activeTag && items.length ? t.nothingFound : t.noEntries));
+      return wrap;
+    }
+    groupByYear(shown).forEach(function (g) {
+      wrap.appendChild(el(doc, "h3", "dyn-year", g.year));
+      g.items.forEach(function (x) { wrap.appendChild(renderTalkItem(doc, x, lang, extras)); });
+    });
+    return wrap;
+  }
+
+  function renderTalksFilter(doc, talks, lang, extras) {
+    var tags = [];
+    talks.forEach(function (x) { if (isArray(x.tags)) { tags = tags.concat(x.tags); } });
+    return renderTagFilter(doc, uniqueSorted(tags), lang, extras);
   }
 
   function renderBlog(doc, data, lang) {
@@ -1314,7 +1528,17 @@
     if (want("profile")) { frag.appendChild(renderProfile(doc, data, lang)); }
     // News and selected papers are opt-in: only pages that list them render them.
     if (sections && want("news") && isArray(extras.news) && extras.news.length) {
-      frag.appendChild(renderNews(doc, extras.news, lang));
+      frag.appendChild(renderNews(doc, extras.news, lang, extras));
+    }
+    if (sections && want("newsall")) {
+      frag.appendChild(renderNewsPage(doc, isArray(extras.news) ? extras.news : [], lang, extras));
+    }
+    if (sections && (want("talks") || want("interviews"))) {
+      var talks = isArray(extras.talks) ? extras.talks : [];
+      var filter = renderTalksFilter(doc, talks, lang, extras);
+      if (filter) { frag.appendChild(filter); }
+      if (want("talks")) { frag.appendChild(renderTalksSection(doc, talks, "talk", lang, extras)); }
+      if (want("interviews")) { frag.appendChild(renderTalksSection(doc, talks, "interview", lang, extras)); }
     }
     if (sections && want("selected") && isArray(extras.selected) && extras.selected.length) {
       frag.appendChild(renderPublications(doc, data, lang, extras.selected, extras.images));
@@ -1389,9 +1613,16 @@
     var sectionAttr = root.getAttribute("data-sections");
     var sections = sectionAttr ? sectionAttr.split(",").map(function (x) { return x.trim(); }) : null;
     var newsUrl = root.getAttribute("data-news-url");
+    var talksUrl = root.getAttribute("data-talks-url");
     var selectedAttr = root.getAttribute("data-selected");
     var selected = selectedAttr ? selectedAttr.split(",").map(function (x) { return x.trim(); }) : null;
     var news = [];
+    var talks = [];
+    var activeTag = null;
+    try {
+      var qs = /[?&]tag=([^&#]+)/.exec(win.location.search || "");
+      if (qs) { activeTag = decodeURIComponent(qs[1]); }
+    } catch (e4) { activeTag = null; }
     var cv = null;
     try {
       var cvAttr = root.getAttribute("data-cv");
@@ -1425,6 +1656,16 @@
 
     var scrolledToHash = false;
 
+    // Tag filter: remembered in ?tag= so a filtered list can be shared.
+    function setTag(tag) {
+      activeTag = tag;
+      try {
+        var q = tag ? "?tag=" + encodeURIComponent(tag) : "";
+        win.history.replaceState(null, "", win.location.pathname + q + win.location.hash);
+      } catch (e5) { /* history may be unavailable */ }
+      paint();
+    }
+
     function paint() {
       if (!currentData || !contentEl) {
         return;
@@ -1432,7 +1673,10 @@
       while (contentEl.firstChild) {
         contentEl.removeChild(contentEl.firstChild);
       }
-      contentEl.appendChild(renderAll(doc, currentData, lang, sections, { news: news, selected: selected, images: images, logos: logos, base: siteBase, cv: cv }));
+      contentEl.appendChild(renderAll(doc, currentData, lang, sections, {
+        news: news, talks: talks, selected: selected, images: images, logos: logos, base: siteBase, cv: cv,
+        activeTag: activeTag, onTag: setTag
+      }));
       doc.documentElement.setAttribute("data-content-lang", lang);
       updateLangButtons();
       if (!scrolledToHash && win.location && win.location.hash.length > 1) {
@@ -1454,8 +1698,6 @@
         var cvLabel = cvLinks[c].querySelector("[data-cv-label]");
         if (cvLabel) { cvLabel.textContent = cvT.viewCv; }
       }
-      var codes = doc.querySelectorAll("[data-lang-code]");
-      for (var j = 0; j < codes.length; j++) { codes[j].textContent = lang.toUpperCase(); }
       var t = ui(lang);
       if (errorEl) {
         var title = errorEl.querySelector(".dyn-error-title");
@@ -1486,9 +1728,15 @@
             .then(function (r) { return r.ok ? r.json() : []; })
             ["catch"](function () { return []; })
         : Promise.resolve([]);
-      Promise.all([loadContent(url), newsLoad]).then(function (res) {
+      var talksLoad = (talksUrl && typeof win.fetch === "function")
+        ? win.fetch(talksUrl, { cache: "no-cache" })
+            .then(function (r) { return r.ok ? r.json() : []; })
+            ["catch"](function () { return []; })
+        : Promise.resolve([]);
+      Promise.all([loadContent(url), newsLoad, talksLoad]).then(function (res) {
         var data = res[0];
         news = isArray(res[1]) ? res[1] : [];
+        talks = isArray(res[2]) ? res[2] : [];
         currentData = data;
         setState("ready");
         paint();

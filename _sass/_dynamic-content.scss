@@ -385,3 +385,251 @@
 // The profile photo floats to the right and can be taller than the profile text:
 // start the next section below it so the photo / CV button never overlap it.
 .dynamic-content .dyn-section + .dyn-section { clear: both; }
+
+// --- Related articles graph (blog posts) -----------------------------------------
+.related-articles {
+  margin-top: 2rem;
+
+  // Blog page graph: fixed-size box next to the blog header (_blog.scss), pre-rendered SVG
+  // that keeps the aspect ratio of its build-time layout.
+  &.blog-graph {
+    margin: 0;
+    .related-graph { max-width: none; background: var(--global-bg-color); }
+    .rg-svg { height: auto; }
+  }
+
+  // Row under the blog graph (outside it, so nothing covers a node): caption on the left,
+  // zoom buttons and replay ("how the graph grew") on the right.
+  .rg-actions {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.5rem;
+    margin-top: 0.25rem;
+  }
+  .rg-caption {
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    color: var(--global-text-color-light);
+    font-size: 0.75rem;
+    cursor: default;
+
+    span { color: inherit; }
+  }
+  .rg-tools { display: inline-flex; flex: 0 0 auto; align-items: center; gap: 0.1rem; }
+  .rg-tool {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 22px;
+    height: 22px;
+    padding: 0;
+    border: 0;
+    border-radius: 999px;
+    background: transparent;
+    color: var(--global-text-color-light);
+    font-size: 0.65rem;
+    cursor: pointer;
+    transition: background-color 0.15s ease, color 0.15s ease;
+
+    &:hover, &:focus-visible { background: var(--global-divider-color); color: var(--global-text-color); outline: none; }
+    &:disabled { opacity: 0.35; cursor: default; background: transparent; }
+  }
+  .rg-replay {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    padding: 0.1rem 0.5rem;
+    border: 0;
+    border-radius: 999px;
+    background: transparent;
+    color: var(--global-text-color-light);
+    font-size: 0.75rem;
+    cursor: pointer;
+    transition: background-color 0.15s ease, color 0.15s ease;
+
+    span { color: inherit; } // the theme colors every <span>
+    &:hover, &:focus-visible { background: var(--global-divider-color); color: var(--global-text-color); outline: none; }
+    &:disabled { opacity: 0.4; cursor: default; background: transparent; }
+  }
+  .rg-replay-date { font-size: 11px; fill: var(--global-text-color-light); font-variant-numeric: tabular-nums; }
+
+  // Replay: hidden until their turn, nodes pop in, edges fade in.
+  .rg-svg .rg-pending { opacity: 0 !important; } // over the hover / post-page dimming
+  .rg-edge { transition: opacity 0.3s ease; }
+  .rg-node.rg-pop circle {
+    animation: rg-pop 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+    transform-box: fill-box;
+    transform-origin: center;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .rg-node.rg-pop circle { animation: none; }
+  }
+
+  .related-articles-title { margin: 0 0 0.5rem; font-size: 1rem; font-weight: 600; }
+  .related-articles-list { margin: 0; padding-left: 1.1rem; }  // no-JS fallback
+
+  .related-graph {
+    border: 1px solid var(--global-divider-color);
+    border-radius: 8px;
+    overflow: hidden;
+    max-width: 38rem;
+  }
+  .rg-svg { display: block; width: 100%; height: 320px; touch-action: none; }
+  .rg-svg.rg-many .rg-label { display: none; }  // many nodes: no labels, the hover tooltip names the post
+  .rg-svg.rg-many.rg-zoomed-labels .rg-label { display: block; } // zoomed in ×3+: room for labels
+  .rg-svg.rg-zoomed { cursor: grab; }
+  .rg-svg.rg-zoomed:active { cursor: grabbing; }
+
+  // Zoom (related-graph.js) scales the viewBox by --rg-k: strokes and label text keep their size.
+  .rg-edge {
+    stroke: var(--global-text-color-light);
+    stroke-width: 1.3;
+    opacity: 0.55;
+    vector-effect: non-scaling-stroke;
+    &.rg-edge-tag { opacity: 0.4; }
+    &.rg-hot { stroke: var(--global-theme-color); opacity: 1; }
+  }
+  .rg-node {
+    cursor: pointer;
+    outline: none;
+    -webkit-user-drag: none;
+    circle { fill: var(--global-text-color-light); stroke: var(--global-bg-color); stroke-width: 2; vector-effect: non-scaling-stroke; transition: fill 0.15s; }
+    &.rg-current circle { fill: var(--global-theme-color); }
+    .rg-label { font-size: calc(11px / var(--rg-k, 1)); fill: var(--global-text-color); pointer-events: none; }
+    &:hover circle, &:focus circle { fill: var(--global-theme-color); }
+    &.rg-tagged circle { fill: var(--global-theme-color); } // posts of the hovered blog tag
+  }
+  .rg-dim {
+    .rg-node:not(.rg-hot) { opacity: 0.25; }
+    .rg-edge:not(.rg-hot) { opacity: 0.1; }
+  }
+
+  // Post pages: the current post (larger, theme color, labelled) and its related posts stand
+  // out; everything else is dimmed.
+  .rg-node.rg-related circle { fill: var(--global-text-color); }
+  .rg-svg.rg-many .rg-node.rg-current .rg-label { display: block; }
+  .rg-focus {
+    .rg-node:not(.rg-current):not(.rg-related) { opacity: 0.3; }
+    .rg-edge:not(.rg-rel) { opacity: 0.08; }
+    .rg-edge.rg-rel { stroke: var(--global-theme-color); opacity: 0.9; }
+  }
+}
+
+@keyframes rg-pop {
+  from { transform: scale(0); }
+  to { transform: scale(1); }
+}
+
+// --- Tag filter, year groups, talks and news pages -----------------------------------
+.dynamic-content {
+  .dyn-tagbar { display: flex; flex-wrap: wrap; gap: 0.4rem; margin: 0 0 1.25rem; }
+  .dyn-tag {
+    padding: 0.1rem 0.6rem;
+    border: 1px solid var(--global-divider-color);
+    border-radius: 999px;
+    background: transparent;
+    color: var(--global-text-color-light);
+    font-size: 0.8rem;
+    cursor: pointer;
+    &:hover { color: var(--global-theme-color); border-color: var(--global-theme-color); }
+    &.is-active { color: var(--global-bg-color); background: var(--global-theme-color); border-color: var(--global-theme-color); }
+  }
+  .dyn-year {
+    margin: 1.5rem 0 0.5rem;
+    padding-bottom: 0.25rem;
+    border-bottom: 1px solid var(--global-divider-color);
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: var(--global-text-color-light);
+  }
+  .dyn-tags { display: flex; flex-wrap: wrap; gap: 0.3rem; margin-top: 0.5rem; }
+  .dyn-news-meta { display: block; margin-top: 0.2rem; }
+  .dyn-news-meta > * { margin-right: 0.5rem; font-size: 0.8rem; }
+  .dyn-more { display: inline-block; margin-top: 0.5rem; font-size: 0.9rem; }
+}
+
+// Talks page: compact rows (no cards), like the blog post list.
+.dynamic-content {
+  .dyn-talk {
+    padding: 0.45rem 0;
+    scroll-margin-top: 4.5rem; // links from news / search / posts land below the fixed header
+
+    &:target .dyn-talk-title { color: var(--global-theme-color); }
+  }
+
+  .dyn-talk-head {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 0.2rem 1rem;
+  }
+
+  .dyn-talk-title {
+    margin: 0;
+    font-size: 1rem;
+    font-weight: 600;
+    line-height: 1.35;
+  }
+
+  .dyn-talk-links {
+    display: flex;
+    flex: 0 0 auto;
+    gap: 0.75rem;
+
+    .dyn-link {
+      padding: 0;
+      border: 0;
+      font-size: 0.8rem;
+      white-space: nowrap;
+      &:hover { background: transparent; color: var(--global-theme-color); text-decoration: underline; }
+    }
+  }
+
+  .dyn-talk-meta {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 0.1rem 0.6rem;
+    margin-top: 0.15rem;
+    color: var(--global-text-color-light);
+    font-size: 0.85rem;
+
+    span { color: inherit; } // the theme colors every <span>
+    .dyn-date { font-size: inherit; }
+
+    // Tags as plain "#tag" text; still filter the list on click.
+    .dyn-tag {
+      padding: 0;
+      border: 0;
+      border-radius: 0;
+      background: transparent;
+      color: inherit;
+      font-size: 0.8rem;
+      font-weight: 400;
+      &:hover { color: var(--global-theme-color); }
+      &.is-active { color: var(--global-theme-color); background: transparent; }
+    }
+  }
+
+  .dyn-talk-desc {
+    margin: 0.2rem 0 0;
+    color: var(--global-text-color-light);
+    font-size: 0.85rem;
+  }
+
+  #section-talks, #section-interviews {
+    .dyn-year { margin: 1rem 0 0.15rem; font-size: 0.95rem; }
+  }
+
+  @media (max-width: 575px) {
+    .dyn-talk-head { flex-wrap: wrap; }
+  }
+}
+
+.post-talks {
+  margin-top: 2rem;
+  max-width: 38rem;
+}

@@ -3,10 +3,13 @@ layout: none
 permalink: /assets/json/news.json
 sitemap: false
 ---
+{%- assign talks_page = site.pages | where: 'permalink', '/talks/' | first -%}
 [
 {%- assign items = site.news | sort: 'date' | reverse -%}
 {%- for n in items -%}
-{%- unless forloop.first -%},{%- endunless %}
-{"date": {{ n.date | date: '%Y-%m' | jsonify }}, "en": {{ n.content | strip_html | strip_newlines | strip | replace: '&amp;', '&' | jsonify }}, "ru": {{ n.ru | default: nil | jsonify }}}
+{%- unless forloop.first -%},{%- endunless -%}
+{%- assign post_url_out = '' -%}
+{%- if n.post -%}{%- for p in site.posts -%}{%- if p.name contains n.post -%}{%- assign post_url_out = p.url | relative_url -%}{%- endif -%}{%- endfor -%}{%- endif %}
+{"id": {{ n.name | remove: '.md' | jsonify }}, "date": {{ n.date | date: '%Y-%m' | jsonify }}, "tag": {{ n.tag | default: nil | jsonify }}, "talk": {% if talks_page %}{{ n.talk | default: nil | jsonify }}{% else %}null{% endif %}, "post": {{ post_url_out | default: nil | jsonify }}, "en": {{ n.content | strip_html | strip_newlines | strip | replace: '&amp;', '&' | jsonify }}, "ru": {{ n.ru | default: nil | jsonify }}}
 {%- endfor %}
 ]
