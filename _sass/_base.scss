@@ -442,15 +442,15 @@ footer.static-footer {
   margin-bottom: 1.5rem;
   padding: 0;
 
+  // No divider lines: posts are separated by space. The bold title carries the row;
+  // description and meta are secondary (muted, smaller).
   li {
-    border-bottom: 1px solid var(--global-divider-color);
     list-style: none;
-    padding-top: 0.9rem;
-    padding-bottom: 0.9rem;
+    padding-top: 0.75rem;
+    padding-bottom: 0.75rem;
 
-    // Compact rows: small title, one-line description, one meta line.
-    h3 { font-size: 1.15rem; margin: 0 0 0.15rem; }
-    .post-desc { margin: 0 0 0.2rem; font-size: 0.95rem; }
+    h3 { font-size: 1.15rem; font-weight: 600; margin: 0 0 0.2rem; }
+    .post-desc { margin: 0 0 0.2rem; color: var(--global-text-color-light); font-size: 0.9rem; }
 
     .post-meta {
       color: var(--global-text-color-light);
