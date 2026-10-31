@@ -10,3 +10,4 @@ exclude:
   - package.json
   - node_modules
   - DYNAMIC_CONTENT.md
+  - TODO.md
