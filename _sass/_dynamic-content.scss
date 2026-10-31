@@ -390,11 +390,82 @@
 .related-articles {
   margin-top: 2rem;
 
-  // Home page graph: sits at the top of the right-hand profile column.
+  // Blog page graph: fixed-size box next to the blog header (_blog.scss), pre-rendered SVG
+  // that keeps the aspect ratio of its build-time layout.
   &.blog-graph {
-    margin: 0 0 0.75rem;
+    margin: 0;
     .related-graph { max-width: none; background: var(--global-bg-color); }
-    .rg-svg { height: 260px; }
+    .rg-svg { height: auto; }
+  }
+
+  // Row under the blog graph (outside it, so nothing covers a node): caption on the left,
+  // zoom buttons and replay ("how the graph grew") on the right.
+  .rg-actions {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.5rem;
+    margin-top: 0.25rem;
+  }
+  .rg-caption {
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    color: var(--global-text-color-light);
+    font-size: 0.75rem;
+    cursor: default;
+
+    span { color: inherit; }
+  }
+  .rg-tools { display: inline-flex; flex: 0 0 auto; align-items: center; gap: 0.1rem; }
+  .rg-tool {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 22px;
+    height: 22px;
+    padding: 0;
+    border: 0;
+    border-radius: 999px;
+    background: transparent;
+    color: var(--global-text-color-light);
+    font-size: 0.65rem;
+    cursor: pointer;
+    transition: background-color 0.15s ease, color 0.15s ease;
+
+    &:hover, &:focus-visible { background: var(--global-divider-color); color: var(--global-text-color); outline: none; }
+    &:disabled { opacity: 0.35; cursor: default; background: transparent; }
+  }
+  .rg-replay {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    padding: 0.1rem 0.5rem;
+    border: 0;
+    border-radius: 999px;
+    background: transparent;
+    color: var(--global-text-color-light);
+    font-size: 0.75rem;
+    cursor: pointer;
+    transition: background-color 0.15s ease, color 0.15s ease;
+
+    span { color: inherit; } // the theme colors every <span>
+    &:hover, &:focus-visible { background: var(--global-divider-color); color: var(--global-text-color); outline: none; }
+    &:disabled { opacity: 0.4; cursor: default; background: transparent; }
+  }
+  .rg-replay-date { font-size: 11px; fill: var(--global-text-color-light); font-variant-numeric: tabular-nums; }
+
+  // Replay: hidden until their turn, nodes pop in, edges fade in.
+  .rg-svg .rg-pending { opacity: 0 !important; } // over the hover / post-page dimming
+  .rg-edge { transition: opacity 0.3s ease; }
+  .rg-node.rg-pop circle {
+    animation: rg-pop 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+    transform-box: fill-box;
+    transform-origin: center;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .rg-node.rg-pop circle { animation: none; }
   }
 
   .related-articles-title { margin: 0 0 0.5rem; font-size: 1rem; font-weight: 600; }
@@ -407,47 +478,49 @@
     max-width: 38rem;
   }
   .rg-svg { display: block; width: 100%; height: 320px; touch-action: none; }
-  .rg-svg.rg-many .rg-label { display: none; }  // many nodes: label only on hover
-  .rg-svg.rg-many .rg-node:hover .rg-label, .rg-svg.rg-many .rg-node:focus .rg-label { display: block; }
+  .rg-svg.rg-many .rg-label { display: none; }  // many nodes: no labels, the hover tooltip names the post
+  .rg-svg.rg-many.rg-zoomed-labels .rg-label { display: block; } // zoomed in ×3+: room for labels
+  .rg-svg.rg-zoomed { cursor: grab; }
+  .rg-svg.rg-zoomed:active { cursor: grabbing; }
 
+  // Zoom (related-graph.js) scales the viewBox by --rg-k: strokes and label text keep their size.
   .rg-edge {
     stroke: var(--global-text-color-light);
     stroke-width: 1.3;
     opacity: 0.55;
-    &.rg-edge-tag { stroke-dasharray: 3 3; opacity: 0.4; }
+    vector-effect: non-scaling-stroke;
+    &.rg-edge-tag { opacity: 0.4; }
     &.rg-hot { stroke: var(--global-theme-color); opacity: 1; }
   }
   .rg-node {
     cursor: pointer;
     outline: none;
-    circle { fill: var(--global-text-color-light); stroke: var(--global-bg-color); stroke-width: 2; transition: fill 0.15s; }
+    -webkit-user-drag: none;
+    circle { fill: var(--global-text-color-light); stroke: var(--global-bg-color); stroke-width: 2; vector-effect: non-scaling-stroke; transition: fill 0.15s; }
     &.rg-current circle { fill: var(--global-theme-color); }
-    .rg-label { font-size: 11px; fill: var(--global-text-color); pointer-events: none; }
+    .rg-label { font-size: calc(11px / var(--rg-k, 1)); fill: var(--global-text-color); pointer-events: none; }
     &:hover circle, &:focus circle { fill: var(--global-theme-color); }
+    &.rg-tagged circle { fill: var(--global-theme-color); } // posts of the hovered blog tag
   }
   .rg-dim {
     .rg-node:not(.rg-hot) { opacity: 0.25; }
     .rg-edge:not(.rg-hot) { opacity: 0.1; }
   }
+
+  // Post pages: the current post (larger, theme color, labelled) and its related posts stand
+  // out; everything else is dimmed.
+  .rg-node.rg-related circle { fill: var(--global-text-color); }
+  .rg-svg.rg-many .rg-node.rg-current .rg-label { display: block; }
+  .rg-focus {
+    .rg-node:not(.rg-current):not(.rg-related) { opacity: 0.3; }
+    .rg-edge:not(.rg-rel) { opacity: 0.08; }
+    .rg-edge.rg-rel { stroke: var(--global-theme-color); opacity: 0.9; }
+  }
 }
 
-// --- Blog page: post list with the all-posts graph at the top right ----------------
-.blog-layout {
-  display: flex;
-  align-items: flex-start;
-  gap: 1.5rem;
-
-  .blog-main { flex: 1 1 auto; min-width: 0; }
-  .blog-side {
-    flex: 0 0 300px;
-    position: sticky;
-    top: 5rem;
-    margin-top: 1rem;
-  }
-  @media (max-width: 767px) {
-    flex-direction: column;
-    .blog-side { order: -1; flex-basis: auto; position: static; width: 100%; }
-  }
+@keyframes rg-pop {
+  from { transform: scale(0); }
+  to { transform: scale(1); }
 }
 
 // --- Tag filter, year groups, talks and news pages -----------------------------------

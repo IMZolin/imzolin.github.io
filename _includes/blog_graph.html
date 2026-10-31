@@ -1,41 +1,79 @@
 {%- comment -%}
-  Graph of all blog posts (home page, top right), drawn by assets/js/related-graph.js.
-  Two posts are linked when one mentions the other (solid) or they share a tag (dashed).
-  Renders nothing when the site has no posts, i.e. while the blog is hidden.
+  The graph of all blog posts, in the top right corner of the blog list pages and of the posts.
+  Built once per site build by _plugins/blog-graph.rb and rendered here as finished SVG: every
+  blog page shows the same picture, with no layout work or animation in the browser, and blog
+  pages share it through a view transition (opt-in in head.html), so it stays in place while
+  the page changes.
+  assets/js/related-graph.js adds hover, drag, the replay button and the phone toggle.
+
+  include.focus: the current post's url (post pages). The post and its related posts are
+  highlighted, the rest is dimmed; the box is left out when the post has no related posts.
+  An edge links two posts when one mentions the other or they share a tag.
+  Below the graph: caption, zoom buttons (zoom also with Ctrl/⌘ + scroll, pinch, double-click;
+  drag the background to pan) and replay.
 {%- endcomment -%}
-{%- assign all_posts = site.posts -%}
-{%- if all_posts.size > 1 -%}
-  {%- capture nodes_json -%}
-    {%- for m in all_posts -%}{"id":{{ forloop.index0 }},"title":{{ m.title | jsonify }},"url":{{ m.url | relative_url | jsonify }},"current":false}{% unless forloop.last %},{% endunless %}{%- endfor -%}
-  {%- endcapture -%}
-  {%- capture edges_json -%}
-    {%- assign first_edge = true -%}
-    {%- for a in all_posts -%}
-      {%- assign ai = forloop.index0 -%}
-      {%- assign a_slug = a.name | remove: '.md' | remove: '.markdown' -%}
-      {%- for b in all_posts -%}
-        {%- if forloop.index0 <= ai -%}{%- continue -%}{%- endif -%}
-        {%- assign bi = forloop.index0 -%}
-        {%- assign b_slug = b.name | remove: '.md' | remove: '.markdown' -%}
-        {%- assign kind = '' -%}
-        {%- if a.content contains b.url or a.content contains b_slug or b.content contains a.url or b.content contains a_slug -%}
-          {%- assign kind = 'mention' -%}
-        {%- else -%}
-          {%- for tag in a.tags -%}{%- if b.tags contains tag -%}{%- assign kind = 'tag' -%}{%- endif -%}{%- endfor -%}
-        {%- endif -%}
-        {%- if kind != '' -%}{%- unless first_edge -%},{%- endunless -%}{%- assign first_edge = false -%}{"source":{{ ai }},"target":{{ bi }},"kind":"{{ kind }}"}{%- endif -%}
-      {%- endfor -%}
-    {%- endfor -%}
-  {%- endcapture -%}
-<div class="related-articles blog-graph">
-  <div class="related-graph" data-height="230">
-    <script type="application/json" class="related-graph-data">{"nodes":[{{ nodes_json | strip | replace: '<', '<' }}],"edges":[{{ edges_json | strip }}]}</script>
-    <ul class="related-articles-list">
-      {%- for post in all_posts -%}
-      <li><a href="{{ post.url | relative_url }}">{{ post.title }}</a></li>
-      {%- endfor -%}
-    </ul>
+{%- assign g = site.data.blog_graph -%}
+{%- assign cur = nil -%}
+{%- if g and include.focus -%}{%- assign cur = g.nodes | where: "url", include.focus | first -%}{%- endif -%}
+{%- assign show_graph = false -%}
+{%- if g -%}
+  {%- if include.focus -%}
+    {%- if cur and cur.related.size > 0 -%}{%- assign show_graph = true -%}{%- endif -%}
+  {%- else -%}
+    {%- assign show_graph = true -%}
+  {%- endif -%}
+{%- elsif site.posts.size > 1 and jekyll.environment == 'development' -%}
+<p class="rg-missing">Blog graph data is missing: restart <code>jekyll serve</code> (it loads <code>_plugins</code> only at startup).</p>
+{%- endif -%}
+{%- if show_graph %}
+<aside class="blog-graph-box" data-blog-graph>
+  <button type="button" class="blog-graph-toggle" data-blog-graph-toggle aria-expanded="false">
+    <i class="fas fa-project-diagram fa-xs" aria-hidden="true"></i>
+    <span class="when-collapsed" data-i18n="blog.graphShow">Show graph</span>
+    <span class="when-expanded" data-i18n="blog.graphHide">Hide graph</span>
+  </button>
+  <div class="related-articles blog-graph">
+    <div class="related-graph">
+      <svg class="rg-svg{% if g.many %} rg-many{% endif %}{% if cur %} rg-focus{% endif %}" viewBox="0 0 {{ g.width }} {{ g.height }}" data-static role="group" aria-label="Graph of blog articles">
+        {%- for e in g.edges %}
+        {%- assign rel = false -%}
+        {%- if cur -%}
+          {%- if e.source == cur.id and cur.related contains e.target -%}{%- assign rel = true -%}{%- endif -%}
+          {%- if e.target == cur.id and cur.related contains e.source -%}{%- assign rel = true -%}{%- endif -%}
+        {%- endif %}
+        <line class="rg-edge rg-edge-{{ e.kind }}{% if rel %} rg-rel{% endif %}" data-s="{{ e.source }}" data-t="{{ e.target }}" x1="{{ e.x1 }}" y1="{{ e.y1 }}" x2="{{ e.x2 }}" y2="{{ e.y2 }}"></line>
+        {%- endfor %}
+        {%- for n in g.nodes %}
+        {%- assign r = n.r -%}
+        {%- assign node_class = '' -%}
+        {%- if cur -%}
+          {%- if n.id == cur.id -%}{%- assign node_class = ' rg-current' -%}{%- assign r = 7 -%}
+          {%- elsif cur.related contains n.id -%}{%- assign node_class = ' rg-related' -%}{%- endif -%}
+        {%- endif %}
+        <a class="rg-node{{ node_class }}" href="{{ n.url | relative_url }}" transform="translate({{ n.x }},{{ n.y }})" data-x="{{ n.x }}" data-y="{{ n.y }}" data-r="{{ r }}" data-date="{{ n.date }}" data-tags="{{ n.tags | jsonify | escape }}" aria-label="{{ n.title | escape }}" data-tooltip="{{ n.title | escape }}"{% if n.id == cur.id %} aria-current="page"{% endif %}>
+          <circle r="{{ r }}"></circle>
+          <text class="rg-label" x="{% if n.anchor == 'start' %}-4{% elsif n.anchor == 'end' %}4{% else %}0{% endif %}" y="{{ r | plus: 13 }}" text-anchor="{{ n.anchor }}">{{ n.title | remove_first: 'Test: ' | escape }}</text>
+        </a>
+        {%- endfor %}
+      </svg>
+    </div>
+    <div class="rg-actions">
+      <span class="rg-caption" data-tooltip="Lines link posts that share a tag or mention each other" data-i18n-attr="data-tooltip:blog.graphHint">
+        {%- if cur -%}<span data-i18n="blog.relatedTitle">Related posts</span>{%- else -%}<span data-i18n="blog.graphTitle">Graph of posts</span>{%- endif -%}
+      </span>
+      <span class="rg-tools">
+        <button type="button" class="rg-tool" data-rg-zoom="out" aria-label="Zoom out" data-tooltip="Zoom out" data-i18n-attr="data-tooltip:blog.zoomOut;aria-label:blog.zoomOut" disabled><i class="fas fa-minus" aria-hidden="true"></i></button>
+        <button type="button" class="rg-tool" data-rg-zoom="in" aria-label="Zoom in" data-tooltip="Zoom in · Ctrl/⌘ + scroll" data-i18n-attr="data-tooltip:blog.zoomInHint;aria-label:blog.zoomIn"><i class="fas fa-plus" aria-hidden="true"></i></button>
+        <button type="button" class="rg-tool" data-rg-zoom="reset" aria-label="Reset zoom" data-tooltip="Reset zoom" data-i18n-attr="data-tooltip:blog.zoomReset;aria-label:blog.zoomReset" disabled><i class="fas fa-rotate-left" aria-hidden="true"></i></button>
+        <button type="button" class="rg-replay" data-rg-replay data-tooltip="Replay how the graph grew" data-i18n-attr="data-tooltip:blog.graphReplay">
+          <i class="fas fa-play fa-xs" aria-hidden="true"></i>
+          <span data-i18n="blog.replay">replay</span>
+        </button>
+      </span>
+    </div>
   </div>
-</div>
+</aside>
+{%- comment -%} Phones: reopen the graph before paint if it was opened on a previous blog page. {%- endcomment %}
+<script>try{if(sessionStorage.getItem("blog-graph-open")==="1"){var bg=document.currentScript.previousElementSibling;bg.classList.add("is-open");bg.querySelector("[data-blog-graph-toggle]").setAttribute("aria-expanded","true");}}catch(e){}</script>
 <script defer src="{{ '/assets/js/related-graph.js' | relative_url | bust_file_cache }}"></script>
 {%- endif -%}

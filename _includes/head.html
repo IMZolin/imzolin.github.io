@@ -28,6 +28,11 @@
     <link rel="shortcut icon" href="{{ site.icon | prepend: '/assets/img/' | relative_url}}"/>
     {% endif %}
     <link rel="stylesheet" href="{{ '/assets/css/main.css' | relative_url | bust_css_cache }}">
+    {%- if page.url contains '/blog/' %}
+    <!-- Blog pages share the posts graph (view-transition-name: blog-graph): it stays in place
+         while the page changes. Must be in <head> to apply before the new page's first paint. -->
+    <style>@view-transition { navigation: auto; }</style>
+    {%- endif %}
     <link rel="canonical" href="{{ page.url | replace:'index.html','' | absolute_url }}">
 
     <!-- Dark Mode -->

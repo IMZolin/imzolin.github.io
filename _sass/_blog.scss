@@ -130,10 +130,21 @@
 }
 
 // Graph: fixed size next to the header on wide screens (graph styles: _dynamic-content.scss).
+// The view-transition name lets blog pages share it: it stays put while the page changes.
 .blog-graph-box {
   flex: 0 0 280px;
   width: 280px;
+  view-transition-name: blog-graph;
 }
+
+@media (prefers-reduced-motion: reduce) {
+  ::view-transition-group(*), ::view-transition-old(*), ::view-transition-new(*) { animation: none !important; }
+}
+
+// Post pages: the header sits in the left column next to the graph.
+.blog-intro .post-header { margin-bottom: 0; }
+
+.rg-missing { font-size: 0.8rem; color: var(--global-text-color-light); }
 
 .blog-graph-toggle { display: none; }
 
