@@ -28,6 +28,8 @@
     "page.news.title": "Новости",
     "page.news.desc": "Обновления в хронологическом порядке.",
     "blog.talks": "Выступления и медиа",
+    "blog.newer": "Новые",
+    "blog.older": "Старые",
     "page.research.title": "Публикации",
     "page.research.desc": "Публикации и научные работы.",
     "page.cv.title": "Опыт работы",
