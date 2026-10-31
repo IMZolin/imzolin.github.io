@@ -1695,8 +1695,6 @@
         var cvLabel = cvLinks[c].querySelector("[data-cv-label]");
         if (cvLabel) { cvLabel.textContent = cvT.viewCv; }
       }
-      var codes = doc.querySelectorAll("[data-lang-code]");
-      for (var j = 0; j < codes.length; j++) { codes[j].textContent = lang.toUpperCase(); }
       var t = ui(lang);
       if (errorEl) {
         var title = errorEl.querySelector(".dyn-error-title");

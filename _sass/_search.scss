@@ -97,17 +97,40 @@ body.site-search-open { overflow: hidden; }
   }
 }
 
-.lang-toggle-btn {
+// Thin outlined pill: "EN | RU", one button per language.
+.lang-switch {
+  display: inline-flex;
+  margin: 0 0.35rem;
+  border: 1px solid var(--global-divider-color);
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+// The .navbar prefix beats the shared button padding above.
+.navbar .navbar-nav .toggle-container .lang-switch .lang-opt {
+  padding: 0.2rem 0.45rem;
   border: 0;
-  background-color: inherit;
-  color: var(--global-text-color);
+  background: transparent;
+  color: var(--global-text-color-light);
+  font-size: 0.75rem;
+  letter-spacing: 0.02em;
   cursor: pointer;
 
-  &:hover { color: var(--global-hover-color); }
+  & + .lang-opt { border-left: 1px solid var(--global-divider-color); }
 
-  .lang-toggle-code {
-    margin-left: 0.3rem;
-    font-size: 0.75rem;
-    font-weight: 600;
+  // Current language: bold, not clickable, no hover fill.
+  &[aria-pressed="true"] {
+    color: var(--global-text-color);
+    font-weight: 700;
+    cursor: default;
+  }
+
+  // Only the hovered half is filled, like the "View CV" button.
+  &[aria-pressed="false"]:hover,
+  &[aria-pressed="false"]:active,
+  &[aria-pressed="false"]:focus-visible {
+    background: var(--global-text-color);
+    color: var(--global-bg-color);
+    outline: none;
   }
 }

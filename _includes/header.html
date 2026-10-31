@@ -21,12 +21,12 @@
           </a>
           <!-- Always-visible icons: language, search, theme -->
           <ul class="navbar-nav nav-icons flex-row flex-nowrap">
-            <!-- Language toggle (shown by content-loader.js on pages with dynamic content) -->
+            <!-- Language switch: "EN | RU", one button per language; i18n.js marks the current one with aria-pressed -->
             <li class="toggle-container" data-lang-item hidden>
-              <button type="button" class="lang-toggle-btn" data-lang-toggle title="Switch language (EN / RU)" data-i18n-attr="title:lang.btn;aria-label:lang.btn" aria-label="Switch language">
-                <i class="fas fa-language"></i>
-                <span class="lang-toggle-code" data-lang-code>EN</span>
-              </button>
+              <div class="lang-switch" role="group" data-tooltip="Switch language" data-tooltip-placement="bottom" data-i18n-attr="data-tooltip:lang.btn;aria-label:lang.btn" aria-label="Switch language">
+                <button type="button" class="lang-opt" data-lang-set="en" aria-pressed="true" aria-label="English">EN</button>
+                <button type="button" class="lang-opt" data-lang-set="ru" aria-pressed="false" aria-label="Русский">RU</button>
+              </div>
             </li>
 
             <!-- Search -->

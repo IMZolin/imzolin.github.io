@@ -126,8 +126,8 @@
       });
     });
     Array.prototype.forEach.call(document.querySelectorAll("[data-lang-item]"), function (n) { n.hidden = false; });
-    Array.prototype.forEach.call(document.querySelectorAll("[data-lang-code]"), function (n) {
-      n.textContent = lang.toUpperCase();
+    Array.prototype.forEach.call(document.querySelectorAll("[data-lang-set]"), function (b) {
+      b.setAttribute("aria-pressed", b.getAttribute("data-lang-set") === lang ? "true" : "false");
     });
   }
 
@@ -144,8 +144,11 @@
   function init() {
     lang = initialLang();
     apply();
-    Array.prototype.forEach.call(document.querySelectorAll("[data-lang-toggle]"), function (b) {
-      b.addEventListener("click", function () { setLang(lang === "en" ? "ru" : "en"); });
+    Array.prototype.forEach.call(document.querySelectorAll("[data-lang-set]"), function (b) {
+      b.addEventListener("click", function () {
+        var next = b.getAttribute("data-lang-set");
+        if (next !== lang) { setLang(next); }
+      });
     });
   }
 
