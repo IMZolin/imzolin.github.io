@@ -7,13 +7,25 @@
 
   &:hover { color: var(--global-hover-color); }
 
+  // Plain shortcut hint before the icon ("⌘K" on Apple devices, set by search.js).
   kbd {
-    margin-left: 0.4rem;
-    font-size: 0.7rem;
+    margin-right: 0.4rem;
+    padding: 0;
+    font-family: inherit;
+    font-size: 0.75rem;
+    line-height: 1.2;
     color: var(--global-text-color-light);
-    border: 1px solid var(--global-divider-color);
+    border: 0;
     background: transparent;
+    box-shadow: none;
   }
+
+  &:hover kbd { color: var(--global-hover-color); }
+}
+
+// No hardware keyboard to use it with: phones, tablets, narrow screens.
+@media (max-width: 575px), (hover: none) {
+  .site-search-btn kbd { display: none; }
 }
 
 .site-search {

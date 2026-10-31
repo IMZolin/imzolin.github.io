@@ -159,6 +159,11 @@
     results = document.getElementById("site-search-results");
 
     document.querySelectorAll("[data-search-open]").forEach(function (b) { b.addEventListener("click", open); });
+    // Shortcut hint: "⌘K" on Apple devices, "Ctrl K" elsewhere (the markup default).
+    var platform = (navigator.userAgentData && navigator.userAgentData.platform) || navigator.platform || "";
+    if (/mac|iphone|ipad/i.test(platform)) {
+      document.querySelectorAll("[data-search-kbd]").forEach(function (k) { k.textContent = "⌘K"; });
+    }
     modal.addEventListener("mousedown", function (e) { if (e.target === modal) { close(); } });
     input.addEventListener("input", render);
     input.addEventListener("keydown", function (e) {
