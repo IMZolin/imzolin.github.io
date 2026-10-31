@@ -1420,26 +1420,23 @@
     return wrap;
   }
 
+  /**
+   * One talk as a compact row: title with its links on the right, then one muted line with
+   * the event, the month (the year is already the group heading) and the tags.
+   */
   function renderTalkItem(doc, item, lang, extras) {
     var t = ui(lang);
-    var card = el(doc, "div", "dyn-card dyn-talk");
-    card.id = "talk-" + item.id;
-    var header = el(doc, "div", "dyn-card-header");
-    header.appendChild(el(doc, "h3", "dyn-card-title", itemText(item.title, lang) || item.id));
-    var date = formatMonth(item.date, lang);
-    if (date) { header.appendChild(el(doc, "span", "dyn-date", date)); }
-    card.appendChild(header);
-    var event = itemText(item.event, lang);
-    if (event) { card.appendChild(el(doc, "p", "dyn-org", event)); }
-    var description = itemText(item.description, lang);
-    if (description) { card.appendChild(el(doc, "p", "dyn-result", description)); }
+    var row = el(doc, "div", "dyn-talk");
+    row.id = "talk-" + item.id;
+    var head = el(doc, "div", "dyn-talk-head");
+    head.appendChild(el(doc, "h3", "dyn-talk-title", itemText(item.title, lang) || item.id));
 
-    var row = el(doc, "div", "dyn-links-row");
-    var links = isArray(item.links) ? item.links : [];
-    for (var l = 0; l < links.length; l++) {
-      if (!links[l] || !links[l].url) { continue; }
-      var label = links[l].label || t.linkTypes[links[l].type] || links[l].type || links[l].url;
-      row.appendChild(safeLink(doc, links[l].url, label));
+    var links = el(doc, "span", "dyn-talk-links");
+    var list = isArray(item.links) ? item.links : [];
+    for (var l = 0; l < list.length; l++) {
+      if (!list[l] || !list[l].url) { continue; }
+      var label = list[l].label || t.linkTypes[list[l].type] || list[l].type || list[l].url;
+      links.appendChild(safeLink(doc, list[l].url, label));
     }
     var base = (extras && extras.base) || "/";
     var news = isArray(extras && extras.news) ? extras.news : [];
@@ -1447,18 +1444,24 @@
       if (news[n].talk === item.id && news[n].id) {
         var a = el(doc, "a", "dyn-link dyn-rel", t.relNews + " \u2192");
         a.href = resolveSitePath("news/", base) + "#news-" + news[n].id;
-        row.appendChild(a);
+        links.appendChild(a);
       }
     }
-    if (row.childNodes.length) { card.appendChild(row); }
+    if (links.childNodes.length) { head.appendChild(links); }
+    row.appendChild(head);
 
+    var meta = el(doc, "div", "dyn-talk-meta");
+    var event = itemText(item.event, lang);
+    if (event) { meta.appendChild(el(doc, "span", "dyn-talk-event", event)); }
+    var date = formatMonth(item.date, lang);
+    if (date && date !== String(item.date).slice(0, 4)) { meta.appendChild(el(doc, "span", "dyn-date", date)); }
     var tags = isArray(item.tags) ? item.tags : [];
-    if (tags.length) {
-      var tagRow = el(doc, "div", "dyn-tags");
-      tags.forEach(function (tag) { tagRow.appendChild(tagChip(doc, tag, lang, extras)); });
-      card.appendChild(tagRow);
-    }
-    return card;
+    tags.forEach(function (tag) { meta.appendChild(tagChip(doc, tag, lang, extras)); });
+    if (meta.childNodes.length) { row.appendChild(meta); }
+
+    var description = itemText(item.description, lang);
+    if (description) { row.appendChild(el(doc, "p", "dyn-talk-desc", description)); }
+    return row;
   }
 
   /** One kind ("talk" | "interview") of the talks data, filtered by tag and grouped by year. */

@@ -549,7 +549,84 @@
   .dyn-news-meta { display: block; margin-top: 0.2rem; }
   .dyn-news-meta > * { margin-right: 0.5rem; font-size: 0.8rem; }
   .dyn-more { display: inline-block; margin-top: 0.5rem; font-size: 0.9rem; }
-  .dyn-talk { margin-bottom: 0.75rem; }
+}
+
+// Talks page: compact rows (no cards), like the blog post list.
+.dynamic-content {
+  .dyn-talk {
+    padding: 0.45rem 0;
+    scroll-margin-top: 4.5rem; // links from news / search / posts land below the fixed header
+
+    &:target .dyn-talk-title { color: var(--global-theme-color); }
+  }
+
+  .dyn-talk-head {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 0.2rem 1rem;
+  }
+
+  .dyn-talk-title {
+    margin: 0;
+    font-size: 1rem;
+    font-weight: 600;
+    line-height: 1.35;
+  }
+
+  .dyn-talk-links {
+    display: flex;
+    flex: 0 0 auto;
+    gap: 0.75rem;
+
+    .dyn-link {
+      padding: 0;
+      border: 0;
+      font-size: 0.8rem;
+      white-space: nowrap;
+      &:hover { background: transparent; color: var(--global-theme-color); text-decoration: underline; }
+    }
+  }
+
+  .dyn-talk-meta {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 0.1rem 0.6rem;
+    margin-top: 0.15rem;
+    color: var(--global-text-color-light);
+    font-size: 0.85rem;
+
+    span { color: inherit; } // the theme colors every <span>
+    .dyn-date { font-size: inherit; }
+
+    // Tags as plain "#tag" text; still filter the list on click.
+    .dyn-tag {
+      padding: 0;
+      border: 0;
+      border-radius: 0;
+      background: transparent;
+      color: inherit;
+      font-size: 0.8rem;
+      font-weight: 400;
+      &:hover { color: var(--global-theme-color); }
+      &.is-active { color: var(--global-theme-color); background: transparent; }
+    }
+  }
+
+  .dyn-talk-desc {
+    margin: 0.2rem 0 0;
+    color: var(--global-text-color-light);
+    font-size: 0.85rem;
+  }
+
+  #section-talks, #section-interviews {
+    .dyn-year { margin: 1rem 0 0.15rem; font-size: 0.95rem; }
+  }
+
+  @media (max-width: 575px) {
+    .dyn-talk-head { flex-wrap: wrap; }
+  }
 }
 
 .post-talks {
