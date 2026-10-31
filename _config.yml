@@ -212,6 +212,8 @@ include: ['_pages']
 exclude:
   - blog      # TEMPORARILY HIDDEN blog page - remove to restore
   - _posts    # TEMPORARILY HIDDEN blog posts - remove to restore
+  - _pages/talks.md  # TEMPORARILY HIDDEN talks & media page - remove to restore
+  - talks.json       # TEMPORARILY HIDDEN talks data - remove to restore
   - bin
   - Gemfile
   - Gemfile.lock
