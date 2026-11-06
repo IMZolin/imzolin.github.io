@@ -13,3 +13,4 @@ socials:
   - { title: Scopus,         icon: "ai ai-scopus",      url: "https://www.scopus.com/authid/detail.uri?authorId=59473355300" }
   - { title: ORCID,          icon: "ai ai-orcid",        url: "https://orcid.org/0009-0005-3498-7880" }
   - { title: ResearchGate,   icon: "ai ai-researchgate", url: "https://www.researchgate.net/profile/Ivan-Zolin-2" }
+  - { title: Flickr,         icon: "fab fa-flickr",     url: "https://www.flickr.com/photos/204128758@N05/" }

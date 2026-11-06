@@ -54,6 +54,7 @@
       copied: "Copied",
       present: "Present",
       allNews: "All news \u2192",
+      allPublications: "All publications \u2192",
       allTags: "All",
       noEntries: "No entries yet.",
       nothingFound: "Nothing found for this tag.",
@@ -114,6 +115,7 @@
       copied: "Скопировано",
       present: "Настоящее время",
       allNews: "Все новости \u2192",
+      allPublications: "Все публикации \u2192",
       allTags: "Все",
       noEntries: "Пока нет записей.",
       nothingFound: "По этому тегу ничего не найдено.",
@@ -1097,12 +1099,16 @@
     if (cls.huggingface) { row.appendChild(safeLink(doc, cls.huggingface.url, t.huggingface)); }
     if (cls.project) { row.appendChild(safeLink(doc, cls.project.url, t.project)); }
 
-    // Remaining links (publisher page, DOI, ...) stay available as plain links.
-    if (item.doi) { row.appendChild(safeLink(doc, "https://doi.org/" + item.doi, "DOI")); }
+    // Remaining links (publisher/journal page, ...) stay available as plain links,
+    // named after the journal/platform. DOI is only shown as a fallback when no
+    // such named link exists, so the venue is never named twice.
+    var hasNamedLink = cls.github || cls.huggingface || cls.project;
     for (var r = 0; r < cls.other.length; r++) {
       if (cls.other[r] === usedFallback) { continue; }
+      hasNamedLink = true;
       row.appendChild(safeLink(doc, cls.other[r].url, cls.other[r].label));
     }
+    if (item.doi && !hasNamedLink) { row.appendChild(safeLink(doc, "https://doi.org/" + item.doi, "DOI")); }
     return { row: row, panels: panels, hasRow: row.childNodes.length > 0, hasPanels: toggles.length > 0 };
   }
 
@@ -1134,7 +1140,7 @@
    * "Selected papers" heading, in the order given.
    * `images` is the optional {id: {src, alt}} thumbnail map.
    */
-  function renderPublications(doc, data, lang, selectedIds, images) {
+  function renderPublications(doc, data, lang, selectedIds, images, base) {
     var t = ui(lang);
     var pubs;
     var wrap;
@@ -1192,6 +1198,11 @@
       }
       card.appendChild(body);
       wrap.appendChild(card);
+    }
+    if (selectedIds) {
+      var more = el(doc, "a", "dyn-more", t.allPublications);
+      more.href = resolveSitePath("research/", base || "/");
+      wrap.appendChild(more);
     }
     return wrap;
   }
@@ -1541,7 +1552,7 @@
       if (want("interviews")) { frag.appendChild(renderTalksSection(doc, talks, "interview", lang, extras)); }
     }
     if (sections && want("selected") && isArray(extras.selected) && extras.selected.length) {
-      frag.appendChild(renderPublications(doc, data, lang, extras.selected, extras.images));
+      frag.appendChild(renderPublications(doc, data, lang, extras.selected, extras.images, extras.base));
     }
     if (want("experience") && data.experience.length) { frag.appendChild(renderExperience(doc, data, lang, extras.logos, extras.base)); }
     if (want("education") && data.education.length) { frag.appendChild(renderEducation(doc, data, lang, extras.logos, extras.base)); }
