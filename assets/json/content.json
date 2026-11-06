@@ -98,11 +98,11 @@
       "status": "completed",
       "responsibilities": {
         "en": [
-          "Developed TriDeFusion-v2, a hybrid spatial-frequency restoration framework for volumetric fluorescence microscopy pairing a distilled attention CNN with locally adaptive wavelet refinement, raising PSNR to 29.2 dB from 22.6 dB for TriDeFusion-v1 on high-noise synthetic tubular volumes at up to 3x faster inference; manuscript under review in a Q1 journal.",
+          "Developed TriDeFusion-v2, a hybrid spatial-frequency restoration framework for volumetric fluorescence microscopy pairing a distilled attention CNN with locally adaptive wavelet refinement, raising PSNR to 29.2 dB from 22.6 dB for TriDeFusion-v1 on high-noise synthetic tubular volumes at up to 3x faster inference; published.",
           "Developed NeuroRAG, a multi-agent LLM and RAG system for neurobiological question answering over a curated vector store, PubMed, arXiv and NCBI, whose answers 13 domain specialists preferred to GPT-5 and Claude 4.5 Sonnet in 72.6% of 135 decisive blind comparisons; published."
         ],
         "ru": [
-          "Разработал TriDeFusion-v2 — гибридный пространственно-частотный метод восстановления объёмных изображений флуоресцентной микроскопии, объединяющий дистиллированную свёрточную сеть с механизмом внимания и локально адаптивное вейвлет-уточнение; PSNR повышен до 29.2 дБ против 22.6 дБ у TriDeFusion-v1 на синтетических трубчатых объёмах с высоким уровнем шума при инференсе до 3 раз быстрее; статья на рецензировании в Q1 журнале.",
+          "Разработал TriDeFusion-v2 — гибридный пространственно-частотный метод восстановления объёмных изображений флуоресцентной микроскопии, объединяющий дистиллированную свёрточную сеть с механизмом внимания и локально адаптивное вейвлет-уточнение; PSNR повышен до 29.2 дБ против 22.6 дБ у TriDeFusion-v1 на синтетических трубчатых объёмах с высоким уровнем шума при инференсе до 3 раз быстрее; статья опубликована.",
           "Разработал NeuroRAG — мультиагентную систему LLM и RAG для ответов на вопросы по нейробиологии по внутреннему векторному хранилищу литературы, PubMed, arXiv и NCBI; в слепом сравнении 13 профильных специалистов предпочли её ответы GPT-5 и Claude 4.5 Sonnet в 72.6% из 135 случаев с однозначным выбором; статья опубликована."
         ]
       },
@@ -775,8 +775,8 @@
         "ru": "TriDeFusion"
       },
       "description": {
-        "en": "# TriDeFusion\n\n## Overview\n\nTriDeFusion is a research line on deep-learning-based restoration and denoising of 3D fluorescence microscopy images, developed across two laboratories: the Laboratory of Molecular Neurodegeneration (LMN), SPbPU (TriDeFusion v1) and the Laboratory of Biomedical Imaging and Data Analysis (LABID), SPbPU (TriDeFusion-v2).\n\nFluorescence microscopy images are frequently degraded by noise and distortions that complicate downstream analysis. TriDeFusion addresses this by combining classical and learned denoising techniques rather than relying on a single method.\n\n## TriDeFusion (v1)\n\nThe first version combines Noise2Noise (N2N) with Non-Local Means (NLM) filtering for 3D image denoising. On synthetic data it achieved up to a 54% reduction in RMSE and a 20% increase in PSNR compared to an N2N-UNet baseline; on real data it reduced noise mean intensity by over 50% and noise variance by 33%. This work was presented as \"TriDeFusion: Enhanced denoising algorithm for 3D fluorescence microscopy images integrating modified Noise2Noise and Non-local means\" at IEEE SIBIRCON 2024 (see the `tridefusion-v1` publication).\n\n## TriDeFusion-v2\n\nThe second version extends the approach into a hybrid spatial-frequency restoration design: a lightweight attention-based CNN family (RAUDen), Noise2Noise knowledge distillation into a smaller distilled variant (RAUDen-Lite, -40% parameters and inference time), and a locally adaptive, CUDA-accelerated wavelet-domain refinement module (8x speedup). This work is described in \"TriDeFusion-v2: Distilled Hybrid Residual Attention Denoising and Wavelet Filtering\", currently under review in a Q1 journal (see the `tridefusion-v2` publication).\n\n## Code\n\nSource code: https://github.com/Biomed-imaging-lab/TriDeFusion",
-        "ru": "# TriDeFusion\n\n## Обзор\n\nTriDeFusion — исследовательское направление по восстановлению и денойзингу 3D-изображений флуоресцентной микроскопии на основе глубокого обучения, развивавшееся в двух лабораториях: Лаборатории молекулярной нейродегенерации (ЛМН), СПбПУ (TriDeFusion v1) и Лаборатории анализа биомедицинских изображений и данных (ЛАБИД), СПбПУ (TriDeFusion-v2).\n\nИзображения флуоресцентной микроскопии часто страдают от шума и искажений, усложняющих последующий анализ. TriDeFusion решает эту задачу, комбинируя классические и обучаемые методы денойзинга вместо использования единственного подхода.\n\n## TriDeFusion (v1)\n\nПервая версия объединяет Noise2Noise (N2N) и фильтр Non-local Means (NLM) для денойзинга 3D-изображений. На синтетических данных достигнуто снижение RMSE до 54% и рост PSNR на 20% по сравнению с базовым методом N2N-UNet; на реальных данных среднее значение шума снижено более чем на 50%, дисперсия — на 33%. Работа представлена как «TriDeFusion: Enhanced denoising algorithm for 3D fluorescence microscopy images integrating modified Noise2Noise and Non-local means» на конференции IEEE SIBIRCON 2024 (см. публикацию `tridefusion-v1`).\n\n## TriDeFusion-v2\n\nВторая версия расширяет подход до гибридной пространственно-частотной архитектуры: семейство лёгких CNN с механизмом внимания (RAUDen), дистилляция знаний Noise2Noise в уменьшенную модель (RAUDen-Lite, -40% параметров и времени инференса) и локально-адаптивный CUDA-ускоренный модуль уточнения в вейвлет-области (ускорение 8x). Работа описана в статье «TriDeFusion-v2: Distilled Hybrid Residual Attention Denoising and Wavelet Filtering», которая находится на рецензировании в журнале Q1 (см. публикацию `tridefusion-v2`).\n\n## Код\n\nИсходный код: https://github.com/Biomed-imaging-lab/TriDeFusion"
+        "en": "# TriDeFusion\n\n## Overview\n\nTriDeFusion is a research line on deep-learning-based restoration and denoising of 3D fluorescence microscopy images, developed across two laboratories: the Laboratory of Molecular Neurodegeneration (LMN), SPbPU (TriDeFusion v1) and the Laboratory of Biomedical Imaging and Data Analysis (LABID), SPbPU (TriDeFusion-v2).\n\nFluorescence microscopy images are frequently degraded by noise and distortions that complicate downstream analysis. TriDeFusion addresses this by combining classical and learned denoising techniques rather than relying on a single method.\n\n## TriDeFusion (v1)\n\nThe first version combines Noise2Noise (N2N) with Non-Local Means (NLM) filtering for 3D image denoising. On synthetic data it achieved up to a 54% reduction in RMSE and a 20% increase in PSNR compared to an N2N-UNet baseline; on real data it reduced noise mean intensity by over 50% and noise variance by 33%. This work was presented as \"TriDeFusion: Enhanced denoising algorithm for 3D fluorescence microscopy images integrating modified Noise2Noise and Non-local means\" at IEEE SIBIRCON 2024 (see the `tridefusion-v1` publication).\n\n## TriDeFusion-v2\n\nThe second version extends the approach into a hybrid spatial-frequency restoration design: a lightweight attention-based CNN family (RAUDen), Noise2Noise knowledge distillation into a smaller distilled variant (RAUDen-Lite, -40% parameters and inference time), and a locally adaptive, CUDA-accelerated wavelet-domain refinement module (8x speedup). This work is described in \"TriDeFusion-v2: Distilled Hybrid Residual Attention Denoising and Wavelet Filtering\", published in IEEE Access (see the `tridefusion-v2` publication).\n\n## Code\n\nSource code: https://github.com/Biomed-imaging-lab/TriDeFusion",
+        "ru": "# TriDeFusion\n\n## Обзор\n\nTriDeFusion — исследовательское направление по восстановлению и денойзингу 3D-изображений флуоресцентной микроскопии на основе глубокого обучения, развивавшееся в двух лабораториях: Лаборатории молекулярной нейродегенерации (ЛМН), СПбПУ (TriDeFusion v1) и Лаборатории анализа биомедицинских изображений и данных (ЛАБИД), СПбПУ (TriDeFusion-v2).\n\nИзображения флуоресцентной микроскопии часто страдают от шума и искажений, усложняющих последующий анализ. TriDeFusion решает эту задачу, комбинируя классические и обучаемые методы денойзинга вместо использования единственного подхода.\n\n## TriDeFusion (v1)\n\nПервая версия объединяет Noise2Noise (N2N) и фильтр Non-local Means (NLM) для денойзинга 3D-изображений. На синтетических данных достигнуто снижение RMSE до 54% и рост PSNR на 20% по сравнению с базовым методом N2N-UNet; на реальных данных среднее значение шума снижено более чем на 50%, дисперсия — на 33%. Работа представлена как «TriDeFusion: Enhanced denoising algorithm for 3D fluorescence microscopy images integrating modified Noise2Noise and Non-local means» на конференции IEEE SIBIRCON 2024 (см. публикацию `tridefusion-v1`).\n\n## TriDeFusion-v2\n\nВторая версия расширяет подход до гибридной пространственно-частотной архитектуры: семейство лёгких CNN с механизмом внимания (RAUDen), дистилляция знаний Noise2Noise в уменьшенную модель (RAUDen-Lite, -40% параметров и времени инференса) и локально-адаптивный CUDA-ускоренный модуль уточнения в вейвлет-области (ускорение 8x). Работа описана в статье «TriDeFusion-v2: Distilled Hybrid Residual Attention Denoising and Wavelet Filtering», опубликованной в журнале IEEE Access (см. публикацию `tridefusion-v2`).\n\n## Код\n\nИсходный код: https://github.com/Biomed-imaging-lab/TriDeFusion"
       },
       "highlights": {
         "en": [
@@ -993,8 +993,8 @@
         "ru": null
       },
       "year": 2026,
-      "status": "under_review",
-      "doi": null,
+      "status": "published",
+      "doi": "10.1109/ACCESS.2026.3750817",
       "authors": [
         "Ivan Zolin",
         "Anastasiya Rakovskaya",
@@ -1007,9 +1007,14 @@
         "name": "IEEE Access",
         "pages": null,
         "isbn": null,
-        "publisher": null
+        "publisher": "IEEE"
       },
-      "links": {},
+      "links": {
+        "article": {
+          "url": "https://ieeexplore.ieee.org/document/11775476",
+          "label": "IEEE Xplore"
+        }
+      },
       "related": {
         "projects": [
           "tridefusion"
