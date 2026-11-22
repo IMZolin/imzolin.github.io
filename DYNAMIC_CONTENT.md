@@ -36,6 +36,12 @@ DOM (safe: textContent / createElement, validated URLs, sanitized markdown)
 
 ## Editing content
 
+Site-specific publication resource links are maintained in
+`_data/publication_links.json`, keyed by publication ID. They supplement the
+generated contract on both Research and Selected papers cards. Each published
+card has one Paper button (article page, otherwise PDF or DOI), plus Code,
+Project Page, and Hugging Face when available.
+
 Do **not** edit professional facts here. Change them in `personal-os`, which
 regenerates and republishes `assets/json/content.json`. On the next push to
 `master`, GitHub Pages redeploys and the browser picks up the new file.

@@ -1,0 +1,15 @@
+{
+  "neurorag": {
+    "github": { "url": "https://github.com/Biomed-imaging-lab/NeuroRAG", "label": "Code" },
+    "project": { "url": "https://imzolin.github.io/neurorag_page/", "label": "Project Page" },
+    "huggingface": { "url": "https://huggingface.co/Biomed-imaging-lab-boss/NeuroRAG", "label": "Hugging Face" }
+  },
+  "tridefusion-v1": {
+    "github": { "url": "https://github.com/Biomed-imaging-lab/TriDeFusion", "label": "Code" },
+    "project": { "url": "https://imzolin.github.io/tridefusion_page/", "label": "Project Page" }
+  },
+  "tridefusion-v2": {
+    "github": { "url": "https://github.com/Biomed-imaging-lab/TriDeFusion", "label": "Code" },
+    "project": { "url": "https://imzolin.github.io/tridefusion_page/", "label": "Project Page" }
+  }
+}

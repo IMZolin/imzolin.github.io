@@ -16,6 +16,7 @@
      data-talks-url="{{ '/assets/json/talks.json' | relative_url }}"
      {%- endif %}
      data-site-base="{{ '/' | relative_url }}"
+     data-pub-links="{{ site.data.publication_links | jsonify | escape }}"
      {%- if include.images %}
      data-pub-images="{{ site.data.publication_images | jsonify | escape }}"
      {%- endif %}

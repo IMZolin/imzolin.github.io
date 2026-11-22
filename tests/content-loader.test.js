@@ -262,7 +262,7 @@ test("renderAll renders news and selected papers only when the page opts in", ()
   assert.ok(!other.includes("Recent news") && !other.includes("Selected papers"));
 });
 
-test("published papers get PDF / Cite / Abstract buttons; optional links only when present", () => {
+test("published papers get Paper / Cite / Abstract buttons; optional links only when present", () => {
   const base = {
     id: "p1", year: 2024, authors: ["Ivan Zolin", "Jane Doe"],
     title: { en: "A & B", ru: null },
@@ -275,8 +275,8 @@ test("published papers get PDF / Cite / Abstract buttons; optional links only wh
     status: "published",
     links: { official: { url: "https://x.org/paper.pdf", label: "Proc" } }
   }));
-  ["PDF", "Cite", "Abstract"].forEach((b) => assert.ok(published.includes(b), `${b} button`));
-  assert.ok(!published.includes("GitHub") && !published.includes("Hugging Face") && !published.includes("Project Page"));
+  ["Paper", "Cite", "Abstract"].forEach((b) => assert.ok(published.includes(b), `${b} button`));
+  assert.ok(!published.includes("Code") && !published.includes("Hugging Face") && !published.includes("Project Page"));
   assert.ok(published.includes("The abstract text.") && !published.includes("Key words"), "only the abstract section");
 
   const extras = doc(Object.assign({}, base, {
@@ -288,10 +288,40 @@ test("published papers get PDF / Cite / Abstract buttons; optional links only wh
       project: { url: "https://a.github.io", label: "site" }
     }
   }));
-  ["GitHub", "Hugging Face", "Project Page", "PDF"].forEach((b) => assert.ok(extras.includes(b), `${b} button`));
+  ["Code", "Hugging Face", "Project Page", "Paper"].forEach((b) => assert.ok(extras.includes(b), `${b} button`));
 
   const review = doc(Object.assign({}, base, { status: "under_review", links: {} }));
-  assert.ok(!review.includes("PDF") && !review.includes("Cite"), "no PDF/Cite before publication");
+  assert.ok(!review.includes("Paper") && !review.includes("Cite"), "no Paper/Cite before publication");
+});
+
+test("publication resources render once on Research and Selected papers in both languages", () => {
+  const data = JSON.parse(fs.readFileSync(path.join(__dirname, "../assets/json/content.json"), "utf8"));
+  const publicationLinks = require("../_data/publication_links.json");
+  function find(node, predicate) {
+    return (predicate(node) ? [node] : []).concat(...node.childNodes.map((child) => find(child, predicate)));
+  }
+  for (const lang of ["en", "ru"]) {
+    for (const section of ["publications", "selected"]) {
+      const tree = SC.renderAll(fakeDoc, data, lang, [section], {
+        selected: data.publications.map((p) => p.id), publicationLinks
+      });
+      const cards = find(tree, (node) => node.className.split(" ").includes("dyn-publication"));
+      assert.equal(cards.length, 3);
+      for (const card of cards) {
+        const row = find(card, (node) => node.className === "dyn-links-row")[0];
+        const links = row.childNodes.filter((node) => node.tagName === "A");
+        assert.equal(links.filter((node) => node.textContent === "Paper").length, 1);
+        assert.ok(!links.some((node) => /^(PDF|DOI|MDPI|IEEE Xplore|GitHub)$/.test(node.textContent)));
+        const paper = links.find((node) => node.textContent === "Paper");
+        assert.ok(/mdpi.com|ieeexplore.ieee.org/.test(paper.href), "Paper opens the article page");
+        const neuro = card.textContent.includes("NeuroRAG");
+        assert.equal(links.find((node) => node.textContent === "Code").href,
+          publicationLinks[neuro ? "neurorag" : "tridefusion-v1"].github.url);
+        assert.ok(links.some((node) => node.href === publicationLinks[neuro ? "neurorag" : "tridefusion-v1"].project.url));
+        assert.equal(links.filter((node) => node.textContent === "Hugging Face").length, neuro ? 1 : 0);
+      }
+    }
+  }
 });
 
 test("buildBibtex escapes special characters and detects proceedings", () => {

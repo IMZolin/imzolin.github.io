@@ -43,7 +43,8 @@
       errorTitle: "Unable to load website content.",
       errorBody: "Please try again later.",
       retry: "Retry",
-      pdf: "PDF",
+      paper: "Paper",
+      code: "Code",
       cite: "Cite",
       abstractLabel: "Abstract",
       github: "GitHub",
@@ -104,7 +105,8 @@
       errorTitle: "Не удалось загрузить содержимое сайта.",
       errorBody: "Пожалуйста, попробуйте позже.",
       retry: "Повторить",
-      pdf: "PDF",
+      paper: "Paper",
+      code: "Code",
       cite: "Цитировать",
       abstractLabel: "Аннотация",
       github: "GitHub",
@@ -933,7 +935,7 @@
   }
 
   // ---------------------------------------------------------------------------
-  // Publication buttons: PDF / Cite / Abstract (+ GitHub, Hugging Face, Project)
+  // Publication buttons: Paper / Cite / Abstract (+ Code, Project, Hugging Face)
   // ---------------------------------------------------------------------------
 
   function urlHost(url) {
@@ -1027,11 +1029,11 @@
     return b;
   }
 
-  function renderPublicationActions(doc, item, lang) {
+  function renderPublicationActions(doc, item, lang, extraLinks) {
     var t = ui(lang);
     var row = el(doc, "div", "dyn-links-row");
     var panels = el(doc, "div", "dyn-panels");
-    var cls = classifyPublicationLinks(item);
+    var cls = classifyPublicationLinks({ links: Object.assign({}, item.links, extraLinks) });
     var published = item.status === "published";
     var toggles = [];
 
@@ -1052,17 +1054,17 @@
       panels.appendChild(panel);
     }
 
-    var usedFallback = null;
     if (published) {
-      // PDF: explicit PDF link, else the publisher page / DOI where it is served.
-      var pdf = cls.pdf;
-      if (!pdf) {
-        for (var o = 0; o < cls.other.length; o++) {
-          if (String(cls.other[o].key).toLowerCase() === "paper") { pdf = cls.other[o]; usedFallback = pdf; break; }
+      // Prefer the article landing page; expose one Paper link even with a PDF.
+      var paper = null;
+      for (var o = 0; o < cls.other.length; o++) {
+        if (/^(paper|article|publisher|journal|official)$/i.test(cls.other[o].key)) {
+          paper = cls.other[o]; break;
         }
       }
-      if (!pdf && item.doi) { pdf = { url: "https://doi.org/" + item.doi }; }
-      if (pdf) { row.appendChild(safeLink(doc, pdf.url, t.pdf)); }
+      if (!paper) { paper = cls.pdf || cls.other[0]; }
+      if (!paper && item.doi) { paper = { url: "https://doi.org/" + item.doi }; }
+      if (paper) { row.appendChild(safeLink(doc, paper.url, t.paper)); }
 
       var citeBtn = actionButton(doc, t.cite);
       var citePanel = el(doc, "div", "dyn-panel dyn-cite");
@@ -1095,20 +1097,9 @@
       register(absBtn, absPanel);
     }
 
-    if (cls.github) { row.appendChild(safeLink(doc, cls.github.url, t.github)); }
-    if (cls.huggingface) { row.appendChild(safeLink(doc, cls.huggingface.url, t.huggingface)); }
+    if (cls.github) { row.appendChild(safeLink(doc, cls.github.url, t.code)); }
     if (cls.project) { row.appendChild(safeLink(doc, cls.project.url, t.project)); }
-
-    // Remaining links (publisher/journal page, ...) stay available as plain links,
-    // named after the journal/platform. DOI is only shown as a fallback when no
-    // such named link exists, so the venue is never named twice.
-    var hasNamedLink = cls.github || cls.huggingface || cls.project;
-    for (var r = 0; r < cls.other.length; r++) {
-      if (cls.other[r] === usedFallback) { continue; }
-      hasNamedLink = true;
-      row.appendChild(safeLink(doc, cls.other[r].url, cls.other[r].label));
-    }
-    if (item.doi && !hasNamedLink) { row.appendChild(safeLink(doc, "https://doi.org/" + item.doi, "DOI")); }
+    if (cls.huggingface) { row.appendChild(safeLink(doc, cls.huggingface.url, t.huggingface)); }
     return { row: row, panels: panels, hasRow: row.childNodes.length > 0, hasPanels: toggles.length > 0 };
   }
 
@@ -1140,7 +1131,7 @@
    * "Selected papers" heading, in the order given.
    * `images` is the optional {id: {src, alt}} thumbnail map.
    */
-  function renderPublications(doc, data, lang, selectedIds, images, base) {
+  function renderPublications(doc, data, lang, selectedIds, images, base, publicationLinks) {
     var t = ui(lang);
     var pubs;
     var wrap;
@@ -1189,7 +1180,7 @@
         body.appendChild(el(doc, "p", "dyn-venue", venueLine.join(", ")));
       }
 
-      var actions = renderPublicationActions(doc, item, lang);
+      var actions = renderPublicationActions(doc, item, lang, publicationLinks && publicationLinks[item.id]);
       if (actions.hasRow) {
         body.appendChild(actions.row);
       }
@@ -1552,12 +1543,12 @@
       if (want("interviews")) { frag.appendChild(renderTalksSection(doc, talks, "interview", lang, extras)); }
     }
     if (sections && want("selected") && isArray(extras.selected) && extras.selected.length) {
-      frag.appendChild(renderPublications(doc, data, lang, extras.selected, extras.images, extras.base));
+      frag.appendChild(renderPublications(doc, data, lang, extras.selected, extras.images, extras.base, extras.publicationLinks));
     }
     if (want("experience") && data.experience.length) { frag.appendChild(renderExperience(doc, data, lang, extras.logos, extras.base)); }
     if (want("education") && data.education.length) { frag.appendChild(renderEducation(doc, data, lang, extras.logos, extras.base)); }
     if (want("projects") && data.projects.length) { frag.appendChild(renderProjects(doc, data, lang)); }
-    if (want("publications") && data.publications.length) { frag.appendChild(renderPublications(doc, data, lang, null, extras.images)); }
+    if (want("publications") && data.publications.length) { frag.appendChild(renderPublications(doc, data, lang, null, extras.images, null, extras.publicationLinks)); }
     var hasPatents = data.achievements.some(isPatent);
     var hasOthers = data.achievements.some(function (a) { return !isPatent(a); });
     if (want("achievements") && hasOthers) { frag.appendChild(renderAchievements(doc, data, lang)); }
@@ -1640,6 +1631,10 @@
       if (cvAttr) { cv = JSON.parse(cvAttr); cv.__base = root.getAttribute("data-site-base") || "/"; }
     } catch (e3) { cv = null; }
     var images = null;
+    var publicationLinks = null;
+    try {
+      publicationLinks = JSON.parse(root.getAttribute("data-pub-links") || "null");
+    } catch (e5) { publicationLinks = null; }
     var logos = null;
     var siteBase = root.getAttribute("data-site-base") || "/";
     try {
@@ -1685,7 +1680,7 @@
         contentEl.removeChild(contentEl.firstChild);
       }
       contentEl.appendChild(renderAll(doc, currentData, lang, sections, {
-        news: news, talks: talks, selected: selected, images: images, logos: logos, base: siteBase, cv: cv,
+        news: news, talks: talks, selected: selected, images: images, publicationLinks: publicationLinks, logos: logos, base: siteBase, cv: cv,
         activeTag: activeTag, onTag: setTag
       }));
       doc.documentElement.setAttribute("data-content-lang", lang);
